@@ -1,37 +1,65 @@
 // ** Lib
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
 
 // ** Model
 import Account from "../models/account";
+import User from "../models/user";
 
 // ** Services
 import jwtService from "../services/jwt.service";
 
 const authService = {
-    create: async ({ username, password }) => {
-        const usernameExist = await Account.findOne({ username });
+    create: async ({ username, password, email, phone, firstName, lastName }) => {
+        let session = null;
+        try {
+            session = await mongoose.startSession();
+            session.startTransaction();
 
-        if (usernameExist) {
-            throw new Error('Username is exist');
+            const usernameExist = await Account.findOne({ username });
+
+            if (usernameExist) {
+                throw new Error('Username is exist');
+            }
+
+            const user = new User({
+                firstName,
+                lastName,
+                phone,
+            });
+
+            const account = new Account({
+                username,
+                password,
+                email,
+            });
+
+            account.user = user._id;
+
+            const salt = bcrypt.genSaltSync();
+            account.password = bcrypt.hashSync(account.password, salt);
+
+            await account.save({ session });
+            await user.save({ session });
+
+            const accountJson = account.toJSON();
+
+            delete accountJson.password;
+
+            await session.commitTransaction();
+            session.endSession();
+
+            return accountJson;
+        } catch (error) {
+            if (session) {
+                await session.abortTransaction();
+                session.endSession();
+            }
+            throw error;
         }
-
-        const account = new Account({
-            username,
-            password,
-        });
-
-        const salt = bcrypt.genSaltSync();
-        account.password = bcrypt.hashSync(account.password, salt);
-
-        await account.save();
-
-        const accountJson = account.toJSON();
-
-        delete accountJson.password;
-
-        return accountJson;
     },
+
 
     getToken: async (payload, type = "login") => {
         let accessToken, refreshToken;
@@ -71,7 +99,7 @@ const authService = {
 
         // const salt = bcrypt.genSaltSync();
         // user.refreshToken = bcrypt.hashSync(refreshToken, salt);
-    
+
         // await user.save();
 
         const { accessToken, refreshToken } = await jwtService.getToken(payload);
@@ -85,7 +113,7 @@ const authService = {
         }
     },
 
-    
+
 };
 
 export default authService;
