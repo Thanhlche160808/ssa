@@ -19,6 +19,10 @@ configApp(app);
 
 const server = http.createServer(app);
 
+app.use("/server-check", (req, res) => {
+    res.status(200).json("Hello World");
+});
+
 //Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
