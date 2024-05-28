@@ -9,3 +9,5 @@ export const FIRE_BASE_MESSAGING_SENDER_ID =
   process.env.FIRE_BASE_MESSAGING_SENDER_ID;
 export const FIRE_BASE_APP_ID = process.env.FIRE_BASE_APP_ID;
 export const FIRE_BASE_MEASUREMENT_ID = process.env.FIRE_BASE_MEASUREMENT_ID;
+export const PORT = process.env.SERVER_PORT;
+export const HOST = process.env.SERVER_HOST;

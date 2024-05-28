@@ -6,6 +6,24 @@ const accountSChema = new mongoose.Schema({
     },
     password: {
         type: String
+    },
+    email: {
+        type: String
+    },
+    refreshToken: {
+        type: String
+    },
+    isBlocked: {
+        type: Boolean,
+        default: false
+    },
+    role: {
+        type: String,
+        default: "User"
+    },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     }
 });
 
