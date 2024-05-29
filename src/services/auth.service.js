@@ -107,7 +107,11 @@ const authService = {
         delete accountJson.password;
 
         return {
+            id: account.id,
             username: account.username,
+            email: account.email,
+            role: account.role,
+            isBlocked: account.isBlocked,
             accessToken,
             refreshToken,
         }
