@@ -2,10 +2,10 @@
 import jwt from "jsonwebtoken";
 
 // ** Constants
-import { authConstant, statusCode } from "../constants"
+import { authConstant, statusCode } from "../constants/index.js"
 
 // ** Utils
-import { response } from "../utils/baseResponse";
+import { response } from "../utils/baseResponse.js";
 
 export const verifyAccessToken = (req, res, next) => {
     try {

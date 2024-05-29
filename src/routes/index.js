@@ -1,2 +1,2 @@
-export * from "./public/index.js";
-export * from "./private/index.js";
+export { publicRouter } from "./public/index.js";
+export { privateRouter } from "./private/index.js";

@@ -2,7 +2,7 @@
 import express from "express";
 
 // ** Routes
-import authRouter from "./auth";
+import authRouter from "./auth.js";
 
 const publicRouter = express.Router();
 

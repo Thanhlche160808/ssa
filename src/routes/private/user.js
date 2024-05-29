@@ -2,7 +2,7 @@
 import express from "express";
 
 // ** Controllers
-import userController from "../../controllers/user.controller";
+import userController from "../../controllers/user.controller.js";
 
 // ** Middlewares
 // import { authValidation } from "../../middlewares/validate-data/auth";

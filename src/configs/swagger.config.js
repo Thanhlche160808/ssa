@@ -1,5 +1,5 @@
 import swaggerJSDoc from 'swagger-jsdoc';
-import { HOST, PORT } from '../constants/env';
+import { HOST, PORT } from '../constants/env.js';
 
 const options = {
     swaggerDefinition: {

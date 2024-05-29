@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 // ** Model
-import Account from "../models/account";
+import Account from "../models/account.js";
 
 // ** Services
 

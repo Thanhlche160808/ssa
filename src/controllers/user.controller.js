@@ -1,11 +1,11 @@
 // ** Service
-import userService from "../services/user.service";
+import userService from "../services/user.service.js";
 
 // ** Constants
-import { statusCode } from "../constants";
+import { statusCode } from "../constants/index.js";
 
 // ** Utils
-import { response } from "../utils/baseResponse";
+import { response } from "../utils/baseResponse.js";
 
 const userController = {
     getProfile: async (req, res) => {

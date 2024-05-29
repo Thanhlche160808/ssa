@@ -1,8 +1,8 @@
 "use strict";
 
-import { server } from "./app";
-import { connection } from "./configs/database";
-import { HOST, PORT } from './constants/env';
+import { server } from "./app.js";
+import { connection } from "./configs/database.js";
+import { HOST, PORT } from './constants/env.js';
 
 (async () => {
   try {

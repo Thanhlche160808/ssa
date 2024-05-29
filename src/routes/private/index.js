@@ -2,7 +2,7 @@
 import express from "express";
 
 // ** Routes
-import userRouter from "./user";
+import userRouter from "./user.js";
 
 const privateRouter = express.Router();
 
