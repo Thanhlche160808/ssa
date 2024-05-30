@@ -1,3 +1,3 @@
-export * from "./auth.constant";
-export * from "./http.constant";
-export * from "./statusCode.constant";
+export * from "./auth.constant.js";
+export * from "./http.constant.js";
+export * from "./statusCode.constant.js";

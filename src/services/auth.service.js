@@ -4,11 +4,11 @@ import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
 
 // ** Model
-import Account from "../models/account";
-import User from "../models/user";
+import Account from "../models/account.js";
+import User from "../models/user.js";
 
 // ** Services
-import jwtService from "../services/jwt.service";
+import jwtService from "../services/jwt.service.js";
 
 const authService = {
     create: async ({ username, password, email, phone, firstName, lastName }) => {
@@ -107,7 +107,11 @@ const authService = {
         delete accountJson.password;
 
         return {
+            id: account.id,
             username: account.username,
+            email: account.email,
+            role: account.role,
+            isBlocked: account.isBlocked,
             accessToken,
             refreshToken,
         }

@@ -2,22 +2,25 @@
 import express from "express";
 import http from "http";
 import swaggerUi from 'swagger-ui-express';
-import swaggerSpec from './configs/swagger.config'; 
 
 // ** Configs
-import configApp from "./configs/appConfig";
+import configApp from "./configs/appConfig.js";
+import swaggerSpec from './configs/swagger.config.js'; 
 
 // ** Routes
-import { publicRouter } from "./routes";
-import { privateRouter } from "./routes";
+import { publicRouter, privateRouter } from "./routes/index.js";
 
 // ** Middlewares
-import { verifyAccessToken } from "./middlewares/auth";
+import { verifyAccessToken } from "./middlewares/auth.js";
 
 const app = express();
 configApp(app);
 
 const server = http.createServer(app);
+
+app.use("/server-check", (req, res) => {
+    res.status(200).json("Hello World");
+});
 
 //Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
