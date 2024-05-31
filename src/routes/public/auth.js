@@ -1,8 +1,9 @@
-// ** Express
+// ** Lib
 import express from "express";
+import passport from "passport";
 
 // ** Controllers
-import authValidation from "../../controllers/auth.controller.js";
+import authController from "../../controllers/auth.controller.js";
 
 // ** Middlewares
 // import { authValidation } from "../../middlewares/validate-data/auth";
@@ -119,7 +120,7 @@ const router = express.Router();
  *                  isBlocked: false
  *                  role: User
  */
-router.post("/register", authValidation.register);
+router.post("/register", authController.register);
 
 /**
  * @swagger
@@ -168,6 +169,10 @@ router.post("/register", authValidation.register);
  *                              type: string
  *                              example: eyJhbGciO....
  */
-router.post("/login", authValidation.login);
+router.post("/login", authController.login);
 
+router.get("/google/login", passport.authenticate('google', { scope: ['profile', 'email'] , session: false}));
+
+router.get("/google/callback", passport.authenticate('google', { failureRedirect: '/' }), authController.loginWithGoogle);
 export default router;
+//

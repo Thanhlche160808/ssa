@@ -58,6 +58,26 @@ const authController = {
             )
         }
     },
+
+    loginWithGoogle: async (req, res) => {
+        const googleId = req.user.id;
+        try {
+            const { accessToken } = await authService.loginWithGoogle(googleId)
+            res.header('Access-Control-Expose-Headers', 'Authorization');
+            res.header('Authorization', `Bearer ${accessToken}`);
+            res.redirect('https://www.facebook.com/');
+        } catch (error) {
+            res.status(statusCode.UNAUTHORIZED).json(
+                {
+                    response: {
+                        isSuccess: false,
+                        statusCode: statusCode.UNAUTHORIZED,
+                        message: error?.message,
+                    }
+                }
+            )
+        }
+    },
 };
 
 export default authController;

@@ -12,10 +12,10 @@ import jwtService from "../services/jwt.service.js";
 
 const authService = {
     create: async ({ username, password, email, phone, firstName, lastName }) => {
-        let session = null;
+        // let session = null;
         try {
-            session = await mongoose.startSession();
-            session.startTransaction();
+            // session = await mongoose.startSession();
+            // session.startTransaction();
 
             const usernameExist = await Account.findOne({ username });
 
@@ -33,54 +33,33 @@ const authService = {
                 username,
                 password,
                 email,
+                user,
             });
 
-            account.user = user._id;
+            // account.user = user._id;
 
             const salt = bcrypt.genSaltSync();
             account.password = bcrypt.hashSync(account.password, salt);
 
-            await account.save({ session });
-            await user.save({ session });
+            await account.save();
+            await user.save();
+
+            // await user.save({ session });
 
             const accountJson = account.toJSON();
 
             delete accountJson.password;
 
-            await session.commitTransaction();
-            session.endSession();
+            // await session.commitTransaction();
+            // session.endSession();
 
             return accountJson;
         } catch (error) {
-            if (session) {
-                await session.abortTransaction();
-                session.endSession();
-            }
+            // if (session) {
+            //     await session.abortTransaction();
+            //     session.endSession();
+            // }
             throw error;
-        }
-    },
-
-
-    getToken: async (payload, type = "login") => {
-        let accessToken, refreshToken;
-
-        if (type === "login") {
-            [accessToken, refreshToken] = await Promise.all([
-                jwt.sign(payload, process.env.JWT_ACCESS_KEY, {
-                    expiresIn: process.env.EXPIRES_ACCESS_TOKEN,
-                }),
-                jwt.sign(payload, process.env.JWT_SECRET_KEY, {
-                    expiresIn: process.env.EXPIRES_REFRESH_TOKEN,
-                }),
-            ]);
-
-            return { accessToken, refreshToken };
-        } else {
-            accessToken = jwt.sign(payload, process.env.JWT_ACCESS_KEY, {
-                expiresIn: process.env.EXPIRES_ACCESS_TOKEN,
-            });
-
-            return { accessToken };
         }
     },
 
@@ -117,7 +96,16 @@ const authService = {
         }
     },
 
+    loginWithGoogle: async (googleId) => {
+        const account = await Account.findOne({ googleId });
+        if (!account) throw new Error("Cannot login with google");
 
+        const payload = {
+            id: account.id,
+            username: account.email,
+        }
+        return await jwtService.getToken(payload);
+    }
 };
 
 export default authService;

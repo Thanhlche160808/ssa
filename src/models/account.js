@@ -8,7 +8,11 @@ const accountSChema = new mongoose.Schema({
         type: String
     },
     email: {
-        type: String
+        type: String,
+        require: true
+    },
+    googleId: {
+        type: String,
     },
     refreshToken: {
         type: String
