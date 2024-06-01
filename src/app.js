@@ -2,7 +2,6 @@
 import express from "express";
 import http from "http";
 import swaggerUi from 'swagger-ui-express';
-import passport from './middlewares/passport.js';
 
 // ** Configs
 import configApp from "./configs/appConfig.js";
@@ -28,8 +27,6 @@ app.use("/server-check", (req, res) => {
     res.status(200).json("Hello World");
 });
 
-app.use(passport.initialize());
-app.use(passport.session());
 
 //Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));

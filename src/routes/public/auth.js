@@ -175,4 +175,3 @@ router.get("/google/login", passport.authenticate('google', { scope: ['profile',
 
 router.get("/google/callback", passport.authenticate('google', { failureRedirect: '/' }), authController.loginWithGoogle);
 export default router;
-//

@@ -9,6 +9,19 @@ import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from '../constants/env.js'
 import Account from '../models/account.js';
 import User from '../models/user.js';
 
+passport.serializeUser((user, done) => {
+    done(null, user._id);
+});
+
+passport.deserializeUser(async (id, done) => {
+    try {
+        const user = await Account.findById(id);
+        return user ? done(null, user) : done(null, null);
+    } catch (err) {
+        done(err, null);
+    }
+});
+
 passport.use(new GoogleStrategy({
     clientID: GOOGLE_CLIENT_ID,
     clientSecret: GOOGLE_CLIENT_SECRET,
@@ -16,8 +29,9 @@ passport.use(new GoogleStrategy({
 
 },
     async (accessToken, refreshToken, profile, cb) => {
+        let accountExisted;
         try {
-            const accountExisted = await Account.findOne({googleId: profile.id});
+            accountExisted = await Account.findOne({ googleId: profile.id });
             if (accountExisted) {
                 await User.findOneAndUpdate(
                     { _id: accountExisted.user },
@@ -39,28 +53,15 @@ passport.use(new GoogleStrategy({
                     googleId: profile.id,
                     user,
                 });
-
-                user.save();
+                await user.save();
             }
+            return cb(null, accountExisted);
         } catch (error) {
             console.log(error);
+            return cb(error, null);
         }
-        return cb(null, profile);
     }
 ));
-
-passport.serializeUser((user, done) => {
-    done(null, user.id);
-});
-
-passport.deserializeUser(async (id, done) => {
-    try {
-        const user = await Account.findOne({googleId: id});
-        done(null, user);
-    } catch (err) {
-        done(err, null);
-    }
-});
 
 
 export default passport;
