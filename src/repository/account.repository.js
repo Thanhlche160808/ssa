@@ -6,13 +6,13 @@ import Account from '../models/account.js';
 import User from '../models/user.js';
 
 class AccountRepository {
-    async create (account) {
+    async create(account) {
         // let session = null;
         try {
             // session = await mongoose.startSession();
             // session.startTransaction();
 
-            const usernameExist = await Account.findOne({ username: account.username });
+            const usernameExist = await Account.findOne({ $or: [{ username: account.username }, { email: account.email }] });
 
             if (usernameExist) {
                 throw new Error('Username is exist');
@@ -60,7 +60,7 @@ class AccountRepository {
         }
     }
 
-    async findByUsername (username) {
+    async findByUsername(username) {
         const account = await Account.findOne({ username });
 
         if (!account) throw new Error("Incorrect username");
@@ -68,7 +68,7 @@ class AccountRepository {
         return account;
     }
 
-    async createOrUpdate ({email, firstName, lastName, avatar}){
+    async createOrUpdate({ email, firstName, lastName, avatar }) {
         const account = await Account.findOne({ email }).populate('user');
 
         if (account) {
@@ -83,7 +83,7 @@ class AccountRepository {
             );
             return account;
         } else {
-            return this.create({email, firstName, lastName, picture});
+            return this.create({ email, firstName, lastName, picture });
         }
 
     }
