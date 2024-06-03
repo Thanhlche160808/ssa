@@ -62,9 +62,20 @@ const authController = {
     loginWithGoogle: async (req, res) => {
         const { credentital } = req.body;
         try {
-            const response = await authService.loginWithGoogle(credentital);
+            const result = await authService.loginWithGoogle(credentital);
+            res.status(statusCode.OK).json(response.success(
+                {
+                    data: result,
+                    code: statusCode.OK,
+                }
+            ));
         } catch (error) {
-            
+            res.status(statusCode.BAD_REQUEST).json(response.error(
+                {
+                    message: error?.message,
+                    code: statusCode.BAD_REQUEST,
+                }
+            ))
         }
     },
 };
