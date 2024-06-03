@@ -5,8 +5,8 @@ import bcrypt from 'bcrypt';
 import Account from '../models/account.js';
 import User from '../models/user.js';
 
-class AccountRepository {
-    async create(account) {
+const accountRepository = {
+    create: async (account) => {
         // let session = null;
         try {
             // session = await mongoose.startSession();
@@ -56,19 +56,19 @@ class AccountRepository {
             //     await session.abortTransaction();
             //     session.endSession();
             // }
-            throw error;
+            throw new Error(error.message);
         }
-    }
+    },
 
-    async findByUsername(username) {
+    findByUsername: async (username) => {
         const account = await Account.findOne({ username });
 
         if (!account) throw new Error("Incorrect username");
 
         return account;
-    }
+    },
 
-    async createOrUpdate({ email, firstName, lastName, avatar }) {
+    createOrUpdate: async ({ email, firstName, lastName, avatar }) => {
         const account = await Account.findOne({ email }).populate('user');
 
         if (account) {
@@ -83,10 +83,10 @@ class AccountRepository {
             );
             return account;
         } else {
-            return this.create({ email, firstName, lastName, picture });
+            return accountRepository.create({ email, firstName, lastName, picture });
         }
 
     }
 };
 
-export default new AccountRepository();
+export default accountRepository;

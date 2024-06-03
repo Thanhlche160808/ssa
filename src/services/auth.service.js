@@ -1,11 +1,5 @@
 // ** Lib
 import bcrypt from 'bcrypt';
-import { OAuth2Client } from 'google-auth-library'
-
-
-// ** Model
-import Account from "../models/account.js";
-import User from "../models/user.js";
 
 // ** Services
 import jwtService from "../services/jwt.service.js";
@@ -14,21 +8,10 @@ import jwtService from "../services/jwt.service.js";
 import accountRepository from "../repository/account.repository.js";
 
 // ** Constants
-import { GOOGLE_CLIENT_ID } from '../constants/env.js'
 
-const client = new OAuth2Client(GOOGLE_CLIENT_ID);
+// ** Helper
+import googleHelper from '../helper/google.helper.js'
 
-async function verifyGoogleToken(token) {
-    try {
-        const ticket = await client.verifyIdToken({
-            idToken: token,
-            audience: GOOGLE_CLIENT_ID,
-        });
-        return { payload: ticket.getPayload() };
-    } catch (error) {
-        return { error: "Invalid user detected. Please try again" };
-    }
-}
 
 const authService = {
     register: async ({ username, password, email, phone, firstName, lastName }) => {
@@ -73,7 +56,7 @@ const authService = {
     loginWithGoogle: async (credentital) => {
         try {
             if (credentital) {
-                const verificationResponse = await verifyGoogleToken(credentital);
+                const verificationResponse = await googleHelper.verifyGoogleToken(credentital);
                 if (verificationResponse.error) throw new Error(verificationResponse.error);
 
                 const profile = verificationResponse?.payload;
