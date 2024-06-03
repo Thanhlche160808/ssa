@@ -29,6 +29,18 @@ const productChema = new mongoose.Schema({
     productCode: {
         type: String
     },
+    productName: {
+        type: String
+    },
+    type: {
+        type: String
+    },
+    displayName: {
+        type: String
+    },
+    description: {
+        type: String
+    },
     thumbnail: {
         type: String
     },
@@ -36,7 +48,7 @@ const productChema = new mongoose.Schema({
         type: Array[String]
     },
     category: {
-        type: String,
+        type: ObjectId,
         ref: 'Category'
     },
     isHide: {
@@ -44,7 +56,7 @@ const productChema = new mongoose.Schema({
         default: false
     },
     color: {
-        type: Array[Color],
+        type: Color,
     },
     price: {
         type: Number
