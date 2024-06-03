@@ -5,7 +5,6 @@ import morgan from "morgan";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import path from "path";
-import passport from '../middlewares/passport.js';
 
 const configApp = (app) => {
   dotenv.config();
@@ -23,8 +22,6 @@ const configApp = (app) => {
       },
     })
   );
-  app.use(passport.initialize());
-  app.use(passport.session());
   app.use(
     cors({
       origin: "*",

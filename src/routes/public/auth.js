@@ -1,6 +1,5 @@
 // ** Lib
 import express from "express";
-import passport from "passport";
 
 // ** Controllers
 import authController from "../../controllers/auth.controller.js";
@@ -171,7 +170,10 @@ router.post("/register", authController.register);
  */
 router.post("/login", authController.login);
 
-router.get("/google/login", passport.authenticate('google', { scope: ['profile', 'email'] , session: false}));
+// router.get("/google/login", passport.authenticate('google', { scope: ['profile', 'email'] , session: false}));
 
-router.get("/google/callback", passport.authenticate('google', { failureRedirect: '/' }), authController.loginWithGoogle);
+// router.get("/google/callback", passport.authenticate('google', { failureRedirect: '/' }), authController.loginWithGoogle);
+
+router.get("/google/login", authController.loginWithGoogle);
+
 export default router;

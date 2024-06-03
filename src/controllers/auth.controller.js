@@ -11,10 +11,10 @@ const authController = {
     register: async (req, res) => {
         const data = req.body;
         try {
-            const account = await authService.create(data);
+            const result = await authService.register(data);
             res.status(statusCode.CREATED).json(response.success(
                 {
-                    data: account,
+                    data: result,
                     code: statusCode.CREATED,
                 }
             ));
@@ -60,22 +60,11 @@ const authController = {
     },
 
     loginWithGoogle: async (req, res) => {
-        const googleId = req.user.id;
+        const { credentital } = req.body;
         try {
-            const { accessToken } = await authService.loginWithGoogle(googleId)
-            res.header('Access-Control-Expose-Headers', 'Authorization');
-            res.header('Authorization', `Bearer ${accessToken}`);
-            res.redirect('https://www.facebook.com/');
+            const response = await authService.loginWithGoogle(credentital);
         } catch (error) {
-            res.status(statusCode.UNAUTHORIZED).json(
-                {
-                    response: {
-                        isSuccess: false,
-                        statusCode: statusCode.UNAUTHORIZED,
-                        message: error?.message,
-                    }
-                }
-            )
+            
         }
     },
 };

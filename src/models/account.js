@@ -12,9 +12,6 @@ const accountSChema = new mongoose.Schema({
         type: String,
         require: true
     },
-    googleId: {
-        type: String,
-    },
     refreshToken: {
         type: String
     },
