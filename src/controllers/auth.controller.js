@@ -60,9 +60,9 @@ const authController = {
     },
 
     loginWithGoogle: async (req, res) => {
-        const { credentital } = req.body;
+        const { credential } = req.body;
         try {
-            const result = await authService.loginWithGoogle(credentital);
+            const result = await authService.loginWithGoogle(credential);
             res.status(statusCode.OK).json(response.success(
                 {
                     data: result,

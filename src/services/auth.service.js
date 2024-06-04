@@ -58,8 +58,8 @@ const authService = {
             if (credentital) {
                 const verificationResponse = await googleHelper.verifyGoogleToken(credentital);
                 if (verificationResponse.error) throw new Error(verificationResponse.error);
-
                 const profile = verificationResponse?.payload;
+
                 const account = await accountRepository.createOrUpdate(
                     {
                         email: profile.email,
@@ -70,12 +70,14 @@ const authService = {
                 );
 
                 const payload = {
-                    id: account.id,
-                    username,
+                    id: account._id,
+                    username: account.username,
                 }
 
                 const { accessToken, refreshToken } = await jwtService.getToken(payload);
-                const accountJson = accountExisted.toJSON();
+
+                const accountJson = account.toJSON();
+
                 delete accountJson.password;
 
                 return {

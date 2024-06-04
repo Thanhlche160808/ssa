@@ -174,6 +174,6 @@ router.post("/login", authController.login);
 
 // router.get("/google/callback", passport.authenticate('google', { failureRedirect: '/' }), authController.loginWithGoogle);
 
-router.get("/google/login", authController.loginWithGoogle);
+router.post("/google/login", authController.loginWithGoogle);
 
 export default router;
