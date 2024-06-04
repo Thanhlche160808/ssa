@@ -41,7 +41,7 @@ const cateController = {
             res.status(statusCode.BAD_REQUEST).json(response.error(
                 {
                     message: error?.message,
-                    code: statusCode.BAD_REQUEST,
+                    code: statusCode.BAD_REQUEST
                 }
             ))
         }
