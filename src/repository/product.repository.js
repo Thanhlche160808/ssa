@@ -21,7 +21,7 @@ const productRepository = {
         images: product.images,
         categoryId: product.categoryId,
         price: product.price,
-        colour: product.colour,
+        colourVariant: product.colourVariant,
       });
 
       return await newProduct.save();
@@ -36,6 +36,14 @@ const productRepository = {
     if (!product) throw new Error("Not found");
 
     return product;
+  },
+
+  totalDocuments: async (query) => {
+    return await Product.countDocuments(query);
+  },
+
+  filterProducts: async (query) => {
+    return await Product.find(query)
   },
 };
 

@@ -1,20 +1,6 @@
 import mongoose from "mongoose";
 
-export const Color = new mongoose.Schema(
-    {
-        colorName: {
-            type: String
-        },
-        hex: {
-            type: String
-        },
-        size: {
-            type: Array[Size],
-        },
-    }
-);
-
-export const Size = new mongoose.Schema(
+export const SizeMetrics = new mongoose.Schema(
     {
         size: {
             type: Number
@@ -25,7 +11,19 @@ export const Size = new mongoose.Schema(
     }
 );
 
-const productChema = new mongoose.Schema({
+export const ColourVariant = new mongoose.Schema(
+    {
+        colourName: {
+            type: String
+        },
+        hex: {
+            type: String
+        },
+        sizeMetrics: [SizeMetrics],
+    }
+);
+
+const productSchema = new mongoose.Schema({
     productCode: {
         type: String
     },
@@ -44,24 +42,24 @@ const productChema = new mongoose.Schema({
     thumbnail: {
         type: String
     },
-    images: {
-        type: Array[String]
-    },
+    images: [String],
     category: {
-        type: ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Category'
     },
     isHide: {
         type: Boolean,
         default: false
     },
-    color: {
-        type: Color,
+    colourVariant: {
+        type: ColourVariant,
     },
     price: {
         type: Number
     },
 });
 
-let Product = mongoose.model('Product', productChema);
+const Product = mongoose.models.Product
+    ? mongoose.model('Product')
+    : mongoose.model('Product', productSchema);
 export default Product;
