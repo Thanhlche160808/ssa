@@ -45,6 +45,26 @@ const cateController = {
                 }
             ))
         }
+    },
+
+    create: async(req, res) => {
+        const data = req.body
+        try{
+            const category = await cateService.create(data);
+            res.status(statusCode.CREATED).json(response.success(
+                {
+                    data: category,
+                    code: statusCode.CREATED,
+                }
+            ));
+        }catch (error){
+            res.status(statusCode.BAD_REQUEST).json(response.error(
+                {
+                    message: error?.message,
+                    code: statusCode.BAD_REQUEST
+                }
+            ))
+        }
     }
 }
 

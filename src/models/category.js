@@ -13,5 +13,5 @@ const categorySChema = new mongoose.Schema({
     }
 });
 
-let Category = mongoose.model('Account', categorySChema);
+let Category = mongoose.model('Category', categorySChema);
 export default Category;

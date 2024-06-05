@@ -62,7 +62,7 @@ const router = express.Router(); // Fixed the initialization of the router
  *               items:
  *                 $ref: '#/components/schemas/Category'
  */
-router.get('/category', cateController.getAll);
+router.get('/', cateController.getAll);
 
 /**
  * @swagger
@@ -85,6 +85,6 @@ router.get('/category', cateController.getAll);
  *             schema:
  *               $ref: '#/components/schemas/Category'
  */
-router.get('/category/:id', cateController.getById);
+router.get('/:id', cateController.getById);
 
 export default router;
