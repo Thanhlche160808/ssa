@@ -4,6 +4,7 @@ import express from 'express';
 //** Controller
 import cateController from '../../controllers/category.controller';
 
+
 const router = express.Router(); // Fixed the initialization of the router
 
 /**
@@ -95,4 +96,56 @@ const router = express.Router(); // Fixed the initialization of the router
 
 router.post('/', cateController.create)
 
+
+/** 
+ * @swagger
+ * /api/category/{id}:
+ *   put:
+ *     summary: Update category
+ *     tags: [Category]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               isHide:
+ *                 type: boolean
+ *           example:
+ *             name: vintage
+ *             description: This is a description
+ *             isHide: false
+ *     responses:
+ *       200:
+ *         description: Update Category
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 isSuccess:
+ *                   type: boolean
+ *                   example: true
+ *                 statusCode:
+ *                   type: number
+ *                   example: 200
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     name:
+ *                       type: string
+ *                       example: vintage
+ *                     description:
+ *                       type: string
+ *                       example: This is a description
+ *                     isHide:
+ *                       type: boolean
+ *                       example: false
+ */
+router.put('/:id', cateController.update)
 export default router

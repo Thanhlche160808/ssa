@@ -22,6 +22,26 @@ const cateService = {
             description,
             isHide,
         })
+        await Category.create(category)
+        return category
+    },
+
+    update: async ({ id, name, description, isHide }) => {
+        const nameExists = await Category.findOne({ name });
+        if (nameExists) {
+            throw new Error('Category already exists');
+        }
+
+        const category = await Category.findById(id);
+        if (!category) {
+            throw new Error('Category not existed');
+        }
+
+        category.name = name;
+        category.description = description;
+        category.isHide = isHide ? isHide : category.isHide;
+        await category.save()
+
         return category
     }
 }

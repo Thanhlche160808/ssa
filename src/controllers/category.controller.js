@@ -65,6 +65,26 @@ const cateController = {
                 }
             ))
         }
+    },
+    
+    update: async(req, res) => {
+        const data = req.body
+        try{
+            const category = await cateService.update(data);
+            res.status(statusCode.OK).json(response.success(
+                {
+                    data: category,
+                    code: statusCode.OK
+                }
+            ))
+        }catch (error){
+            res.status(statusCode.BAD_REQUEST).json(response.error(
+                {
+                    message: error?.message,
+                    code: statusCode.BAD_REQUEST
+                }
+            ))
+        }
     }
 }
 
