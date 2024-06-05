@@ -6,10 +6,11 @@ import { statusCode } from "../constants/index.js";
 
 // ** Utils
 import { response } from "../utils/baseResponse.js";
+import { deleteToken } from "firebase/messaging";
 
 const cateController = {
-    getAll: async(req, res) => {
-        try{
+    getAll: async (req, res) => {
+        try {
             const categories = await cateService.getAll();
             res.status(statusCode.OK).json(response.success(
                 {
@@ -17,7 +18,7 @@ const cateController = {
                     code: statusCode.OK,
                 }
             ));
-        } catch (error){
+        } catch (error) {
             res.status(statusCode.BAD_REQUEST).json(response.error(
                 {
                     message: error?.message,
@@ -27,9 +28,9 @@ const cateController = {
         }
     },
 
-    getById: async(req, res) => {
-        try{
-            const id = req.params.id;
+    getById: async (req, res) => {
+        const id = req.params.id;
+        try {
             const category = await cateService.getById(id);
             res.status(statusCode.OK).json(response.success(
                 {
@@ -37,7 +38,7 @@ const cateController = {
                     code: statusCode.OK,
                 }
             ));
-        }catch (error){
+        } catch (error) {
             res.status(statusCode.BAD_REQUEST).json(response.error(
                 {
                     message: error?.message,
@@ -47,9 +48,9 @@ const cateController = {
         }
     },
 
-    create: async(req, res) => {
+    create: async (req, res) => {
         const data = req.body
-        try{
+        try {
             const category = await cateService.create(data);
             res.status(statusCode.CREATED).json(response.success(
                 {
@@ -57,7 +58,7 @@ const cateController = {
                     code: statusCode.CREATED,
                 }
             ));
-        }catch (error){
+        } catch (error) {
             res.status(statusCode.BAD_REQUEST).json(response.error(
                 {
                     message: error?.message,
@@ -66,18 +67,19 @@ const cateController = {
             ))
         }
     },
-    
-    update: async(req, res) => {
+
+    update: async (req, res) => {
         const data = req.body
-        try{
-            const category = await cateService.update(data);
+        const id = req.params.id
+        try {
+            const category = await cateService.update(id, data);
             res.status(statusCode.OK).json(response.success(
                 {
                     data: category,
                     code: statusCode.OK
                 }
             ))
-        }catch (error){
+        } catch (error) {
             res.status(statusCode.BAD_REQUEST).json(response.error(
                 {
                     message: error?.message,
@@ -85,7 +87,27 @@ const cateController = {
                 }
             ))
         }
-    }
+    },
+
+    // delete: async (req, res) => {
+    //     const id = req.params.id
+    //     try {
+    //         const category = await cateService.delete(id);
+    //         res.status(statusCode.OK).json(response.success(
+    //             {
+    //                 data: category,
+    //                 code: statusCode.OK
+    //             }
+    //         ))
+    //     } catch (error) {
+    //         res.status(statusCode.BAD_REQUEST).json(response.error(
+    //             {
+    //                 message: error?.message,
+    //                 code: statusCode.BAD_REQUEST
+    //             }
+    //         ))
+    //     }
+    // }
 }
 
 export default cateController;

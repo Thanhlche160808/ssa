@@ -3,7 +3,7 @@ import Category from "../models/category";
 
 const cateService = {
     getAll: async () => {
-        return await Category.find()
+        return await Category.find();
     },
 
     getById: async (id) => {
@@ -23,15 +23,15 @@ const cateService = {
             isHide,
         })
         await Category.create(category)
-        return category
+        return category;
     },
 
-    update: async ({ id, name, description, isHide }) => {
+    update: async (id ,{name, description, isHide }) => {
         const nameExists = await Category.findOne({ name });
         if (nameExists) {
             throw new Error('Category already exists');
         }
-
+        console.log(id);
         const category = await Category.findById(id);
         if (!category) {
             throw new Error('Category not existed');
@@ -42,8 +42,19 @@ const cateService = {
         category.isHide = isHide ? isHide : category.isHide;
         await category.save()
 
-        return category
-    }
+        return category;
+    },
+
+    // delete: async (id) => {
+    //     const category = await Category.findById(id);
+    //     if (!category) {
+    //         throw new Error('Category not existed');
+    //     }
+    //     category.isHide = category.isHide ==  false ? true : false;
+    //     await category.save()
+
+    //     return category;
+    // }
 }
 
 export default cateService;

@@ -103,6 +103,13 @@ router.post('/', cateController.create)
  *   put:
  *     summary: Update category
  *     tags: [Category]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The category ID
  *     requestBody:
  *       required: true
  *       content:
