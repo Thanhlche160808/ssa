@@ -27,6 +27,7 @@ const productController = {
             ))
         }
     },
+
     getAllProducts: async (req, res) => {
         const data = req.query;
         try {
@@ -46,6 +47,7 @@ const productController = {
             ))
         }
     },
+
     deleteProduct: async (req, res) => {
         const data = req.query;
         try {
@@ -65,6 +67,7 @@ const productController = {
             ))
         }
     },
+    
     updateProduct: async (req, res) => {
         const data = req.body;
         const productId = req.params.id;

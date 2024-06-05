@@ -31,6 +31,7 @@ const productRepository = {
       throw new Error(error.message);
     }
   },
+
   findAndChangeVisibility: async (productId) => {
     const product = await Product.findById(productId);
 
@@ -42,6 +43,7 @@ const productRepository = {
       { new: true }
     );
   },
+
   findAndUpdate: async (productId, updatedData) => {
     const product = await Product.findById(productId);
 
@@ -50,6 +52,7 @@ const productRepository = {
     const query = { ...updatedData };
     return await Product.findByIdAndUpdate(productId, query, { new: true });
   },
+
   findByProductName: async (productName) => {
     const product = await Product.findOne({ productName });
 
@@ -57,9 +60,11 @@ const productRepository = {
 
     return product;
   },
+
   totalDocuments: async (query) => {
     return await Product.countDocuments(query);
   },
+  
   filterProducts: async (query, skip, size, sortOptions) => {
     return await Product.find(query)
       .select('-__v')
