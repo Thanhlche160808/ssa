@@ -154,7 +154,7 @@ const router = express.Router();
  *                   size: 43,
  *                   quantity: 200
  *                  }
-*                 ]
+ *                ]
  *             }
  *     responses:
  *       200:
@@ -168,6 +168,128 @@ const router = express.Router();
  */
 router.post("/createProduct", productController.createProduct);
 
-router.get("/getProducts", productController.getAllProducts);
+/**
+ * @swagger
+ * /api/product/deleteProduct:
+ *   put:
+ *     summary: Delete Product 
+ *     tags: [Product]
+ *     parameters:
+ *       - in: query
+ *         name: productId
+ *         schema:
+ *           type: string
+ *         description: The id of the product to delete 
+ *     responses:
+ *       200:
+ *         description: Product deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 productCode:
+ *                   type: string
+ *                   example: abcsd
+ *                 productName:
+ *                   type: string
+ *                   example: Bitis Hunter X
+ *                 type:
+ *                   type: string
+ *                   example: Low top
+ *                 displayName:
+ *                   type: string
+ *                   example: Bitis Hunter X - Low top - SKyblue
+ *                 isHide:
+ *                   type: boolean
+ *                   example: true
+ */    
+router.put("/deleteProduct", productController.deleteProduct);
+
+/**
+ * @swagger
+ * /api/product/{id}:
+ *   put:
+ *     summary: Update Product 
+ *     tags: [Product]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The product ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               productName: 
+ *                 type: string
+ *               type:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               thumbnail:
+ *                 type: string
+ *               images:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *               category:
+ *                 type: string
+ *               price:
+ *                 type: string
+ *               colourVariant:
+ *                 type: string
+ *           example:
+ *             productName: Bitis Hunter X
+ *             type: Low top
+ *             description: Giày chạy bộ tốt nhất năm 2024
+ *             thumnail: https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
+ *             images: []
+ *             category: Bitis Hunter
+ *             isHide: false
+ *             colourVariant: {
+ *               colourName: Skyblue,
+ *               hex: "#00CCFF",
+ *               sizeMetrics: [
+ *                 {
+ *                   size: 42,
+ *                   quantity: 100
+ *                 },
+ *                 {
+ *                   size: 43,
+ *                   quantity: 200
+ *                  }
+ *                ]
+ *             }
+ *     responses:
+ *       200:
+ *         description: Update product successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 productCode:
+ *                   type: string
+ *                   example: abcsd
+ *                 productName:
+ *                   type: string
+ *                   example: Bitis Hunter X
+ *                 type:
+ *                   type: string
+ *                   example: Low top
+ *                 displayName:
+ *                   type: string
+ *                   example: Bitis Hunter X - Low top - SKyblue
+ *                 isHide:
+ *                   type: boolean
+ *                   example: true
+ */
+router.put("/:id", productController.updateProduct);
 
 export default router;

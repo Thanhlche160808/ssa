@@ -29,13 +29,52 @@ const productController = {
     },
 
     getAllProducts: async (req, res) => {
-        const data = req.body;
+        const data = req.query;
         try {
             const result = await productService.getAllProduct(data);
-            res.status(statusCode.CREATED).json(response.success(
+            res.status(statusCode.OK).json(response.success(
                 {
                     data: result,
-                    code: statusCode.CREATED,
+                    code: statusCode.OK,
+                }
+            ));
+        } catch (error) {
+            res.status(statusCode.BAD_REQUEST).json(response.error(
+                {
+                    message: error?.message,
+                    code: statusCode.BAD_REQUEST,
+                }
+            ))
+        }
+    },
+    deleteProduct: async (req, res) => {
+        const data = req.query;
+        try {
+            const result = await productService.deleteProduct(data);
+            res.status(statusCode.OK).json(response.success(
+                {
+                    data: result,
+                    code: statusCode.OK,
+                }
+            ));
+        } catch (error) {
+            res.status(statusCode.BAD_REQUEST).json(response.error(
+                {
+                    message: error?.message,
+                    code: statusCode.BAD_REQUEST,
+                }
+            ))
+        }
+    },
+    updateProduct: async (req, res) => {
+        const data = req.body;
+        const productId = req.params.id;
+        try {
+            const result = await productService.updateProduct(productId, data);
+            res.status(statusCode.OK).json(response.success(
+                {
+                    data: result,
+                    code: statusCode.OK,
                 }
             ));
         } catch (error) {

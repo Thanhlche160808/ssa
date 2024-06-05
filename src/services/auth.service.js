@@ -12,10 +12,10 @@ import jwtService from "../services/jwt.service.js";
 
 const authService = {
     create: async ({ username, password, email, phone, firstName, lastName }) => {
-        let session = null;
-        try {
-            session = await mongoose.startSession();
-            session.startTransaction();
+        // let session = null;
+        // try {
+        //     session = await mongoose.startSession();
+        //     session.startTransaction();
 
             const usernameExist = await Account.findOne({ username });
 
@@ -40,24 +40,24 @@ const authService = {
             const salt = bcrypt.genSaltSync();
             account.password = bcrypt.hashSync(account.password, salt);
 
-            await account.save({ session });
-            await user.save({ session });
+            await account.save();
+            await user.save();
 
             const accountJson = account.toJSON();
 
             delete accountJson.password;
 
-            await session.commitTransaction();
-            session.endSession();
+            // await session.commitTransaction();
+            // session.endSession();
 
             return accountJson;
-        } catch (error) {
-            if (session) {
-                await session.abortTransaction();
-                session.endSession();
-            }
-            throw error;
-        }
+        // } catch (error) {
+        //     if (session) {
+        //         await session.abortTransaction();
+        //         session.endSession();
+        //     }
+        //     throw error;
+        // }
     },
 
 
@@ -116,8 +116,6 @@ const authService = {
             refreshToken,
         }
     },
-
-
 };
 
 export default authService;

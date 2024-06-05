@@ -15,10 +15,12 @@ const productRepository = {
       const newProduct = new Product({
         productCode: product.productCode,
         productName: product.productName,
+        type: product.type,
         displayName: product.displayName,
         description: product.description,
         thumbnail: product.thumbnail,
         images: product.images,
+        isHide: false,
         categoryId: product.categoryId,
         price: product.price,
         colourVariant: product.colourVariant,
@@ -29,7 +31,25 @@ const productRepository = {
       throw new Error(error.message);
     }
   },
+  findAndChangeVisibility: async (productId) => {
+    const product = await Product.findById(productId);
 
+    if (!product) throw new Error("Not found");
+
+    return await Product.findByIdAndUpdate(
+      { _id: productId },
+      { $set: { isHide: !product.isHide } },
+      { new: true }
+    );
+  },
+  findAndUpdate: async (productId, updatedData) => {
+    const product = await Product.findById(productId);
+
+    if (!product) throw new Error("Not found");
+
+    const query = { ...updatedData };
+    return await Product.findByIdAndUpdate(productId, query, { new: true });
+  },
   findByProductName: async (productName) => {
     const product = await Product.findOne({ productName });
 
@@ -42,8 +62,12 @@ const productRepository = {
     return await Product.countDocuments(query);
   },
 
-  filterProducts: async (query) => {
+  filterProducts: async (query, skip, size, sortOptions) => {
     return await Product.find(query)
+    .skip(skip)
+    .limit(size)
+    .sort(sortOptions)
+    .select({ productName: 1, isHide: 1 });
   },
 };
 
