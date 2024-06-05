@@ -63,7 +63,7 @@ const cartSchema = new mongoose.Schema({
 
 let Cart = mongoose.model('Cart', cartSchema);
 let Item = mongoose.model('Item', itemSchema);
-Item.discriminator('Product', productSchema);
-Item.discriminator('Collection', collectionSchema);
+Item.discriminator('ProductCart', productSchema);
+Item.discriminator('CollectionCart', collectionSchema);
 
 export default { Cart };

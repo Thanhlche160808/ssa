@@ -27,7 +27,6 @@ const productController = {
             ))
         }
     },
-
     getAllProducts: async (req, res) => {
         const data = req.query;
         try {

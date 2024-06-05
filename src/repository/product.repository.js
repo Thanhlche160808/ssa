@@ -34,7 +34,7 @@ const productRepository = {
   findAndChangeVisibility: async (productId) => {
     const product = await Product.findById(productId);
 
-    if (!product) throw new Error("Not found");
+    if (!product) throw new Error("Product not found");
 
     return await Product.findByIdAndUpdate(
       { _id: productId },
@@ -45,7 +45,7 @@ const productRepository = {
   findAndUpdate: async (productId, updatedData) => {
     const product = await Product.findById(productId);
 
-    if (!product) throw new Error("Not found");
+    if (!product) throw new Error("Product not found");
 
     const query = { ...updatedData };
     return await Product.findByIdAndUpdate(productId, query, { new: true });
@@ -53,21 +53,19 @@ const productRepository = {
   findByProductName: async (productName) => {
     const product = await Product.findOne({ productName });
 
-    if (!product) throw new Error("Not found");
+    if (!product) throw new Error("Product not found");
 
     return product;
   },
-
   totalDocuments: async (query) => {
     return await Product.countDocuments(query);
   },
-
   filterProducts: async (query, skip, size, sortOptions) => {
     return await Product.find(query)
-    .skip(skip)
-    .limit(size)
-    .sort(sortOptions)
-    .select({ productName: 1, isHide: 1 });
+      .select('-__v')
+      .skip(skip)
+      .limit(size)
+      .sort(sortOptions)
   },
 };
 
