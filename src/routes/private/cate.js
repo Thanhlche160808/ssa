@@ -155,4 +155,93 @@ router.post('/', cateController.create)
  *                       example: false
  */
 router.put('/:id', cateController.update)
+
+
+/** 
+ * @swagger
+ * /api/category/delete/{id}:
+ *   put:
+ *     summary: Change status of category
+ *     tags: [Category]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The category ID
+ *     responses:
+ *       200:
+ *         description: Change status of Category
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 isSuccess:
+ *                   type: boolean
+ *                   example: true
+ *                 statusCode:
+ *                   type: number
+ *                   example: 200
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     name:
+ *                       type: string
+ *                       example: vintage
+ *                     description:
+ *                       type: string
+ *                       example: This is a description
+ *                     isHide:
+ *                       type: boolean
+ *                       example: false
+ */
+router.put('/delete/:id', cateController.delete)
+
+/** 
+ * @swagger
+ * /api/category/list-dashboard:
+ *   get:
+ *     summary: Get all existing categories
+ *     tags: [Category]
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *           example:
+ *             name: vintage
+ *     responses:
+ *       200:
+ *         description: All existing categories
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 isSuccess:
+ *                   type: boolean
+ *                   example: true
+ *                 statusCode:
+ *                   type: number
+ *                   example: 200
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     name:
+ *                       type: string
+ *                       example: vintage
+ *                     description:
+ *                       type: string
+ *                       example: This is a description
+ *                     isHide:
+ *                       type: boolean
+ *                       example: false
+ */
+router.get('/list-dashboard', cateController.searchAndPaginate)
 export default router

@@ -89,25 +89,48 @@ const cateController = {
         }
     },
 
-    // delete: async (req, res) => {
-    //     const id = req.params.id
-    //     try {
-    //         const category = await cateService.delete(id);
-    //         res.status(statusCode.OK).json(response.success(
-    //             {
-    //                 data: category,
-    //                 code: statusCode.OK
-    //             }
-    //         ))
-    //     } catch (error) {
-    //         res.status(statusCode.BAD_REQUEST).json(response.error(
-    //             {
-    //                 message: error?.message,
-    //                 code: statusCode.BAD_REQUEST
-    //             }
-    //         ))
-    //     }
-    // }
+    delete: async (req, res) => {
+        const id = req.params.id
+        try {
+            const category = await cateService.delete(id);
+            res.status(statusCode.OK).json(response.success(
+                {
+                    data: category,
+                    code: statusCode.OK
+                }
+            ))
+        } catch (error) {
+            res.status(statusCode.BAD_REQUEST).json(response.error(
+                {
+                    message: error?.message,
+                    code: statusCode.BAD_REQUEST
+                }
+            ))
+        }
+    },
+
+    searchAndPaginate: async (req, res) => {
+        const page = parseInt(req.query.page) || 1;
+        const size = parseInt(req.query.size) || 5;
+        const name = req.query.name || '';
+
+        try {
+            const result = await cateService.searchAndPaginate(page, size, name);
+            res.status(statusCode.OK).json(response.success(
+                {
+                    data: result,
+                    code: statusCode.OK
+                }
+            ))
+        } catch (error) {
+            res.status(statusCode.BAD_REQUEST).json(response.error(
+                {
+                    message: error?.message,
+                    code: statusCode.BAD_REQUEST
+                }
+            ))
+        }
+    }
 }
 
 export default cateController;

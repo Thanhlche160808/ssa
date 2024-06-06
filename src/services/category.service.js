@@ -1,13 +1,16 @@
 // ** Model
 import Category from "../models/category";
 
+// ** Repository
+import cateRepository from "../repository/category.repository";
+
 const cateService = {
     getAll: async () => {
-        return await Category.find();
+        return await cateRepository.getAll()
     },
 
     getById: async (id) => {
-        return await Category.findById(id);
+        return await cateRepository.getById(id);
     },
 
     create: async ({ name, description, isHide }) => {
@@ -22,39 +25,41 @@ const cateService = {
             description,
             isHide,
         })
-        await Category.create(category)
-        return category;
+
+        return cateRepository.create(category);
     },
 
-    update: async (id ,{name, description, isHide }) => {
+    update: async (id, { name, description, isHide }) => {
         const nameExists = await Category.findOne({ name });
         if (nameExists) {
             throw new Error('Category already exists');
         }
-        console.log(id);
-        const category = await Category.findById(id);
-        if (!category) {
-            throw new Error('Category not existed');
-        }
 
-        category.name = name;
-        category.description = description;
-        category.isHide = isHide ? isHide : category.isHide;
-        await category.save()
-
-        return category;
+        return cateRepository.update(id, { name, description, isHide });
     },
 
-    // delete: async (id) => {
-    //     const category = await Category.findById(id);
-    //     if (!category) {
-    //         throw new Error('Category not existed');
-    //     }
-    //     category.isHide = category.isHide ==  false ? true : false;
-    //     await category.save()
+    delete: async (id) => {
+        return cateRepository.changeStatus(id);
+    },
 
-    //     return category;
-    // }
+    //get all existing categories in DB
+    searchAndPaginate: async (page, size, name) => {
+        const startIndex = (page - 1) * size;
+        const query = { name: { $regex: name, $options: 'i' } };
+
+        try {
+            const listCategory = await cateRepository.searchAndPaginate(startIndex, size, query);
+            return {
+                items: listCategory.item,
+                totalPage: Math.ceil(listCategory.total / size),
+                activePage: page
+            }
+        } catch (error) {
+            return {
+                message: "Error"
+            }
+        }
+    }
 }
 
 export default cateService;
