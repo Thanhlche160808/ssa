@@ -130,15 +130,27 @@ const router = express.Router();
  *     tags: [Product]
  *     parameters:
  *       - in: query
- *         name: productName
+ *         name: page
+ *         schema:
+ *           type: number
+ *           example: 1
+ *         description: The number page displaying in product pagination
+ *       - in: query
+ *         name: size
+ *         schema:
+ *           type: number
+ *           example: 10
+ *         description: The size of product in 1 page
+ *       - in: query
+ *         name: displayName
  *         schema:
  *           type: string
- *         description: The name of the product to search for
+ *         description: The displayName of the product to search for
  *       - in: query
  *         name: priceSort
  *         schema:
  *           type: number
- *         description: The sort order of the products   
+ *         description: The sort order of the products [-1, 1]
  *       - in: query
  *         name: min
  *         schema:
@@ -153,7 +165,6 @@ const router = express.Router();
  *         name: isHide
  *         schema:
  *           type: boolean
- *           example: false
  *         description: hide status of the product
  *     responses:
  *       200:
@@ -264,5 +275,28 @@ const router = express.Router();
  *                          price: 500000
  */
 router.get("/getProducts", productController.getAllProducts);
+
+/**
+ * @swagger
+ * /api/public/product/{id}:
+ *   get:
+ *     summary: Product 
+ *     tags: [Product]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The product ID
+ *     responses:
+ *       200:
+ *         description: Update product successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
+ */
+router.get("/:id", productController.productDetail);
 
 export default router;

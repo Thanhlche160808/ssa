@@ -1,63 +1,62 @@
 import mongoose from "mongoose";
 
-export const SizeMetrics = new mongoose.Schema(
-    {
-        size: {
-            type: Number
-        },
-        quantity: {
-            type: Number
-        },
-    }
-);
+export const SizeMetrics = new mongoose.Schema({
+  size: {
+    type: Number,
+  },
+  quantity: {
+    type: Number,
+  },
+});
 
-export const ColourVariant = new mongoose.Schema(
-    {
-        colourName: {
-            type: String
-        },
-        hex: {
-            type: String
-        },
-        sizeMetrics: [SizeMetrics],
-    }
-);
+export const ColourVariant = new mongoose.Schema({
+  colourName: {
+    type: String,
+  },
+  hex: {
+    type: String,
+  },
+  sizeMetrics: [SizeMetrics],
+});
 
-const productSchema = new mongoose.Schema({
+const productSchema = new mongoose.Schema(
+  {
     productCode: {
-        type: String
+      type: String,
     },
     productName: {
-        type: String
+      type: String,
     },
     type: {
-        type: String
+      type: String,
     },
     displayName: {
-        type: String
+      type: String,
     },
     description: {
-        type: String
+      type: String,
     },
     thumbnail: {
-        type: String
+      type: String,
     },
     images: [String],
     category: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Category'
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
     },
     isHide: {
-        type: Boolean,
-        default: false
+      type: Boolean,
+      default: false,
     },
     colourVariant: {
-        type: ColourVariant,
+      type: ColourVariant,
     },
     price: {
-        type: Number
+      type: Number,
     },
-});
+  },
+  { timestamps: true }
+);
 
-let Product = mongoose.model('Product', productSchema);
+let Product = mongoose.model("Product", productSchema);
 export default Product;

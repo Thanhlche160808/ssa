@@ -32,25 +32,12 @@ const productRepository = {
     }
   },
 
-  findAndChangeVisibility: async (productId) => {
+  findById: async (productId) => {
     const product = await Product.findById(productId);
 
     if (!product) throw new Error("Product not found");
 
-    return await Product.findByIdAndUpdate(
-      { _id: productId },
-      { $set: { isHide: !product.isHide } },
-      { new: true }
-    );
-  },
-
-  findAndUpdate: async (productId, updatedData) => {
-    const product = await Product.findById(productId);
-
-    if (!product) throw new Error("Product not found");
-
-    const query = { ...updatedData };
-    return await Product.findByIdAndUpdate(productId, query, { new: true });
+    return product;
   },
 
   findByProductName: async (productName) => {
@@ -61,16 +48,33 @@ const productRepository = {
     return product;
   },
 
+  findAndChangeVisibility: async (productId) => {
+    const product = await productRepository.findById(productId);
+
+    return await Product.findByIdAndUpdate(
+      { _id: productId },
+      { $set: { isHide: !product.isHide } },
+      { new: true },
+    );
+  },
+
+  findAndUpdate: async (productId, updatedData) => {
+    await productRepository.findById(productId);
+
+    const query = { ...updatedData };
+    return await Product.findByIdAndUpdate(productId, query, { new: true });
+  },
+
   totalDocuments: async (query) => {
     return await Product.countDocuments(query);
   },
-  
+
   filterProducts: async (query, skip, size, sortOptions) => {
     return await Product.find(query)
-      .select('-__v')
+      .select("-__v")
       .skip(skip)
       .limit(size)
-      .sort(sortOptions)
+      .sort(sortOptions);
   },
 };
 
