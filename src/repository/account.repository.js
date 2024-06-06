@@ -5,14 +5,24 @@ import bcrypt from 'bcrypt';
 import Account from '../models/account.js';
 import User from '../models/user.js';
 
+// ** Constants
+import { selectUser } from '../constants/query.constant.js';
+
 const accountRepository = {
     create: async (account) => {
         // let session = null;
         try {
             // session = await mongoose.startSession();
             // session.startTransaction();
+            const query = {};
+            if (account.username) {
+                query.username = account.username;
+            }
+            if (account.email) {
+                query.email = account.email;
+            }
 
-            const usernameExist = await Account.findOne({ $or: [{ username: account.username }, { email: account.email }] });
+            const usernameExist = await Account.findOne({ $or: [query] });
 
             if (usernameExist) {
                 throw new Error('Username is exist');
@@ -26,20 +36,24 @@ const accountRepository = {
 
             const newAccount = new Account({
                 userName: account.username,
-                password: account.password,
+                // password: account.password,
                 email: account.email,
                 user,
             });
 
             // account.user = user._id;
 
-            const salt = bcrypt.genSaltSync();
+            if (account.password) {
+                const salt = bcrypt.genSaltSync();
 
-            newAccount.password = bcrypt.hashSync(newAccount.password, salt);
+                newAccount.password = bcrypt.hashSync(newAccount.password, salt);
+            }
 
             await newAccount.save();
 
-            return await user.save();
+            await user.save();
+
+            return newAccount.populate('user', selectUser);
 
             // // await user.save({ session });
 

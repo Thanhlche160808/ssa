@@ -19,6 +19,7 @@ const authService = {
         
         const accountJson = account.toJSON();
         delete accountJson.password;
+        delete accountJson.__v;
 
         return accountJson;
     },

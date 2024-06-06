@@ -10,41 +10,41 @@ import authController from "../../controllers/auth.controller.js";
 const router = express.Router();
 
 
-/**
- * @swagger
- * components:
- *   schemas:
- *     Auth:
- *       type: object
- *       properties:
- *         isSuccess:
- *           type: boolean
- *         statusCode:
- *           type: number
- *         data:
- *           type: Object
- *           properties:
- *             username:
- *               type: string
- *               example: thomaslee
- *             email:
- *               type: string
- *               example: testzed920@gmail.com
- *             isBlocked:
- *               type: boolean
- *               example: false
- *             role:
- *               type: string
- *               example: User
- *       example:
- *         isSuccess: true
- *         statusCode: 200
- *         data: 
- *              username: thomaslee
- *              email: testzed920@gmail.com
- *              isBlocked: false
- *              role: User
- */
+// /**
+//  * @swagger
+//  * components:
+//  *   schemas:
+//  *     Auth:
+//  *       type: object
+//  *       properties:
+//  *         isSuccess:
+//  *           type: boolean
+//  *         statusCode:
+//  *           type: number
+//  *         data:
+//  *           type: Object
+//  *           properties:
+//  *             username:
+//  *               type: string
+//  *               example: thomaslee
+//  *             email:
+//  *               type: string
+//  *               example: testzed920@gmail.com
+//  *             isBlocked:
+//  *               type: boolean
+//  *               example: false
+//  *             role:
+//  *               type: string
+//  *               example: User
+//  *       example:
+//  *         isSuccess: true
+//  *         statusCode: 200
+//  *         data: 
+//  *              username: thomaslee
+//  *              email: testzed920@gmail.com
+//  *              isBlocked: false
+//  *              role: User
+//  */
 /**
  * @swagger
  * tags:
@@ -98,6 +98,9 @@ const router = express.Router();
  *                      data:
  *                          type: Object
  *                          properties:
+ *                              _id:
+ *                                  type: string
+ *                                  example: 665fbbde32d25335b95b1089
  *                              username:
  *                                  type: string
  *                                  example: thomaslee
@@ -110,14 +113,36 @@ const router = express.Router();
  *                              role:
  *                                  type: string
  *                                  example: User
+ *                              user:
+ *                                  type: Object
+ *                                  properties:
+ *                                      _id:
+ *                                          type: string
+ *                                          example: 665fbbde32d25335b95b1089
+ *                                      firstName:
+ *                                          type: string
+ *                                          example: Thomas
+ *                                      lastName:
+ *                                          type: string
+ *                                          example: Lee
+ *                              favourite:
+ *                                  type: Array
+ *                                  example: []                     
  *             example:
  *              isSuccess: true
  *              statusCode: 200
  *              data: 
+ *                  _id: 665fbbde32d25335b95b1089
  *                  username: thomaslee
  *                  email: testzed920@gmail.com
  *                  isBlocked: false
  *                  role: User
+ *                  user:
+ *                     _id: 665fbbde32d25335b95b1089
+ *                     firstName: Thomas
+ *                     lastName: Lee
+ *                  favourite: []
+ * 
  */
 router.post("/register", authController.register);
 
@@ -158,9 +183,21 @@ router.post("/register", authController.register);
  *                  data:
  *                      type: object
  *                      properties:
+ *                          id: 
+ *                              type: string
+ *                              example: 665fbbde32d25335b95b1089
  *                          username:
  *                              type: string
  *                              example: thomaslee
+ *                          email:
+ *                              type: string
+ *                              example: abcd@gmail.com
+ *                          role:
+ *                              type: string
+ *                              example: User
+ *                          isBlocked:
+ *                              type: string
+ *                              example: false
  *                          accessToken:
  *                              type: string
  *                              example: eyJhbGciO....
@@ -169,10 +206,6 @@ router.post("/register", authController.register);
  *                              example: eyJhbGciO....
  */
 router.post("/login", authController.login);
-
-// router.get("/google/login", passport.authenticate('google', { scope: ['profile', 'email'] , session: false}));
-
-// router.get("/google/callback", passport.authenticate('google', { failureRedirect: '/' }), authController.loginWithGoogle);
 
 router.post("/google/login", authController.loginWithGoogle);
 
