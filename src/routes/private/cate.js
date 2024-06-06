@@ -2,7 +2,7 @@
 import express from 'express';
 
 //** Controller
-import cateController from '../../controllers/category.controller';
+import cateController from '../../controllers/category.controller.js';
 
 
 const router = express.Router(); // Fixed the initialization of the router
@@ -199,23 +199,33 @@ router.put('/:id', cateController.update)
  */
 router.put('/delete/:id', cateController.delete)
 
-/** 
+/**
  * @swagger
  * /api/category/list-dashboard:
  *   get:
  *     summary: Get all existing categories
  *     tags: [Category]
- *     requestBody:
- *       required: false
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *           example:
- *             name: vintage
+ *     parameters:
+ *       - in: query
+ *         name: name
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: Name of the category to search for
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           example: 1
+ *         required: false
+ *         description: Page number for pagination
+ *       - in: query
+ *         name: size
+ *         schema:
+ *           type: integer
+ *           example: 10
+ *         required: false
+ *         description: Number of items per page
  *     responses:
  *       200:
  *         description: All existing categories
@@ -233,15 +243,26 @@ router.put('/delete/:id', cateController.delete)
  *                 data:
  *                   type: object
  *                   properties:
- *                     name:
- *                       type: string
- *                       example: vintage
- *                     description:
- *                       type: string
- *                       example: This is a description
- *                     isHide:
- *                       type: boolean
- *                       example: false
+ *                     items:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           name:
+ *                             type: string
+ *                             example: vintage
+ *                           description:
+ *                             type: string
+ *                             example: This is a description
+ *                           isHide:
+ *                             type: boolean
+ *                             example: false
+ *                     totalPage:
+ *                       type: integer
+ *                       example: 5
+ *                     activePage:
+ *                       type: integer
+ *                       example: 1
  */
-router.get('/list-dashboard', cateController.searchAndPaginate)
+router.get('/list-dashboard', cateController.searchAndPaginate);
 export default router

@@ -6,7 +6,6 @@ import { statusCode } from "../constants/index.js";
 
 // ** Utils
 import { response } from "../utils/baseResponse.js";
-import { deleteToken } from "firebase/messaging";
 
 const cateController = {
     getAll: async (req, res) => {
@@ -109,6 +108,7 @@ const cateController = {
         }
     },
 
+    //get al existing categories (for admin only)
     searchAndPaginate: async (req, res) => {
         const page = parseInt(req.query.page) || 1;
         const size = parseInt(req.query.size) || 5;
@@ -116,6 +116,29 @@ const cateController = {
 
         try {
             const result = await cateService.searchAndPaginate(page, size, name);
+            res.status(statusCode.OK).json(response.success(
+                {
+                    data: result,
+                    code: statusCode.OK
+                }
+            ))
+        } catch (error) {
+            res.status(statusCode.BAD_REQUEST).json(response.error(
+                {
+                    message: error?.message,
+                    code: statusCode.BAD_REQUEST
+                }
+            ))
+        }
+    },
+
+    searchActivePagination: async (req, res) => {
+        const page = parseInt(req.query.page) || 1;
+        const size = parseInt(req.query.size) || 5;
+        const name = req.query.name || '';
+
+        try {
+            const result = await cateService.searchActivePagination(page, size, name);
             res.status(statusCode.OK).json(response.success(
                 {
                     data: result,

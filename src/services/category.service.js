@@ -1,8 +1,8 @@
 // ** Model
-import Category from "../models/category";
+import Category from "../models/category.js";
 
 // ** Repository
-import cateRepository from "../repository/category.repository";
+import cateRepository from "../repository/category.repository.js";
 
 const cateService = {
     getAll: async () => {
@@ -42,7 +42,7 @@ const cateService = {
         return cateRepository.changeStatus(id);
     },
 
-    //get all existing categories in DB
+    //get all existing categories in DB (for admin only)
     searchAndPaginate: async (page, size, name) => {
         const startIndex = (page - 1) * size;
         const query = { name: { $regex: name, $options: 'i' } };
@@ -59,7 +59,29 @@ const cateService = {
                 message: "Error"
             }
         }
-    }
+    },
+
+    //get all active category (for user's client)
+    searchActivePagination: async (page, size, name) => {
+        const startIndex = (page - 1) * size;
+        const query = {
+            name: { $regex: name, $options: 'i' },
+            isHide: false
+        };
+        try {
+            const listCategory = await cateRepository.searchAndPaginate(startIndex, size, query);
+            console.log(listCategory);
+            return {
+                items: listCategory.item,
+                totalPage: Math.ceil(listCategory.total / size),
+                activePage: page
+            }
+        } catch (error) {
+            return {
+                message: "Error"
+            }
+        }
+    },
 }
 
 export default cateService;

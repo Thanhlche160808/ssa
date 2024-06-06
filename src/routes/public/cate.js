@@ -1,10 +1,10 @@
-//** Express
+// ** Express
 import express from 'express';
 
-//** Controller
-import cateController from '../../controllers/category.controller';
+// ** Controller
+import cateController from '../../controllers/category.controller.js';
 
-const router = express.Router(); // Fixed the initialization of the router
+const router = express.Router();
 
 /**
  * @swagger
@@ -39,7 +39,7 @@ const router = express.Router(); // Fixed the initialization of the router
  *           isHide: false
  */
 
-/** 
+/**
  * @swagger
  * tags:
  *   name: Category
@@ -63,6 +63,73 @@ const router = express.Router(); // Fixed the initialization of the router
  *                 $ref: '#/components/schemas/Category'
  */
 router.get('/', cateController.getAll);
+
+/**
+ * @swagger
+ * /api/public/category/list-active:
+ *   get:
+ *     summary: Get all active categories
+ *     tags: [Category]
+ *     parameters:
+ *       - in: query
+ *         name: name
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: Name of the category to search for
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           example: 1
+ *         required: false
+ *         description: Page number for pagination
+ *       - in: query
+ *         name: size
+ *         schema:
+ *           type: integer
+ *           example: 10
+ *         required: false
+ *         description: Number of items per page
+ *     responses:
+ *       200:
+ *         description: All active categories
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 isSuccess:
+ *                   type: boolean
+ *                   example: true
+ *                 statusCode:
+ *                   type: number
+ *                   example: 200
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     items:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           name:
+ *                             type: string
+ *                             example: vintage
+ *                           description:
+ *                             type: string
+ *                             example: This is a description
+ *                           isHide:
+ *                             type: boolean
+ *                             example: false
+ *                     totalPage:
+ *                       type: integer
+ *                       example: 5
+ *                     activePage:
+ *                       type: integer
+ *                       example: 1
+ */
+router.get('/list-active', cateController.searchActivePagination);
 
 /**
  * @swagger

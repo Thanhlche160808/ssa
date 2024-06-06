@@ -1,5 +1,5 @@
 // ** Model
-import Category from "../models/category";
+import Category from "../models/category.js";
 
 const cateRepository = {
     getAll: async () => {
