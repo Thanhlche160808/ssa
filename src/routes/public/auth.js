@@ -207,6 +207,62 @@ router.post("/register", authController.register);
  */
 router.post("/login", authController.login);
 
+/**
+ * @swagger
+ * /api/public/auth/google/login:
+ *  post:
+ *     summary: Create a new account
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               credential: 
+ *                 type: string
+ *           example:
+ *             credential: aibhjkcnlkmaikbjslkn.....
+ *     responses:
+ *       200:
+ *         description: User login
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                  isSuccess:
+ *                      type: boolean
+ *                      example: true
+ *                  statusCode:
+ *                      type: number
+ *                      example: 200
+ *                  data:
+ *                      type: object
+ *                      properties:
+ *                          id: 
+ *                              type: string
+ *                              example: 665fbbde32d25335b95b1089
+ *                          username:
+ *                              type: string
+ *                              example: thomaslee
+ *                          email:
+ *                              type: string
+ *                              example: abcd@gmail.com
+ *                          role:
+ *                              type: string
+ *                              example: User
+ *                          isBlocked:
+ *                              type: string
+ *                              example: false
+ *                          accessToken:
+ *                              type: string
+ *                              example: eyJhbGciO....
+ *                          refreshToken:
+ *                              type: string
+ *                              example: eyJhbGciO....
+ */
 router.post("/google/login", authController.loginWithGoogle);
 
 export default router;
