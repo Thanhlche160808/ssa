@@ -22,7 +22,6 @@ const configApp = (app) => {
       },
     })
   );
-
   app.use(
     cors({
       origin: "*",
