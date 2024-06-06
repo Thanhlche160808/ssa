@@ -1,5 +1,5 @@
 // ** Services
-import productRepository from "../repository/product.repository";
+import productRepository from "../repository/product.repository.js";
 
 const productService = {
   createProduct: async ({

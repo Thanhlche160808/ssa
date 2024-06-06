@@ -1,5 +1,5 @@
 // ** Models
-import Product from "../models/product";
+import Product from "../models/product.js";
 
 const productRepository = {
   create: async (product) => {
