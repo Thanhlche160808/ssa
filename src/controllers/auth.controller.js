@@ -11,10 +11,10 @@ const authController = {
     register: async (req, res) => {
         const data = req.body;
         try {
-            const account = await authService.create(data);
+            const result = await authService.register(data);
             res.status(statusCode.CREATED).json(response.success(
                 {
-                    data: account,
+                    data: result,
                     code: statusCode.CREATED,
                 }
             ));
@@ -56,6 +56,26 @@ const authController = {
                     }
                 }
             )
+        }
+    },
+
+    loginWithGoogle: async (req, res) => {
+        const { credential } = req.body;
+        try {
+            const result = await authService.loginWithGoogle(credential);
+            res.status(statusCode.OK).json(response.success(
+                {
+                    data: result,
+                    code: statusCode.OK,
+                }
+            ));
+        } catch (error) {
+            res.status(statusCode.BAD_REQUEST).json(response.error(
+                {
+                    message: error?.message,
+                    code: statusCode.BAD_REQUEST,
+                }
+            ))
         }
     },
 };

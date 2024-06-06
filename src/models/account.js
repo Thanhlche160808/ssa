@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { itemSchema } from "./cart";
 
 const accountSChema = new mongoose.Schema({
     username: {
@@ -8,7 +9,8 @@ const accountSChema = new mongoose.Schema({
         type: String
     },
     email: {
-        type: String
+        type: String,
+        require: true
     },
     refreshToken: {
         type: String
@@ -24,7 +26,8 @@ const accountSChema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-    }
+    },
+    favourite: [itemSchema]
 });
 
 let Account = mongoose.model('Account', accountSChema);
