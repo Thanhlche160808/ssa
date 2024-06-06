@@ -5,7 +5,7 @@ import swaggerUi from 'swagger-ui-express';
 
 // ** Configs
 import configApp from "./configs/appConfig.js";
-import swaggerSpec from './configs/swagger.config.js'; 
+import swaggerSpec from './configs/swagger.config.js';
 
 // ** Routes
 import { publicRouter, privateRouter } from "./routes/index.js";
@@ -13,14 +13,15 @@ import { publicRouter, privateRouter } from "./routes/index.js";
 // ** Middlewares
 import { verifyAccessToken } from "./middlewares/auth.js";
 
+
+// ** Constant
+import { statusCode } from "./constants/statusCode.constant.js";
+
+
 const app = express();
 configApp(app);
 
 const server = http.createServer(app);
-
-app.use("/server-check", (req, res) => {
-    res.status(200).json("Hello World");
-});
 
 //Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
@@ -35,8 +36,8 @@ app.use("/api/*", verifyAccessToken);
 app.use("/api", privateRouter);
 
 app.use("/*", (req, res) => {
-    res.status(200).json({
-        code: 404,
+    res.status(statusCode.NOT_FOUND).json({
+        code: statusCode.NOT_FOUND,
         message: "API not found",
     });
 });

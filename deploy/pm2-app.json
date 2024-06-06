@@ -11,7 +11,9 @@
                 "EXPIRES_ACCESS_TOKEN": "1h",
                 "EXPIRES_REFRESH_TOKEN": "12h",
                 "JWT_ACCESS_KEY": "superlongsecretkeyTHANHan123@HaHaHihi!$832002NnIkzNum@oah",
-                "JWT_SECRET_KEY": "superlongsecretkeyTHANHan123@HaHaHihi!$832002NnIkzNum@oah"
+                "JWT_SECRET_KEY": "superlongsecretkeyTHANHan123@HaHaHihi!$832002NnIkzNum@oah",
+                "GOOGLE_CLIENT_ID": "",
+                "GOOGLE_CLIENT_SECRET": ""
             }
         }
     ]

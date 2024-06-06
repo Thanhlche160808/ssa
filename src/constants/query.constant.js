@@ -1,0 +1,1 @@
+export const selectUser = 'firstName lastName avatar';

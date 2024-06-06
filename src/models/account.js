@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { itemSchema } from "./cart";
+import { itemSchema } from "./cart.js";
 
 const accountSChema = new mongoose.Schema({
     username: {
@@ -9,7 +9,8 @@ const accountSChema = new mongoose.Schema({
         type: String
     },
     email: {
-        type: String
+        type: String,
+        require: true
     },
     refreshToken: {
         type: String
