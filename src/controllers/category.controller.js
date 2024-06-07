@@ -1,5 +1,5 @@
 // ** Service
-import cateService from "../services/category.service";
+import cateService from "../services/category.service.js";
 
 // ** Constants
 import { statusCode } from "../constants/index.js";
