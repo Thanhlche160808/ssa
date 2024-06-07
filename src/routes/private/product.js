@@ -156,6 +156,7 @@ const router = express.Router();
  *                  }
  *                ]
  *             }
+ *             price: 400000
  *     responses:
  *       200:
  *         description: Create new product
@@ -250,7 +251,6 @@ router.put("/deleteProduct", productController.deleteProduct);
  *             description: Giày chạy bộ tốt nhất năm 2024
  *             thumnail: https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
  *             images: []
- *             category: Bitis Hunter
  *             isHide: false
  *             colourVariant: {
  *               colourName: Skyblue,
@@ -266,29 +266,14 @@ router.put("/deleteProduct", productController.deleteProduct);
  *                  }
  *                ]
  *             }
+ *             price: 400000
  *     responses:
  *       200:
  *         description: Update product successfully
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 productCode:
- *                   type: string
- *                   example: abcsd
- *                 productName:
- *                   type: string
- *                   example: Bitis Hunter X
- *                 type:
- *                   type: string
- *                   example: Low top
- *                 displayName:
- *                   type: string
- *                   example: Bitis Hunter X - Low top - SKyblue
- *                 isHide:
- *                   type: boolean
- *                   example: true
+ *               $ref: '#/components/schemas/Product'
  */
 router.put("/:id", productController.updateProduct);
 

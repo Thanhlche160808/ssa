@@ -28,6 +28,26 @@ const productController = {
         }
     },
 
+    productDetail: async (req, res) => {
+        const productId = req.params.id;
+        try {
+            const result = await productService.productDetail(productId);
+            res.status(statusCode.OK).json(response.success(
+                {
+                    data: result,
+                    code: statusCode.OK,
+                }
+            ));
+        } catch (error) {
+            res.status(statusCode.BAD_REQUEST).json(response.error(
+                {
+                    message: error?.message,
+                    code: statusCode.BAD_REQUEST,
+                }
+            ))
+        }
+    },
+
     getAllProducts: async (req, res) => {
         const data = req.query;
         try {
