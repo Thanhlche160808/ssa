@@ -26,14 +26,13 @@ const authService = {
 
     login: async ({ username, password }) => {
         const account = await accountRepository.findByUsername(username);
+
         if (!bcrypt.compareSync(password, account.password))
-            throw new Error("incorrect password");
-
+            throw new Error("Incorrect password");
         const payload = {
-            id: account.id,
-            username,
+            id: account._id,
+            username: account.username ? account.username : account.email,
         }
-
         // const salt = bcrypt.genSaltSync();
         // user.refreshToken = bcrypt.hashSync(refreshToken, salt);
 

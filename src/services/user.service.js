@@ -1,23 +1,24 @@
-// ** Lib
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-
 // ** Model
 import Account from "../models/account.js";
+import { selectUser } from '../constants/query.constant.js';
 
 // ** Services
 
 const userService = {
     getProfile: async (id) => {
-        const account = await Account.findById(id).populate('user');
+        const account = await Account.findById(id).select('-__v -password').populate('user', selectUser);
         const user = account.user;
 
+        const accountInfo = account.toJSON();
         const userInfo = user.toJSON();
 
         delete userInfo._id;
         delete userInfo.__v;
 
-        return userInfo;
+        return {
+            ...accountInfo,
+            user: userInfo,
+        };
     },
 };
 

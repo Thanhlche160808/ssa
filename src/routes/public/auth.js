@@ -116,15 +116,18 @@ const router = express.Router();
  *                              user:
  *                                  type: Object
  *                                  properties:
- *                                      _id:
- *                                          type: string
- *                                          example: 665fbbde32d25335b95b1089
  *                                      firstName:
  *                                          type: string
- *                                          example: Thomas
  *                                      lastName:
  *                                          type: string
- *                                          example: Lee
+ *                                      avatar:
+ *                                          type: string
+ *                                      phone:
+ *                                          type: string
+ *                                      deliveryAddress:
+ *                                          type: array
+ *                                      address:
+ *                                          type: string
  *                              favourite:
  *                                  type: Array
  *                                  example: []                     
@@ -138,9 +141,12 @@ const router = express.Router();
  *                  isBlocked: false
  *                  role: User
  *                  user:
- *                     _id: 665fbbde32d25335b95b1089
  *                     firstName: Thomas
  *                     lastName: Lee
+ *                     avatar: ""
+ *                     phone: "123456789"
+ *                     deliveryAddress: []
+ *                     address: ""
  *                  favourite: []
  * 
  */

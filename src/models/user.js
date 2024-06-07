@@ -16,15 +16,9 @@ const userSChema = new mongoose.Schema({
     phone: {
         type: String
     },
-    favorite: {
-        type: Array
-    },
     deliveryAddress: {
         type: Array
     },
-    address: {
-        type: String
-    }
 });
 
 let User = mongoose.model('User', userSChema);

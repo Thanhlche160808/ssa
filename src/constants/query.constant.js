@@ -1,1 +1,1 @@
-export const selectUser = 'firstName lastName avatar';
+export const selectUser = 'firstName lastName avatar phone deliveryAddress address';
