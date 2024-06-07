@@ -6,7 +6,7 @@
             "env": {
                 "SERVER_PORT": 5000,
                 "SERVER_HOST": "0.0.0.0",
-                "SWAGGER_SERVER": "http://54.206.151.132",
+                "SWAGGER_SERVER": "https://ssa.io.vn",
                 "DATABASE_URI": "mongodb+srv://thanhlche160808:thanh2002@demo.cvgbalk.mongodb.net/shoes-store",
                 "EXPIRES_ACCESS_TOKEN": "1h",
                 "EXPIRES_REFRESH_TOKEN": "12h",
