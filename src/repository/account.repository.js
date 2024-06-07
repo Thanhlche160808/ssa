@@ -35,8 +35,8 @@ const accountRepository = {
             });
 
             const newAccount = new Account({
-                userName: account.username,
-                // password: account.password,
+                username: account.username,
+                password: account.password,
                 email: account.email,
                 user,
             });
@@ -75,7 +75,7 @@ const accountRepository = {
     },
 
     findByUsername: async (username) => {
-        const account = await Account.findOne({ username });
+        const account = await Account.findOne({ $or: [{ username }, { email: username }] });
 
         if (!account) throw new Error("Incorrect username");
 
