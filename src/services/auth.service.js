@@ -1,5 +1,6 @@
 // ** Lib
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 // ** Services
 import jwtService from "../services/jwt.service.js";
@@ -8,6 +9,7 @@ import jwtService from "../services/jwt.service.js";
 import accountRepository from "../repository/account.repository.js";
 
 // ** Constants
+import { JWT_SECRET_KEY } from "../constants/index.js";
 
 // ** Helper
 import googleHelper from '../helper/google.helper.js'
@@ -39,6 +41,9 @@ const authService = {
         // await user.save();
 
         const { accessToken, refreshToken } = await jwtService.getToken(payload);
+        account.refreshToken = refreshToken;
+        await account.save();
+
         const accountJson = account.toJSON();
         delete accountJson.password;
 
@@ -93,7 +98,19 @@ const authService = {
         } catch (error) {
             throw new Error(error.toString());
         }
-    }
+    },
+
+    refreshAccessToken: async (refreshToken) => {
+        const payload = jwt.verify(refreshToken, JWT_SECRET_KEY);
+        const account = await accountRepository.findById(payload.id);
+
+        if (refreshToken !== account.refreshToken) throw new Error("Invalid refresh token");
+
+        return await jwtService.getToken({
+            id: account._id,
+            username: account.username,
+        }, "refresh");
+    },
 };
 
 export default authService;

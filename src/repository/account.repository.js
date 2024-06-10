@@ -100,7 +100,15 @@ const accountRepository = {
             return accountRepository.create({ email, firstName, lastName, picture });
         }
 
-    }
+    },
+
+    findById: async (id) => {
+        const account = await Account.findById(id).populate('user', selectUser);
+
+        if (!account) throw new Error('Account not found');
+
+        return account;
+    },
 };
 
 export default accountRepository;
