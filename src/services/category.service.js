@@ -38,7 +38,7 @@ const cateService = {
         return cateRepository.update(id, { name, description, isHide });
     },
 
-    delete: async (id) => {
+    changeStatus: async (id) => {
         return cateRepository.changeStatus(id);
     },
 

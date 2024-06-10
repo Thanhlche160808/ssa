@@ -159,7 +159,7 @@ router.put('/:id', cateController.update)
 
 /** 
  * @swagger
- * /api/category/delete/{id}:
+ * /api/category/change-status/{id}:
  *   put:
  *     summary: Change status of category
  *     tags: [Category]
@@ -197,7 +197,7 @@ router.put('/:id', cateController.update)
  *                       type: boolean
  *                       example: false
  */
-router.put('/delete/:id', cateController.delete)
+router.put('/change-status/:id', cateController.changeStatus)
 
 /**
  * @swagger
