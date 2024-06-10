@@ -3,12 +3,11 @@ import session from "express-session";
 import cors from "cors";
 import morgan from "morgan";
 import bodyParser from "body-parser";
-import dotenv from "dotenv";
 import path from "path";
 import cookieParser from "cookie-parser";
+import { CLIENT_URL } from "../constants/env";
 
 const configApp = (app) => {
-  dotenv.config();
 
   app.use(express.static(path.join("./src", "assets")));
   app.use(express.json());
@@ -25,7 +24,7 @@ const configApp = (app) => {
   );
   app.use(
     cors({
-      origin: "*",
+      origin: CLIENT_URL,
       methods: "GET,POST,PUT,DELETE,PATCH",
       credentials: true,
     })
