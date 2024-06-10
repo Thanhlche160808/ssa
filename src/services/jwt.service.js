@@ -2,7 +2,12 @@
 import jwt from 'jsonwebtoken';
 
 // ** Constants
-import { JWT_ACCESS_KEY, EXPIRES_ACCESS_TOKEN , JWT_SECRET_KEY , EXPIRES_REFRESH_TOKEN} from '../constants';
+import { 
+    JWT_ACCESS_KEY, 
+    EXPIRES_ACCESS_TOKEN, 
+    JWT_SECRET_KEY, 
+    EXPIRES_REFRESH_TOKEN
+} from '../constants/index.js';
 
 const jwtService = {
     getToken: async (payload, type = "login") => {
