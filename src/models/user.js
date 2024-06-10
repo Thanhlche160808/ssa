@@ -19,7 +19,7 @@ const userSChema = new mongoose.Schema({
     deliveryAddress: {
         type: Array
     },
-});
+}, { timestamps: true });
 
 let User = mongoose.model('User', userSChema);
 export default User;

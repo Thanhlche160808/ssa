@@ -76,6 +76,11 @@ const productRepository = {
       .limit(size)
       .sort(sortOptions);
   },
+
+  findProductByCode: async (productCode) => {
+    const product = await Product.findOne({ productCode });
+    return product;
+  },
 };
 
 export default productRepository;

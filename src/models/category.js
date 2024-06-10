@@ -11,7 +11,9 @@ const categorySChema = new mongoose.Schema({
         type: Boolean,
         default: false,
     }
-});
+},
+    { timestamps: true }
+);
 
 let Category = mongoose.model('Category', categorySChema);
 export default Category;

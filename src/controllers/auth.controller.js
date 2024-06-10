@@ -32,6 +32,7 @@ const authController = {
         const data = req.body;
         try {
             const loginInfo = await authService.login(data);
+            res.cookie('account', loginInfo.id);
             res.status(statusCode.OK).json(response.success(
                 {
                     data: loginInfo,
@@ -63,6 +64,7 @@ const authController = {
         const { credential } = req.body;
         try {
             const result = await authService.loginWithGoogle(credential);
+            res.cookie('account', result.id);
             res.status(statusCode.OK).json(response.success(
                 {
                     data: result,

@@ -5,7 +5,7 @@ import express from 'express';
 import cateController from '../../controllers/category.controller.js';
 
 
-const router = express.Router(); // Fixed the initialization of the router
+const router = express.Router();
 
 /**
  * @swagger
