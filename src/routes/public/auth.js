@@ -207,9 +207,6 @@ router.post("/register", authController.register);
  *                          accessToken:
  *                              type: string
  *                              example: eyJhbGciO....
- *                          refreshToken:
- *                              type: string
- *                              example: eyJhbGciO....
  */
 router.post("/login", authController.login);
 
@@ -265,10 +262,36 @@ router.post("/login", authController.login);
  *                          accessToken:
  *                              type: string
  *                              example: eyJhbGciO....
- *                          refreshToken:
+ */
+router.post("/google/login", authController.loginWithGoogle);
+
+/**
+ * @swagger
+ * /api/public/auth/refresh-access-token:
+ *  get:
+ *     summary: refresh token
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: Refresh Token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                  isSuccess:
+ *                      type: boolean
+ *                      example: true
+ *                  statusCode:
+ *                      type: number
+ *                      example: 200
+ *                  data:
+ *                      type: object
+ *                      properties:
+ *                          accessToken: 
  *                              type: string
  *                              example: eyJhbGciO....
  */
-router.post("/google/login", authController.loginWithGoogle);
+router.get("/refresh-access-token", authController.refreshAccessToken);
 
 export default router;

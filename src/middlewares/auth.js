@@ -25,7 +25,6 @@ export const verifyAccessToken = (req, res, next) => {
         const payload = jwt.verify(token, process.env.JWT_ACCESS_KEY);
 
         req.user = payload;
-        req.token = token;
         next();
     } catch (err) {
         res.status(statusCode.UNAUTHORIZED).json(

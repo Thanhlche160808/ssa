@@ -5,6 +5,7 @@ import morgan from "morgan";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import path from "path";
+import cookieParser from "cookie-parser";
 
 const configApp = (app) => {
   dotenv.config();
@@ -40,6 +41,7 @@ const configApp = (app) => {
       parameterLimit: 1000000,
     })
   );
+  app.use(cookieParser('G56_CAPSTONE'));
 };
 
 export default configApp;

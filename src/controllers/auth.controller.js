@@ -32,6 +32,8 @@ const authController = {
         const data = req.body;
         try {
             const loginInfo = await authService.login(data);
+            res.cookie("refreshToken", loginInfo.refreshToken, { signed: true });
+            delete loginInfo.refreshToken;
             res.status(statusCode.OK).json(response.success(
                 {
                     data: loginInfo,
@@ -63,6 +65,8 @@ const authController = {
         const { credential } = req.body;
         try {
             const result = await authService.loginWithGoogle(credential);
+            res.cookie("refreshToken", result.refreshToken, { signed: true });
+            delete result.refreshToken;
             res.status(statusCode.OK).json(response.success(
                 {
                     data: result,
@@ -78,6 +82,37 @@ const authController = {
             ))
         }
     },
+
+    refreshAccessToken: async (req, res) => {
+        const { refreshToken } = req.signedCookies;
+
+        if (!refreshToken) {
+            res.status(statusCode.BAD_REQUEST).json(response.error(
+                {
+                    message: "Token is expired, please login again!",
+                    code: statusCode.BAD_REQUEST,
+                }
+            ));
+            return;
+        }
+
+        try {
+            const result = await authService.refreshAccessToken(refreshToken);
+            res.status(statusCode.OK).json(response.success(
+                {
+                    data: result,
+                    code: statusCode.OK,
+                }
+            ));
+        } catch (error) {
+            res.status(statusCode.BAD_REQUEST).json(response.error(
+                {
+                    message: error?.message,
+                    code: statusCode.BAD_REQUEST,
+                }
+            ))
+        }
+    }
 };
 
 export default authController;
