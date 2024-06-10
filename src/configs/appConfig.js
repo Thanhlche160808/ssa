@@ -24,7 +24,7 @@ const configApp = (app) => {
   );
   app.use(
     cors({
-      origin: "*",
+      origin: "http://localhost:3000",
       methods: "GET,POST,PUT,DELETE,PATCH",
       credentials: true,
     })
