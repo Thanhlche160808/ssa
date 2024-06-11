@@ -11,7 +11,6 @@ const cartController = {
     addToCart: async (req, res) => {
         const cart = req.body;
         const { account } = req.cookies;
-        console.log('account', account);
         if (!account) {
             res.status(statusCode.BAD_REQUEST).json(response.error(
                 {

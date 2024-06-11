@@ -40,7 +40,7 @@ const configApp = (app) => {
       parameterLimit: 1000000,
     })
   );
-  app.use(cookieParser());
+  app.use(cookieParser('G56_CAPSTONE'));
 };
 
 export default configApp;
