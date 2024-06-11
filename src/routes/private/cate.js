@@ -63,9 +63,12 @@ const router = express.Router(); // Fixed the initialization of the router
  *                 type: string
  *               description:
  *                 type: string
+ *               isHide:
+ *                 type: boolean
  *           example:
  *             name: vintage
  *             description: This is a description
+ *             isHide: false
  *     responses:
  *       200:
  *         description: Create Category
