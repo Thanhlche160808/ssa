@@ -14,15 +14,15 @@ const accountRepository = {
         try {
             // session = await mongoose.startSession();
             // session.startTransaction();
-            const query = {};
+            const query = [];
             if (account.username) {
-                query.username = account.username;
+                query.push({ username: account.username });
             }
             if (account.email) {
-                query.email = account.email;
+                query.push({ email: account.email });
             }
 
-            const usernameExist = await Account.findOne({ $or: [query] });
+            const usernameExist = await Account.findOne({ $or: query });
 
             if (usernameExist) {
                 throw new Error('Username is exist');

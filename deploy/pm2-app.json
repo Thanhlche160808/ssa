@@ -12,7 +12,8 @@
                 "EXPIRES_REFRESH_TOKEN": "7d",
                 "JWT_ACCESS_KEY": "superlongsecretkeyTHANHan123@HaHaHihi!$832002NnIkzNum@oah",
                 "JWT_SECRET_KEY": "superlongsecretkeyTHANHan123@HaHaHihi!$832002NnIkzNum@oah",
-                "GOOGLE_CLIENT_ID": "281707253428-bgbb7t4p3831drgcvv30mbtpa71e5b84.apps.googleusercontent.com"
+                "GOOGLE_CLIENT_ID": "281707253428-bgbb7t4p3831drgcvv30mbtpa71e5b84.apps.googleusercontent.com",
+                "CLIENT_URL": "http://localhost:3000"
             }
         }
     ]

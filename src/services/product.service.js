@@ -21,7 +21,7 @@ const productService = {
       const displayName = displayNameComponent.join(" - ");
 
       const product = await productRepository.create({
-        productCode,
+        productCode: productCode.toLocaleUpperCase(),
         productName,
         type,
         displayName,

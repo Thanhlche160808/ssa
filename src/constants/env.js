@@ -1,5 +1,6 @@
 import { config } from "dotenv";
 config();
+export const CLIENT_URL = process.env.CLIENT_URL;
 
 export const FIRE_BASE_API_KEY = process.env.FIRE_BASE_API_KEY;
 export const FIRE_BASE_AUTH_DOMAIN = process.env.FIRE_BASE_AUTH_DOMAIN;
