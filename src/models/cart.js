@@ -2,12 +2,6 @@ import mongoose from "mongoose";
 
 
 const cartSchema = new mongoose.Schema({
-    // items: {
-    //     type: [{
-    //         type: String,
-    //     }],
-    //     default: [],
-    // },
     items: {
         type: String,
     },
