@@ -97,7 +97,7 @@ const accountRepository = {
             );
             return account;
         } else {
-            return accountRepository.create({ email, firstName, lastName, picture });
+            return accountRepository.create({ email, firstName, lastName, avatar });
         }
 
     },
