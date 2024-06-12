@@ -5,7 +5,7 @@ import morgan from "morgan";
 import bodyParser from "body-parser";
 import path from "path";
 import cookieParser from "cookie-parser";
-import { CLIENT_URL } from "../constants/env";
+import { CLIENT_URL } from "../constants/env.js";
 
 const configApp = (app) => {
 
