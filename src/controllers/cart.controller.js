@@ -13,7 +13,7 @@ const cartController = {
         const { account, cart } = req.cookies;
         try {
             const result = await cartService.add(item, account, cart);
-            res.cookie("cart", result);
+            res.cookie("cart", result, { sameSite: "none" });
             res.status(statusCode.CREATED).json(response.success(
                 {
                     data: result,
