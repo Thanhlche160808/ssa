@@ -38,7 +38,7 @@ const cateService = {
         return cateRepository.update(id, { name, description, isHide });
     },
 
-    delete: async (id) => {
+    changeStatus: async (id) => {
         return cateRepository.changeStatus(id);
     },
 
@@ -52,7 +52,8 @@ const cateService = {
             return {
                 items: listCategory.item,
                 totalPage: Math.ceil(listCategory.total / size),
-                activePage: page
+                activePage: page,
+                totalDocument: listCategory.total
             }
         } catch (error) {
             return {
@@ -74,7 +75,8 @@ const cateService = {
             return {
                 items: listCategory.item,
                 totalPage: Math.ceil(listCategory.total / size),
-                activePage: page
+                activePage: page,
+                totalDocument: listCategory.total
             }
         } catch (error) {
             return {

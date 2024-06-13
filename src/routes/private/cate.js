@@ -63,9 +63,12 @@ const router = express.Router();
  *                 type: string
  *               description:
  *                 type: string
+ *               isHide:
+ *                 type: boolean
  *           example:
  *             name: vintage
  *             description: This is a description
+ *             isHide: false
  *     responses:
  *       200:
  *         description: Create Category
@@ -159,7 +162,7 @@ router.put('/:id', cateController.update)
 
 /** 
  * @swagger
- * /api/category/delete/{id}:
+ * /api/category/change-status/{id}:
  *   put:
  *     summary: Change status of category
  *     tags: [Category]
@@ -197,7 +200,7 @@ router.put('/:id', cateController.update)
  *                       type: boolean
  *                       example: false
  */
-router.put('/delete/:id', cateController.delete)
+router.put('/change-status/:id', cateController.changeStatus)
 
 /**
  * @swagger
@@ -257,6 +260,9 @@ router.put('/delete/:id', cateController.delete)
  *                           isHide:
  *                             type: boolean
  *                             example: false
+ *                     totalDocument:
+ *                       type: integer
+ *                       example: 15
  *                     totalPage:
  *                       type: integer
  *                       example: 5

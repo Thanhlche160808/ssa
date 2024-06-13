@@ -88,10 +88,10 @@ const cateController = {
         }
     },
 
-    delete: async (req, res) => {
+    changeStatus: async (req, res) => {
         const id = req.params.id
         try {
-            const category = await cateService.delete(id);
+            const category = await cateService.changeStatus(id);
             res.status(statusCode.OK).json(response.success(
                 {
                     data: category,
