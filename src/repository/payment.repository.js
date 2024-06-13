@@ -10,6 +10,8 @@ const paymentRepository = {
     },
 
     create: async ({ name, description, isActive, type }) => {
+        const existedPayment = await Payment.findOne({ $or: [{ name }, { type }] });
+        if (existedPayment) throw new Error('Payment method existed!');
         const newPayment = new Payment({
             name,
             description,
