@@ -17,12 +17,6 @@ const configApp = (app) => {
       secret: "SECRET",
       resave: true,
       saveUninitialized: true,
-      cookie: {
-        maxAge: 15 * 60 * 1000,
-        secure: false,
-        httpOnly: true,
-        sameSite: 'none',
-      },
     })
   );
   app.use(
