@@ -268,7 +268,7 @@ router.post("/google/login", authController.loginWithGoogle);
 /**
  * @swagger
  * /api/public/auth/refresh-access-token:
- *  get:
+ *  post:
  *     summary: refresh token
  *     tags: [Auth]
  *     responses:
@@ -292,6 +292,6 @@ router.post("/google/login", authController.loginWithGoogle);
  *                              type: string
  *                              example: eyJhbGciO....
  */
-router.get("/refresh-access-token", authController.refreshAccessToken);
+router.post("/refresh-access-token", authController.refreshAccessToken);
 
 export default router;
