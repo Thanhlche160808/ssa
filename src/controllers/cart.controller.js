@@ -16,7 +16,7 @@ const cartController = {
             res.cookie("cart", result);
             res.status(statusCode.CREATED).json(response.success(
                 {
-                    data: 'OK',
+                    data: result,
                     code: statusCode.CREATED,
                 }
             ));
@@ -68,7 +68,7 @@ const cartController = {
             res.cookie("cart", result);
             res.status(statusCode.OK).json(response.success(
                 {
-                    data: 'OK',
+                    data: result,
                     code: statusCode.OK,
                 }
             ));
@@ -99,7 +99,7 @@ const cartController = {
             res.cookie("cart", result);
             res.status(statusCode.OK).json(response.success(
                 {
-                    data: 'OK',
+                    data: result,
                     code: statusCode.OK,
                 }
             ));
