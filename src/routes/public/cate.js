@@ -122,6 +122,9 @@ router.get('/', cateController.getAll);
  *                           isHide:
  *                             type: boolean
  *                             example: false
+ *                     totalDocument:
+ *                       type: integer
+ *                       example: 15
  *                     totalPage:
  *                       type: integer
  *                       example: 5

@@ -260,6 +260,9 @@ router.put('/change-status/:id', cateController.changeStatus)
  *                           isHide:
  *                             type: boolean
  *                             example: false
+ *                     totalDocument:
+ *                       type: integer
+ *                       example: 15
  *                     totalPage:
  *                       type: integer
  *                       example: 5

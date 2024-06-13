@@ -52,7 +52,8 @@ const cateService = {
             return {
                 items: listCategory.item,
                 totalPage: Math.ceil(listCategory.total / size),
-                activePage: page
+                activePage: page,
+                totalDocument: listCategory.total
             }
         } catch (error) {
             return {
@@ -74,7 +75,8 @@ const cateService = {
             return {
                 items: listCategory.item,
                 totalPage: Math.ceil(listCategory.total / size),
-                activePage: page
+                activePage: page,
+                totalDocument: listCategory.total
             }
         } catch (error) {
             return {
