@@ -21,7 +21,7 @@ const configApp = (app) => {
   );
   app.use(
     cors({
-      origin: [CLIENT_URL, "http://localhost:3000"],
+      origin: [CLIENT_URL, "http://localhost:3000", "https://ecd1-14-162-195-115.ngrok-free.app"],
       methods: "GET,POST,PUT,DELETE,PATCH",
       credentials: true,
     })
