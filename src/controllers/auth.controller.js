@@ -33,8 +33,8 @@ const authController = {
         try {
             const loginInfo = await authService.login(data);
             const a = { httpOnly: true, secure: true, sameSite: 'none' };
-            res.cookie('account', loginInfo.id, { signed: true, httpOnly: true, sameSite: 'none'});
-            res.cookie("refreshToken", loginInfo.refreshToken, { signed: true, httpOnly: true, sameSite: 'none'});
+            res.cookie('account', loginInfo.id, { signed: true, httpOnly: true, sameSite: 'none', secure: true});
+            res.cookie("refreshToken", loginInfo.refreshToken, { signed: true, httpOnly: true, sameSite: 'none', secure: true});
             delete loginInfo.refreshToken;
             res.status(statusCode.OK).json(response.success(
                 {
@@ -67,8 +67,8 @@ const authController = {
         const { credential } = req.body;
         try {
             const result = await authService.loginWithGoogle(credential);
-            res.cookie('account', result.id, { signed: true, httpOnly: true, sameSite: 'none'});
-            res.cookie("refreshToken", result.refreshToken, { signed: true, httpOnly: true, sameSite: 'none'});
+            res.cookie('account', result.id, { signed: true, httpOnly: true, sameSite: 'none', secure: true});
+            res.cookie("refreshToken", result.refreshToken, { signed: true, httpOnly: true, sameSite: 'none', secure: true});
             delete result.refreshToken;
             res.status(statusCode.OK).json(response.success(
                 {
