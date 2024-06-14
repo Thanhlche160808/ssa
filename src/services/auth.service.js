@@ -34,6 +34,7 @@ const authService = {
         const payload = {
             id: account._id,
             username: account.username ? account.username : account.email,
+            role: account.role,
         }
         // const salt = bcrypt.genSaltSync();
         // user.refreshToken = bcrypt.hashSync(refreshToken, salt);
@@ -76,11 +77,13 @@ const authService = {
 
                 const payload = {
                     id: account._id,
-                    username: account.username,
+                    username: account.username ? account.username : account.email,
+                    role: account.role,
                 }
 
                 const { accessToken, refreshToken } = await jwtService.getToken(payload);
                 account.refreshToken = refreshToken;
+                await account.save();
                 const accountJson = account.toJSON();
 
                 delete accountJson.password;
