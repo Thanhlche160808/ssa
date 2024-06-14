@@ -80,7 +80,7 @@ const authService = {
                 }
 
                 const { accessToken, refreshToken } = await jwtService.getToken(payload);
-
+                account.refreshToken = refreshToken;
                 const accountJson = account.toJSON();
 
                 delete accountJson.password;
