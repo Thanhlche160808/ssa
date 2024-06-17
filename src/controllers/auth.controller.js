@@ -33,8 +33,8 @@ const authController = {
         try {
             const loginInfo = await authService.login(data);
             const a = { httpOnly: true, secure: true, sameSite: 'none' };
-            res.cookie('account', loginInfo.id, { signed: true, httpOnly: true, sameSite: 'none', secure: true});
-            res.cookie("refreshToken", loginInfo.refreshToken, { signed: true, httpOnly: true, sameSite: 'none', secure: true});
+            res.cookie('account', loginInfo.id, { signed: true, httpOnly: true, sameSite: 'none', secure: true });
+            res.cookie("refreshToken", loginInfo.refreshToken, { signed: true, httpOnly: true, sameSite: 'none', secure: true });
             delete loginInfo.refreshToken;
             res.status(statusCode.OK).json(response.success(
                 {
@@ -67,8 +67,8 @@ const authController = {
         const { credential } = req.body;
         try {
             const result = await authService.loginWithGoogle(credential);
-            res.cookie('account', result.id, { signed: true, httpOnly: true, sameSite: 'none', secure: true});
-            res.cookie("refreshToken", result.refreshToken, { signed: true, httpOnly: true, sameSite: 'none', secure: true});
+            res.cookie('account', result.id, { signed: true, httpOnly: true, sameSite: 'none', secure: true });
+            res.cookie("refreshToken", result.refreshToken, { signed: true, httpOnly: true, sameSite: 'none', secure: true });
             delete result.refreshToken;
             res.status(statusCode.OK).json(response.success(
                 {
@@ -115,7 +115,27 @@ const authController = {
                 }
             ))
         }
-    }
+    },
+
+    logout: async (req, res) => {
+        const { accessToken } = req.body;
+        try {
+            await authService.logout(accessToken);
+            res.status(statusCode.OK).json(response.success(
+                {
+                    data: "OK",
+                    code: statusCode.OK,
+                }
+            ));
+        } catch (error) {
+            res.status(statusCode.BAD_REQUEST).json(response.error(
+                {
+                    message: error?.message,
+                    code: statusCode.BAD_REQUEST,
+                }
+            ))
+        }
+    },
 };
 
 export default authController;

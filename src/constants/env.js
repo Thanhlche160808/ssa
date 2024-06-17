@@ -14,6 +14,8 @@ export const FIRE_BASE_MEASUREMENT_ID = process.env.FIRE_BASE_MEASUREMENT_ID;
 export const PORT = process.env.SERVER_PORT;
 export const HOST = process.env.SERVER_HOST;
 
+export const REDIS_URL = process.env.REDIS_URL;
+
 export const SWAGGER_SERVER= process.env.SWAGGER_SERVER;
 
 export const GOOGLE_CLIENT_ID= process.env.GOOGLE_CLIENT_ID;

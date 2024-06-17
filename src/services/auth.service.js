@@ -1,7 +1,6 @@
 // ** Lib
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-
 // ** Services
 import jwtService from "../services/jwt.service.js";
 
@@ -9,16 +8,18 @@ import jwtService from "../services/jwt.service.js";
 import accountRepository from "../repository/account.repository.js";
 
 // ** Constants
-import { JWT_SECRET_KEY } from "../constants/index.js";
+import { JWT_SECRET_KEY, JWT_ACCESS_KEY } from "../constants/index.js";
 
 // ** Helper
 import googleHelper from '../helper/google.helper.js'
 
+// ** Configs
+import { client } from '../configs/redisConfig.js';
 
 const authService = {
     register: async ({ username, password, email, phone, firstName, lastName }) => {
         const account = await accountRepository.create({ username, password, email, phone, firstName, lastName });
-        
+
         const accountJson = account.toJSON();
         delete accountJson.password;
         delete accountJson.__v;
@@ -113,6 +114,25 @@ const authService = {
             id: account._id,
             username: account.username,
         }, "refresh");
+    },
+
+    logout: async (accessToken) => {
+        const payload = jwt.decode(accessToken, JWT_ACCESS_KEY);
+
+        if (!payload) throw new Error('Invalid access token');
+
+        const account = await accountRepository.findById(payload.id);
+        await account.updateOne({ refreshToken: null });
+
+        const exp = payload.exp * 1000;
+        const now = Date.now();
+
+        const ttl = Math.ceil((exp - now) / 1000);
+
+        await client.set(`${account.id}_${payload.exp}`, accessToken, {
+            EX: ttl,
+            NX: true
+        });
     },
 };
 

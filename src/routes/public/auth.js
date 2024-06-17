@@ -294,4 +294,6 @@ router.post("/google/login", authController.loginWithGoogle);
  */
 router.get("/refresh-access-token", authController.refreshAccessToken);
 
+router.post("/abcde", authController.logout);
+
 export default router;
