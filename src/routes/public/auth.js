@@ -294,6 +294,41 @@ router.post("/google/login", authController.loginWithGoogle);
  */
 router.get("/refresh-access-token", authController.refreshAccessToken);
 
-router.post("/abcde", authController.logout);
+/**
+ * @swagger
+ * /api/public/auth/logout:
+ *  post:
+ *     summary: Logout
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               accessToken: 
+ *                 type: string
+ *           example:
+ *             accessToken: aibhjkcnlkmaikbjslkn.....
+ *     responses:
+ *       200:
+ *         description: User logout
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                  isSuccess:
+ *                      type: boolean
+ *                      example: true
+ *                  statusCode:
+ *                      type: number
+ *                      example: 200
+ *                  data:
+ *                      type: sting
+ *                      example: OK
+ */
+router.post("/logout", authController.logout);
 
 export default router;
