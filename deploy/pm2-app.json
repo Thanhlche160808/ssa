@@ -8,12 +8,12 @@
                 "SERVER_HOST": "0.0.0.0",
                 "SWAGGER_SERVER": "https://ssa.io.vn",
                 "DATABASE_URI": "mongodb+srv://thanhlche160808:thanh2002@demo.cvgbalk.mongodb.net/shoes-store",
-                "EXPIRES_ACCESS_TOKEN": "1m",
+                "EXPIRES_ACCESS_TOKEN": "60m",
                 "EXPIRES_REFRESH_TOKEN": "7d",
                 "JWT_ACCESS_KEY": "superlongsecretkeyTHANHan123@HaHaHihi!$832002NnIkzNum@oah",
                 "JWT_SECRET_KEY": "superlongsecretkeyTHANHan123@HaHaHihi!$832002NnIkzNum@oah",
                 "GOOGLE_CLIENT_ID": "281707253428-bgbb7t4p3831drgcvv30mbtpa71e5b84.apps.googleusercontent.com",
-                "CLIENT_URL": "https://anana-shoes.vercel.app/",
+                "CLIENT_URL": "https://shoe4sure-web.vercel.app",
                 "REDIS_URL": "redis://default:NYreg8nLmKli6uBdJ4wVnK4LAQ7vHLSP@redis-12591.c16.us-east-1-2.ec2.redns.redis-cloud.com:12591"
             }
         }
