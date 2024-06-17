@@ -14,6 +14,7 @@ const userService = {
 
         delete userInfo._id;
         delete userInfo.__v;
+        delete accountInfo.refreshToken;
 
         return {
             ...accountInfo,
