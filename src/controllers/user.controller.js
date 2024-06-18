@@ -12,6 +12,9 @@ const userController = {
         const { user } = req;
         try {
             const userInfo = await userService.getProfile(user.id);
+            if (userInfo.isBlocked) {
+                throw new Error('This account is currently blocked');
+            }
             res.status(statusCode.OK).json(response.success(
                 {
                     data: userInfo,
