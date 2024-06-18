@@ -7,7 +7,9 @@ const cateRepository = {
     },
 
     getById: async (id) => {
-        return await Category.findById(id).select('-__v');
+        const result = await Category.findById(id).select('-__v');
+        if (!result) throw new Error('Category not found');
+        return result;
     },
 
     create: async (data) => {

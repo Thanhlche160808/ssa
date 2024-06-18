@@ -68,7 +68,7 @@ const productController = {
         }
     },
 
-    deleteProduct: async (req, res) => {
+    changeStatus: async (req, res) => {
         const data = req.query;
         try {
             const result = await productService.deleteProduct(data);

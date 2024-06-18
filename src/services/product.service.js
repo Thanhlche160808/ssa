@@ -1,5 +1,6 @@
-// ** Services
+// ** Repository
 import productRepository from "../repository/product.repository.js";
+import categoryRepository from "../repository/category.repository.js";
 
 const productService = {
   createProduct: async ({
@@ -20,6 +21,8 @@ const productService = {
       var displayNameComponent = [productName, type, colourName];
       const displayName = displayNameComponent.join(" - ");
 
+      const category = await categoryRepository.getById(categoryId);
+
       const product = await productRepository.create({
         productCode: productCode.toLocaleUpperCase(),
         productName,
@@ -28,7 +31,7 @@ const productService = {
         description,
         thumbnail,
         images,
-        categoryId,
+        categoryId: category._id,
         price,
         colourVariant,
       });
