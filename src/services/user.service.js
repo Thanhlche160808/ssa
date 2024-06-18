@@ -1,12 +1,10 @@
-// ** Model
-import Account from "../models/account.js";
-import { selectUser } from '../constants/query.constant.js';
+// ** Repository
+import accountRepository from "../repository/account.repository.js";
 
-// ** Services
 
 const userService = {
     getProfile: async (id) => {
-        const account = await Account.findById(id).select('-__v -password').populate('user', selectUser);
+        const account = await accountRepository.findById(id);
         const user = account.user;
 
         const accountInfo = account.toJSON();

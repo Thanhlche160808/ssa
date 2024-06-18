@@ -103,9 +103,9 @@ const accountRepository = {
     },
 
     findById: async (id) => {
-        const account = await Account.findById(id).populate('user', selectUser);
+        const account = await Account.findById(id).select('-__v -password').populate('user', selectUser);
 
-        if (!account) throw new Error('Account not found');
+        if (!account) throw new Error('This account is currently unavailable');
 
         return account;
     },
