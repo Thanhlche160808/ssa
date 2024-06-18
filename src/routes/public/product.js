@@ -4,6 +4,9 @@ import express from "express";
 // ** Controllers
 import productController from "../../controllers/product.controller.js";
 
+//** Middlewares
+import { productValidation } from "../../middlewares/validate-data/product.js";
+
 const router = express.Router();
 
 /**
@@ -38,7 +41,7 @@ const router = express.Router();
  *               description:
  *                 type: string
  *                 example: Giày chạy bộ tốt nhất năm 2024
- *               thumnail:
+ *               thumbnail:
  *                 type: string
  *                 example: https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
  *               images:
@@ -82,7 +85,7 @@ const router = express.Router();
  *                  type: Low top
  *                  displayName: Bitis Hunter X - Low top - SKyblue
  *                  description: Giày chạy bộ tốt nhất năm 2024
- *                  thumnail: https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
+ *                  thumbnail: https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
  *                  images: []
  *                  category: Bitis Hunter
  *                  isHide: false
@@ -100,7 +103,7 @@ const router = express.Router();
  *                  type: High top
  *                  displayName: Bitis Hunter XY - High top - Night
  *                  description: Giày chạy bộ đẹp nhất năm 2024
- *                  thumnail: https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
+ *                  thumbnail: https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
  *                  images: []
  *                  category: Bitis Hunter
  *                  isHide: false
@@ -198,7 +201,7 @@ const router = express.Router();
  *                       description:
  *                         type: string
  *                         example: Giày chạy bộ tốt nhất năm 2024
- *                       thumnail:
+ *                       thumbnail:
  *                         type: string
  *                         example: https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
  *                       images:
@@ -242,7 +245,7 @@ const router = express.Router();
  *                          type: Low top
  *                          displayName: Bitis Hunter X - Low top - SKyblue
  *                          description: Giày chạy bộ tốt nhất năm 2024
- *                          thumnail: https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
+ *                          thumbnail: https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
  *                          images: []
  *                          category: Bitis Hunter
  *                          isHide: false
@@ -260,7 +263,7 @@ const router = express.Router();
  *                          type: High top
  *                          displayName: Bitis Hunter XY - High top - Night
  *                          description: Giày chạy bộ đẹp nhất năm 2024
- *                          thumnail: https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
+ *                          thumbnail: https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
  *                          images: []
  *                          category: Bitis Hunter
  *                          isHide: false
@@ -274,7 +277,7 @@ const router = express.Router();
  *                                quantity: 200
  *                          price: 500000
  */
-router.get("/getProducts", productController.getAllProducts);
+router.get("/getProducts", productValidation.listProducts(), productController.getAllProducts);
 
 /**
  * @swagger

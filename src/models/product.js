@@ -42,6 +42,7 @@ const productSchema = new mongoose.Schema(
     images: [String],
     category: {
       type: mongoose.Schema.Types.ObjectId,
+      required: true,
       ref: "Category",
     },
     isHide: {
