@@ -99,7 +99,7 @@ const router = express.Router();
  *                       example: false
  */
 
-router.post('/', categoryValidation.create, cateController.create)
+router.post('/', categoryValidation.create(), cateController.create)
 
 
 /** 
@@ -159,7 +159,7 @@ router.post('/', categoryValidation.create, cateController.create)
  *                       type: boolean
  *                       example: false
  */
-router.put('/:id', categoryValidation.update, cateController.update)
+router.put('/:id', categoryValidation.update(), cateController.update)
 
 
 /** 
@@ -272,6 +272,6 @@ router.put('/change-status/:id', cateController.changeStatus)
  *                       type: integer
  *                       example: 1
  */
-router.get('/list-dashboard', categoryValidation.list, cateController.searchAndPaginate);
+router.get('/list-dashboard', categoryValidation.list(), cateController.searchAndPaginate);
 
 export default router
