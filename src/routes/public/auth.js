@@ -5,7 +5,7 @@ import express from "express";
 import authController from "../../controllers/auth.controller.js";
 
 // ** Middlewares
-// import { authValidation } from "../../middlewares/validate-data/auth";
+import { authValidation } from "../../middlewares/validate-data/auth.js";
 
 const router = express.Router();
 
@@ -150,7 +150,7 @@ const router = express.Router();
  *                  favourite: []
  * 
  */
-router.post("/register", authController.register);
+router.post("/register", authValidation.register() ,authController.register);
 
 /**
  * @swagger
@@ -208,7 +208,7 @@ router.post("/register", authController.register);
  *                              type: string
  *                              example: eyJhbGciO....
  */
-router.post("/login", authController.login);
+router.post("/login", authValidation.login() ,authController.login);
 
 /**
  * @swagger

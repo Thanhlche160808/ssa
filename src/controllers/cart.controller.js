@@ -31,7 +31,7 @@ const cartController = {
     },
 
     getCart: async (req, res) => {
-        const { account } = req.cookies;
+        const { account } = req.signedCookies;
         if (!account) {
             res.status(statusCode.BAD_REQUEST).json(response.error(
                 {
