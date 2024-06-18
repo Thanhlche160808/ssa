@@ -10,7 +10,8 @@ import { response } from "../utils/baseResponse.js";
 const cartController = {
     addToCart: async (req, res) => {
         const item = req.body;
-        const { account, cart } = req.cookies;
+        const { cart } = req.cookies;
+        const { account } = req.signedCookies;
         try {
             const result = await cartService.add(item, account, cart);
             res.cookie("cart", result, { sameSite: "none" });
@@ -61,7 +62,8 @@ const cartController = {
     },
 
     removeItem: async (req, res) => {
-        const { cart, account } = req.cookies;
+        const { cart } = req.cookies;
+        const { account } = req.signedCookies;
         const { code } = req.params;
         try {
             const result = await cartService.removeItem(code, cart, account);
@@ -83,7 +85,8 @@ const cartController = {
     },
 
     updateItem: async (req, res) => {
-        const { cart, account } = req.cookies;
+        const { cart } = req.cookies;
+        const { account } = req.signedCookies;
         const item = req.body;
         if (!cart) {
             res.status(statusCode.BAD_REQUEST).json(response.error(
