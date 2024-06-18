@@ -14,7 +14,14 @@ const cartController = {
         const { account } = req.signedCookies;
         try {
             const result = await cartService.add(item, account, cart);
-            res.cookie("cart", result, { sameSite: "none" });
+
+            if (!cart) {
+                res.cookie("cart", result);
+            } else {
+                cart.items = result.items;
+                cart.totalPrice = result.totalPrice;
+                res.cookie("cart", cart);
+            }
             res.status(statusCode.CREATED).json(response.success(
                 {
                     data: result,
@@ -33,6 +40,7 @@ const cartController = {
 
     getCart: async (req, res) => {
         const { account } = req.signedCookies;
+        const { cart } = req.cookies;
         if (!account) {
             res.status(statusCode.BAD_REQUEST).json(response.error(
                 {
@@ -44,7 +52,13 @@ const cartController = {
         }
         try {
             const result = await cartService.getCartByAccount(account);
-            res.cookie("cart", result);
+            if (!cart) {
+                res.cookie("cart", result);
+            } else {
+                cart.items = result.items;
+                cart.totalPrice = result.totalPrice;
+                res.cookie("cart", cart);
+            }
             res.status(statusCode.OK).json(response.success(
                 {
                     data: result,
@@ -67,7 +81,13 @@ const cartController = {
         const { code } = req.params;
         try {
             const result = await cartService.removeItem(code, cart, account);
-            res.cookie("cart", result);
+            if (!cart) {
+                res.cookie("cart", result);
+            } else {
+                cart.items = result.items;
+                cart.totalPrice = result.totalPrice;
+                res.cookie("cart", cart);
+            }
             res.status(statusCode.OK).json(response.success(
                 {
                     data: result,
@@ -99,7 +119,9 @@ const cartController = {
         }
         try {
             const result = await cartService.updateCart(item, cart, account);
-            res.cookie("cart", result);
+            cart.items = result.items;
+            cart.totalPrice = result.totalPrice;
+            res.cookie("cart", cart);
             res.status(statusCode.OK).json(response.success(
                 {
                     data: result,

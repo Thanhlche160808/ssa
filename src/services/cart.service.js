@@ -11,13 +11,11 @@ const cartService = {
 
         let totalPrice = 0;
         const product = await productRepository.findProductByCode(code);
-        if (!product) {
-            throw new Error("Product not exist");
-        }
+        if (!product) throw new Error("Product not exist");
+
         let cartItem = {};
         if (product) {
             cartItem = {
-                kind: "Product",
                 productName: product.productName,
                 productCode: product.productCode,
                 color,
@@ -28,10 +26,28 @@ const cartService = {
             totalPrice += product.price * quantity;
         }
 
-        return await cartRepository.addToCart({
-            item: [cartItem],
+        const result = await cartRepository.addToCart({
+            items: [cartItem],
             totalPrice,
             accountId: account,
+        });
+
+        return {
+            items: await cartService.formatCartItems(result.items),
+            totalPrice: result.totalPrice,
+        };
+    },
+
+    formatCartItems: async (items) => {
+        return items.map(item => {
+            return {
+                productName: item.productName,
+                productCode: item.productCode,
+                color: item.color,
+                size: item.size,
+                quantity: item.quantity,
+                price: item.price,
+            }
         });
     },
 
@@ -46,7 +62,6 @@ const cartService = {
                 cart.totalPrice += product.price * quantity;
             } else {
                 items.push({
-                    kind: "Product",
                     productName: product.productName,
                     productCode: product.productCode,
                     color: color,
@@ -66,7 +81,6 @@ const cartService = {
         let cartItem = {};
         if (product) {
             cartItem = {
-                kind: "Product",
                 productName: product.productName,
                 productCode: product.productCode,
                 color: color,
@@ -85,7 +99,7 @@ const cartService = {
 
     getCartByAccount: async (account) => {
         const cart = await cartRepository.findCartByAccount(account);
-        const cartItems = JSON.parse(cart.items);
+        const cartItems = await cartService.formatCartItems(cart.items);
         return {
             items: cartItems,
             totalPrice: cart.totalPrice,
@@ -95,25 +109,27 @@ const cartService = {
     removeItem: async (code, cart, account) => {
         if (!account) {
             const items = cart.items.filter(cartItem => cartItem.productCode !== code);
-            cart.totalPrice = cart.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+            const totalPrice = items.reduce((total, item) => total + (item.price * item.quantity), 0);
 
             return {
                 items,
-                totalPrice: cart.totalPrice,
+                totalPrice,
             }
         }
 
         const userCart = await cartRepository.findCartByAccount(account);
-        const cartItems = JSON.parse(userCart.items);
-        const items = cartItems.filter(cartItem => cartItem.productCode !== code);
-        userCart.totalPrice = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
-        userCart.items = JSON.stringify(items);
+
+        const items = userCart.items.filter(cartItem => cartItem.productCode !== code);
+        const totalPrice = items.reduce((total, item) => total + (item.price * item.quantity), 0);
+
+        userCart.items = items;
+        userCart.totalPrice = totalPrice;
 
         await userCart.save();
 
         return {
             items,
-            totalPrice: userCart.totalPrice,
+            totalPrice,
         }
     },
 
@@ -124,10 +140,9 @@ const cartService = {
         }
 
         const userCart = await cartRepository.findCartByAccount(account);
-        const cartItems = JSON.parse(userCart.items);
 
-        const cartItemsUpdate = await cartService.handleUpdateItems({ code, oldSize, oldQuantity, newSize, newQuantity }, cartItems);
-        userCart.items = JSON.stringify(cartItemsUpdate.items);
+        const cartItemsUpdate = await cartService.handleUpdateItems({ code, oldSize, oldQuantity, newSize, newQuantity }, userCart.items);
+        userCart.items = cartItemsUpdate.items;
         userCart.totalPrice = cartItemsUpdate.totalPrice;
         userCart.save();
 
@@ -137,6 +152,9 @@ const cartService = {
     handleUpdateItems: async ({ code, oldSize, oldQuantity, newSize, newQuantity }, items) => {
         const updateItems = [];
         const index = items.findIndex(item => item.productCode === code && item.size === oldSize && item.quantity === oldQuantity);
+
+        if (index === -1) throw new Error("Item not found");
+
         items[index].size = newSize;
         items[index].quantity = newQuantity;
 
@@ -151,9 +169,9 @@ const cartService = {
         });
 
         const totalPrice = await cartService.calculateTotalPrice(updateItems);
-        console.log('totalPrice:', totalPrice);
+
         return {
-            items: updateItems,
+            items: await cartService.formatCartItems(updateItems),
             totalPrice,
         }
     },
