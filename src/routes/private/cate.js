@@ -4,6 +4,8 @@ import express from 'express';
 //** Controller
 import cateController from '../../controllers/category.controller.js';
 
+// ** Validation
+import { categoryValidation } from '../../middlewares/validate-data/category.js';
 
 const router = express.Router();
 
@@ -97,7 +99,7 @@ const router = express.Router();
  *                       example: false
  */
 
-router.post('/', cateController.create)
+router.post('/', categoryValidation.create, cateController.create)
 
 
 /** 
@@ -157,7 +159,7 @@ router.post('/', cateController.create)
  *                       type: boolean
  *                       example: false
  */
-router.put('/:id', cateController.update)
+router.put('/:id', categoryValidation.update, cateController.update)
 
 
 /** 
@@ -270,5 +272,6 @@ router.put('/change-status/:id', cateController.changeStatus)
  *                       type: integer
  *                       example: 1
  */
-router.get('/list-dashboard', cateController.searchAndPaginate);
+router.get('/list-dashboard', categoryValidation.list, cateController.searchAndPaginate);
+
 export default router

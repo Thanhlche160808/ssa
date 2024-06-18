@@ -13,6 +13,7 @@ export const productValidation = {
             body("productName")
                 .trim()
                 .notEmpty().withMessage(message.required("productName"))
+                .matches(/^[a-zA-Z0-9 ]+$/).withMessage(message.specialCharacter("productName"))
                 .isLength({ min: 2, max: 40 }).withMessage(message.stringLengthInRange({ min: 2, max: 40 })),
 
             body("type")
@@ -67,6 +68,7 @@ export const productValidation = {
         validate([
             body("productName")
                 .trim()
+                .matches(/^[a-zA-Z0-9 ]+$/).withMessage(message.specialCharacter("productName"))
                 .isLength({ min: 2, max: 40 }).withMessage(message.stringLengthInRange({ min: 2, max: 40 })),
 
             body("type")

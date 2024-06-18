@@ -4,6 +4,9 @@ import express from 'express';
 // ** Controller
 import cateController from '../../controllers/category.controller.js';
 
+// ** Validation
+import { categoryValidation } from '../../middlewares/validate-data/category.js';
+
 const router = express.Router();
 
 /**
@@ -45,24 +48,6 @@ const router = express.Router();
  *   name: Category
  *   description: The Category managing API
  */
-
-/**
- * @swagger
- * /api/public/category:
- *   get:
- *     summary: Get Category list
- *     tags: [Category]
- *     responses:
- *       200:
- *         description: Category list
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Category'
- */
-router.get('/', cateController.getAll);
 
 /**
  * @swagger
@@ -132,7 +117,7 @@ router.get('/', cateController.getAll);
  *                       type: integer
  *                       example: 1
  */
-router.get('/list-active', cateController.searchActivePagination);
+router.get('/list-active', categoryValidation.list() ,cateController.searchActivePagination);
 
 /**
  * @swagger
