@@ -1,10 +1,29 @@
 import mongoose from "mongoose";
 
-
-const cartSchema = new mongoose.Schema({
-    items: {
+const itemSchema = new mongoose.Schema({
+    productName: {
         type: String,
     },
+    productCode: {
+        type: String,
+    },
+    color: {
+        type: String,
+    },
+    size : {
+        type: Number,
+    },
+    quantity: {
+        type: Number,
+    },
+    price: {
+        type: Number,
+    }
+},
+);
+
+const cartSchema = new mongoose.Schema({
+    items: [itemSchema],
     totalPrice: {
         type: Number,
     },
