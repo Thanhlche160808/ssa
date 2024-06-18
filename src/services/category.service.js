@@ -47,19 +47,13 @@ const cateService = {
         const startIndex = (page - 1) * size;
         const query = { name: { $regex: name, $options: 'i' } };
 
-        try {
             const listCategory = await cateRepository.searchAndPaginate(startIndex, size, query);
             return {
                 items: listCategory.item,
                 totalPage: Math.ceil(listCategory.total / size),
-                activePage: page,
+                activePage: listCategory.total ? page : 1,
                 totalDocument: listCategory.total
             }
-        } catch (error) {
-            return {
-                message: "Error"
-            }
-        }
     },
 
     //get all active category (for user's client)
@@ -69,20 +63,14 @@ const cateService = {
             name: { $regex: name, $options: 'i' },
             isHide: false
         };
-        try {
             const listCategory = await cateRepository.searchAndPaginate(startIndex, size, query);
-            console.log(listCategory);
+
             return {
                 items: listCategory.item,
                 totalPage: Math.ceil(listCategory.total / size),
-                activePage: page,
+                activePage: listCategory.total ? page : 1,
                 totalDocument: listCategory.total
             }
-        } catch (error) {
-            return {
-                message: "Error"
-            }
-        }
     },
 }
 

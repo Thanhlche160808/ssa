@@ -18,4 +18,5 @@ export const message = {
   mustBeNumberAndGreaterThan: ({ field, value = 1 }) =>
     `${_.capitalize(field)} must be number and greater than ${value}`,
   exist: (field) => `${_.capitalize(field)} is already exists`,
+  specialCharacter: (field) => `${_.capitalize(field)} must not contain special characters`,
 };

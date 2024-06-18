@@ -43,15 +43,11 @@ const cateRepository = {
     },
 
     searchAndPaginate: async (startIndex, size, query) => {
-        try {
-            const listCategory = await Category.find(query).skip(startIndex).limit(size);
-            const total = await Category.countDocuments(query)
-            return{
-                item: listCategory,
-                total: total
-            }
-        } catch (error) {
-            throw new Error ('Can not find category')
+        const listCategory = await Category.find(query).skip(startIndex).limit(size);
+        const total = await Category.countDocuments(query);
+        return {
+            item: listCategory,
+            total: total
         }
     }
 }

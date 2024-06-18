@@ -134,7 +134,7 @@ const cateController = {
 
     searchActivePagination: async (req, res) => {
         const page = parseInt(req.query.page) || 1;
-        const size = parseInt(req.query.size) || 5;
+        const size = parseInt(req.query.size) || 10;
         const name = req.query.name || '';
 
         try {
