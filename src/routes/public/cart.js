@@ -4,6 +4,9 @@ import express from 'express';
 // ** Controller
 import cartController from '../../controllers/cart.controller.js';
 
+// **Middleware
+import { cartValidation } from '../../middlewares/validate-data/cart.js';
+
 const router = express.Router();
 
 /**
@@ -75,7 +78,7 @@ const router = express.Router();
  *                   type: string
  *                   example: "OK"
  */
-router.post('/add', cartController.addToCart);
+router.post('/add', cartValidation.add(), cartController.addToCart);
 
 /**
  * @swagger

@@ -19,6 +19,13 @@ export const validate = (validations = []) => {
       return next();
     }
 
+    const errMessage = {};
+
+    errors.array().forEach((error) => {
+      errMessage[error.path] = error.msg;
+    });
+
+
     res.status(statusCode.BAD_REQUEST).json(
       response.error({
         message: errors.array(),
