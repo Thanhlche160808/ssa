@@ -26,11 +26,17 @@ export const authValidation = {
                 .isLength({ min: 6, max: 30 }).withMessage(message.stringLengthInRange({ min: 6, max: 30 }))
                 .matches(/^(?=.*[A-Z])(?=.*[0-9])/).withMessage('Your password should contain at least one uppercase letter and one number'),
 
+            body("phone")
+                .optional()
+                .isMobilePhone("vi-VN").withMessage(message.invalid("phone")), // validate số điện thoại
+
             body("firstName")
+                .optional()
                 .notEmpty().withMessage(message.required("firstName"))
                 .isLength({ min: 2, max: 15 }).withMessage(message.stringLengthInRange({ min: 2, max: 15 })),
 
             body("lastName")
+                .optional()
                 .notEmpty().withMessage(message.required("lastName"))
                 .isLength({ min: 2, max: 15 }).withMessage(message.stringLengthInRange({ min: 2, max: 15 })),
         ]),
