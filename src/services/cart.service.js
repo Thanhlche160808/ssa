@@ -108,6 +108,9 @@ const cartService = {
 
     removeItem: async (code, cart, account) => {
         if (!account) {
+            const targetItem = cart.items.find(cartItem => cartItem.productCode === code);
+            if (!targetItem) throw new Error("No product in cart");
+
             const items = cart.items.filter(cartItem => cartItem.productCode !== code);
             const totalPrice = items.reduce((total, item) => total + (item.price * item.quantity), 0);
 
@@ -119,17 +122,17 @@ const cartService = {
 
         const userCart = await cartRepository.findCartByAccount(account);
 
-        const items = userCart.items.filter(cartItem => cartItem.productCode !== code);
-        const totalPrice = items.reduce((total, item) => total + (item.price * item.quantity), 0);
+        const item = userCart.items.find(cartItem => cartItem.productCode === code);
+        if (!item) throw new Error("No product in cart");
 
-        userCart.items = items;
-        userCart.totalPrice = totalPrice;
+        userCart.items = userCart.items.filter(cartItem => cartItem.productCode !== code);
+        userCart.totalPrice = await cartService.calculateTotalPrice(userCart.items);
 
         await userCart.save();
 
         return {
-            items,
-            totalPrice,
+            items: await cartService.formatCartItems(userCart.items),
+            totalPrice: userCart.totalPrice,
         }
     },
 
