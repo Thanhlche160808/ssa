@@ -7,6 +7,7 @@ import cateRouter from "./cate.js";
 import productRouter from "./product.js";
 import cartRouter from "./cart.js";
 import paymentRouter from "./payment.js"
+import voucherRouter from "./voucher.js";
 
 const privateRouter = express.Router();
 
@@ -15,5 +16,6 @@ privateRouter.use("/category", cateRouter);
 privateRouter.use("/product", productRouter);
 privateRouter.use("/cart", cartRouter);
 privateRouter.use("/payment", paymentRouter)
+privateRouter.use("/voucher", voucherRouter);
 
 export { privateRouter };
