@@ -16,11 +16,11 @@ const cartController = {
             const result = await cartService.add(item, account, cart);
 
             if (!cart) {
-                res.cookie("cart", result);
+                res.cookie("cart", result, { secure: true, sameSite: 'none' });
             } else {
                 cart.items = result.items;
                 cart.totalPrice = result.totalPrice;
-                res.cookie("cart", cart);
+                res.cookie("cart", cart, { secure: true, sameSite: 'none' });
             }
             res.status(statusCode.CREATED).json(response.success(
                 {
