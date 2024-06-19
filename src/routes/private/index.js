@@ -5,7 +5,6 @@ import express from "express";
 import userRouter from "./user.js";
 import cateRouter from "./cate.js";
 import productRouter from "./product.js";
-import cartRouter from "./cart.js";
 import paymentRouter from "./payment.js"
 
 const privateRouter = express.Router();
@@ -13,7 +12,6 @@ const privateRouter = express.Router();
 privateRouter.use("/user", userRouter);
 privateRouter.use("/category", cateRouter);
 privateRouter.use("/product", productRouter);
-privateRouter.use("/cart", cartRouter);
 privateRouter.use("/payment", paymentRouter)
 
 export { privateRouter };
