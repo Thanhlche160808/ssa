@@ -222,6 +222,22 @@ const productService = {
 
     return await productService.handleformatProductResult(product);
   },
+
+  getAllColors: async () => {
+    const products = await productRepository.getAllProducts();
+    const colors = products.reduce((acc, product) => {
+      const color = {
+        colorName: product.colourVariant.colourName,
+        hex: product.colourVariant.hex,
+      };
+      if (!acc.find((item) => item.colorName === color.colorName)) {
+        acc.push(color);
+      }
+      return acc;
+    }, []);
+
+    return colors;
+  },
 };
 
 export default productService;

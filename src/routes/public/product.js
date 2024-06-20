@@ -121,6 +121,45 @@ const router = express.Router();
  */
 router.get("/getProducts", productValidation.query(), productController.getAllProducts);
 
+
+/**
+ * @swagger
+ * /api/public/product/product-colors:
+ *   get:
+ *     summary: Get colors of product 
+ *     tags: [Product]
+ *     responses:
+ *       200:
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 isSuccess:
+ *                   type: boolean
+ *                 statusCode:
+ *                   type: number
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: Object
+ *                     properties:
+ *                       colorName:
+ *                         type: string
+ *                         example: SKyblue
+ *                       hex:
+ *                         type: string
+ *                         example: '#000000'
+ *               example:
+ *                   isSuccess: true
+ *                   statusCode: 200
+ *                   data:
+ *                        - colorName: SKyblue
+ *                          hex: '#000000'
+*/
+
+router.get("/product-colors", productController.getAllColors);
+
 /**
  * @swagger
  * /api/public/product/{code}:

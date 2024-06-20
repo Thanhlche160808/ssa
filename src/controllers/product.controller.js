@@ -128,6 +128,25 @@ const productController = {
                 }
             ))
         }
+    },
+
+    getAllColors: async (req, res) => {
+        try {
+            const result = await productService.getAllColors();
+            res.status(statusCode.OK).json(response.success(
+                {
+                    data: result,
+                    code: statusCode.OK,
+                }
+            ));
+        } catch (error) {
+            res.status(statusCode.BAD_REQUEST).json(response.error(
+                {
+                    message: error?.message,
+                    code: statusCode.BAD_REQUEST,
+                }
+            ))
+        }
     }
 };
 
