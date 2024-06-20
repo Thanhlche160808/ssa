@@ -54,12 +54,12 @@ export const productValidation = {
     listProducts: () =>
         validate([
             query("page")
-                .notEmpty().withMessage(message.required("page"))
+                .optional()
                 .isNumeric().withMessage(message.invalid("page"))
                 .custom(value => value > 0).withMessage(message.mustBeNumberAndGreaterThan("page", 0)),
 
             query("size")
-                .notEmpty().withMessage(message.required("size"))
+                .optional()
                 .isNumeric().withMessage(message.invalid("size"))
                 .custom(value => value > 0).withMessage(message.mustBeNumberAndGreaterThan("size", 0)),
         ]),
