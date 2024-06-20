@@ -61,8 +61,8 @@ const productRepository = {
       { isHide: !product.isHide },
       { new: true }
     )
-    .populate("category", categorySelect)
-    .select("-__v -_id -createdAt -updatedAt");
+      .populate("category", categorySelect)
+      .select("-__v -_id -createdAt -updatedAt");
   },
 
   findAndUpdate: async (productCode, updatedData) => {
@@ -71,8 +71,8 @@ const productRepository = {
       { ...updatedData },
       { new: true }
     )
-    .populate("category", categorySelect)
-    .select("-__v -_id -createdAt -updatedAt");
+      .populate("category", categorySelect)
+      .select("-__v -_id -createdAt -updatedAt");
 
     return result;
   },
@@ -93,6 +93,12 @@ const productRepository = {
   findProductByCode: async (productCode) => {
     const product = await Product.findOne({ productCode });
     return product;
+  },
+
+  getAllProducts: async () => {
+    return await Product.find()
+      .populate("category", categorySelect)
+      .select("-__v -_id -createdAt -updatedAt");
   },
 };
 
