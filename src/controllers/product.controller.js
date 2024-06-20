@@ -29,9 +29,9 @@ const productController = {
     },
 
     productDetail: async (req, res) => {
-        const productId = req.params.id;
+        const { code } = req.params;
         try {
-            const result = await productService.productDetail(productId);
+            const result = await productService.productDetail(code);
             res.status(statusCode.OK).json(response.success(
                 {
                     data: result,
@@ -69,9 +69,9 @@ const productController = {
     },
 
     changeStatus: async (req, res) => {
-        const data = req.query;
+        const { code } = req.params;
         try {
-            const result = await productService.deleteProduct(data);
+            const result = await productService.deleteProduct(code);
             res.status(statusCode.OK).json(response.success(
                 {
                     data: result,
@@ -87,12 +87,13 @@ const productController = {
             ))
         }
     },
-    
+
     updateProduct: async (req, res) => {
         const data = req.body;
-        const productId = req.params.id;
+        const { code } = req.params;
+
         try {
-            const result = await productService.updateProduct(productId, data);
+            const result = await productService.updateProduct(code, data);
             res.status(statusCode.OK).json(response.success(
                 {
                     data: result,
@@ -108,6 +109,26 @@ const productController = {
             ))
         }
     },
+
+    getProductsDashboard: async (req, res) => {
+        const data = req.query;
+        try {
+            const result = await productService.getPoductDashboard(data);
+            res.status(statusCode.OK).json(response.success(
+                {
+                    data: result,
+                    code: statusCode.OK,
+                }
+            ));
+        } catch (error) {
+            res.status(statusCode.BAD_REQUEST).json(response.error(
+                {
+                    message: error?.message,
+                    code: statusCode.BAD_REQUEST,
+                }
+            ))
+        }
+    }
 };
 
 export default productController;

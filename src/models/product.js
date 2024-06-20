@@ -36,9 +36,6 @@ const productSchema = new mongoose.Schema(
     description: {
       type: String,
     },
-    thumbnail: {
-      type: String,
-    },
     images: [String],
     category: {
       type: mongoose.Schema.Types.ObjectId,
@@ -53,6 +50,9 @@ const productSchema = new mongoose.Schema(
       type: ColourVariant,
     },
     price: {
+      type: Number,
+    },
+    salePrice: {
       type: Number,
     },
   },

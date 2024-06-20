@@ -19,4 +19,6 @@ export const message = {
     `${_.capitalize(field)} must be number and greater than ${value}`,
   exist: (field) => `${_.capitalize(field)} is already exists`,
   specialCharacter: (field) => `${_.capitalize(field)} must not contain special characters`,
+  isHexColor: (field) => `${_.capitalize(field)} must be a valid hex color`,
+  mustBeArray: (field) => `${_.capitalize(field)} must be an array`,
 };

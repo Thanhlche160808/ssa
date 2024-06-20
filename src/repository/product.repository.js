@@ -1,6 +1,9 @@
 // ** Models
 import Product from "../models/product.js";
 
+// ** Constants
+import { categorySelect } from "../constants/query.constant.js";
+
 const productRepository = {
   create: async (product) => {
     try {
@@ -21,7 +24,7 @@ const productRepository = {
         thumbnail: product.thumbnail,
         images: product.images,
         isHide: false,
-        categoryId: product.categoryId,
+        category: product.categoryId,
         price: product.price,
         colourVariant: product.colourVariant,
       });
@@ -32,8 +35,10 @@ const productRepository = {
     }
   },
 
-  findById: async (productId) => {
-    const product = await Product.findById(productId);
+  findByCode: async (code) => {
+    const product = await Product.findOne({ productCode: code })
+      .populate("category", categorySelect)
+      .select("-__v -_id -createdAt -updatedAt");
 
     if (!product) throw new Error("Product not found");
 
@@ -48,21 +53,28 @@ const productRepository = {
     return product;
   },
 
-  findAndChangeVisibility: async (productId) => {
-    const product = await productRepository.findById(productId);
+  findAndChangeVisibility: async (code) => {
+    const product = await Product.findOne({ productCode: code });
 
-    return await Product.findByIdAndUpdate(
-      { _id: productId },
-      { $set: { isHide: !product.isHide } },
-      { new: true },
-    );
+    return await Product.findOneAndUpdate(
+      { productCode: code },
+      { isHide: !product.isHide },
+      { new: true }
+    )
+    .populate("category", categorySelect)
+    .select("-__v -_id -createdAt -updatedAt");
   },
 
-  findAndUpdate: async (productId, updatedData) => {
-    await productRepository.findById(productId);
+  findAndUpdate: async (productCode, updatedData) => {
+    const result = await Product.findOneAndUpdate(
+      { productCode },
+      { ...updatedData },
+      { new: true }
+    )
+    .populate("category", categorySelect)
+    .select("-__v -_id -createdAt -updatedAt");
 
-    const query = { ...updatedData };
-    return await Product.findByIdAndUpdate(productId, query, { new: true });
+    return result;
   },
 
   totalDocuments: async (query) => {
@@ -71,6 +83,7 @@ const productRepository = {
 
   filterProducts: async (query, skip, size, sortOptions) => {
     return await Product.find(query)
+      .populate("category", categorySelect)
       .select("-__v")
       .skip(skip)
       .limit(size)
