@@ -4,3 +4,5 @@ export const sortOptions = {
     ASC: 'ASC',
     DESC: 'DESC',
 };
+
+export const categorySelect = 'name description isHide';

@@ -9,115 +9,6 @@ import { productValidation } from "../../middlewares/validate-data/product.js";
 
 const router = express.Router();
 
-/**
- * @swagger
- * components:
- *   schemas:
- *     Product:
- *       type: object
- *       required: []
- *       properties:
- *         isSuccess:
- *           type: boolean
- *         statusCode:
- *           type: number
- *         data:
- *           type: array
- *           items:
- *             type: Object
- *             properties:
- *               productCode:
- *                 type: string
- *                 example: abcsd
- *               productName:
- *                 type: string
- *                 example: Bitis Hunter X
- *               type:
- *                 type: string
- *                 example: Low top
- *               displayName:
- *                 type: string
- *                 example: Bitis Hunter X - Low top - SKyblue
- *               description:
- *                 type: string
- *                 example: Giày chạy bộ tốt nhất năm 2024
- *               thumbnail:
- *                 type: string
- *                 example: https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
- *               images:
- *                 type: array
- *                 items:
- *                   type: string
- *               category:
- *                 type: string
- *               isHide:
- *                 type: boolean
- *                 example: false
- *               colourVariant:
- *                 type: Object
- *                 properties:
- *                   colourName:
- *                     type: String
- *                     example: Skyblue
- *                   hex:
- *                     type: String
- *                     example: #00CCFF
- *                   sizeMetrics:
- *                     type: array
- *                     items:
- *                       type: Object
- *                       properties:
- *                         size:
- *                           type: number
- *                           example: 41
- *                         quantity:
- *                           type: number
- *                           example: 400
- *               price:
- *                 type: number
- *                 example: 400000
- *         example:
- *           isSuccess: true
- *           statusCode: 200
- *           data:
- *                - productCode: abcsd
- *                  productName: Bitis Hunter X
- *                  type: Low top
- *                  displayName: Bitis Hunter X - Low top - SKyblue
- *                  description: Giày chạy bộ tốt nhất năm 2024
- *                  thumbnail: https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
- *                  images: []
- *                  category: Bitis Hunter
- *                  isHide: false
- *                  colourVariant: 
- *                    colourName: Skyblue
- *                    hex: 00CCFF
- *                    sizeMetrics: 
- *                      - size: 42
- *                        quantity: 100
- *                      - size: 43
- *                        quantity: 200
- *                  price: 400000
- *                - productCode: khshc
- *                  productName: Bitis Hunter XY
- *                  type: High top
- *                  displayName: Bitis Hunter XY - High top - Night
- *                  description: Giày chạy bộ đẹp nhất năm 2024
- *                  thumbnail: https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
- *                  images: []
- *                  category: Bitis Hunter
- *                  isHide: false
- *                  colourVariant: 
- *                    colourName: Night
- *                    hex: ffffff
- *                    sizeMetrics: 
- *                      - size: 42
- *                        quantity: 100
- *                      - size: 43
- *                        quantity: 200
- *                  price: 500000
- */
-
 /** 
  * @swagger
  * tags:
@@ -137,39 +28,36 @@ const router = express.Router();
  *         schema:
  *           type: number
  *           example: 1
- *         description: The number page displaying in product pagination
  *       - in: query
  *         name: size
  *         schema:
  *           type: number
  *           example: 10
- *         description: The size of product in 1 page
  *       - in: query
  *         name: displayName
  *         schema:
  *           type: string
- *         description: The displayName of the product to search for
+ *       - in: query
+ *         name: categoryId
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: color
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: minPrice
+ *         schema:
+ *           type: number
+ *       - in: query
+ *         name: maxPrice
+ *         schema:
+ *           type: number
  *       - in: query
  *         name: priceSort
  *         schema:
  *           type: string
  *           enum: ['ASC', 'DESC']
- *         description: The sort order of the products [ASC, DESC]
- *       - in: query
- *         name: min
- *         schema:
- *           type: number
- *         description: The min range
- *       - in: query
- *         name: max
- *         schema:
- *           type: number
- *         description: The max range
- *       - in: query
- *         name: isHide
- *         schema:
- *           type: boolean
- *         description: hide status of the product
  *     responses:
  *       200:
  *         description: Product list
@@ -193,102 +81,55 @@ const router = express.Router();
  *                       productName:
  *                         type: string
  *                         example: Bitis Hunter X
- *                       type:
- *                         type: string
- *                         example: Low top
  *                       displayName:
  *                         type: string
  *                         example: Bitis Hunter X - Low top - SKyblue
- *                       description:
+ *                       type:
  *                         type: string
- *                         example: Giày chạy bộ tốt nhất năm 2024
- *                       thumbnail:
+ *                         example: Low top
+ *                       colorName:
  *                         type: string
- *                         example: https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
+ *                         example: SKyblue
  *                       images:
  *                         type: array
  *                         items:
  *                           type: string
- *                       category:
- *                         type: string
- *                       isHide:
- *                         type: boolean
- *                         example: false
- *                       colourVariant:
- *                         type: Object
- *                         properties:
- *                           colourName:
- *                             type: String
- *                             example: Skyblue
- *                           hex:
- *                             type: String
- *                             example: #00CCFF
- *                           sizeMetrics:
- *                             type: array
- *                             items:
- *                               type: Object
- *                               properties:
- *                                 size:
- *                                   type: number
- *                                   example: 41
- *                                 quantity:
- *                                   type: number
- *                                   example: 400
+ *                           example: https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
  *                       price:
  *                         type: number
  *                         example: 400000
+ *                       salePrice:
+ *                         type: number
+ *                         example: 400000
+ *                       totalQuantity:
+ *                         type: number
+ *                         example: 300
  *               example:
  *                   isSuccess: true
  *                   statusCode: 200
  *                   data:
  *                        - productCode: abcsd
  *                          productName: Bitis Hunter X
- *                          type: Low top
  *                          displayName: Bitis Hunter X - Low top - SKyblue
- *                          description: Giày chạy bộ tốt nhất năm 2024
- *                          thumbnail: https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
- *                          images: []
- *                          category: Bitis Hunter
- *                          isHide: false
- *                          colourVariant: 
- *                            colourName: Skyblue
- *                            hex: 00CCFF
- *                            sizeMetrics: 
- *                              - size: 42
- *                                quantity: 100
- *                              - size: 43
- *                                quantity: 200
+ *                          type: Low top
+ *                          colorName: SKyblue
+ *                          images:
+ *                              - https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
  *                          price: 400000
- *                        - productCode: khshc
- *                          productName: Bitis Hunter XY
- *                          type: High top
- *                          displayName: Bitis Hunter XY - High top - Night
- *                          description: Giày chạy bộ đẹp nhất năm 2024
- *                          thumbnail: https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
- *                          images: []
- *                          category: Bitis Hunter
- *                          isHide: false
- *                          colourVariant: 
- *                            colourName: Night
- *                            hex: ffffff
- *                            sizeMetrics: 
- *                              - size: 42
- *                                quantity: 100
- *                              - size: 43
- *                                quantity: 200
- *                          price: 500000
+ *                          salePrice: 400000
+ *                          totalQuantity: 300
  */
-router.get("/getProducts", productValidation.listProducts(), productController.getAllProducts);
+router.get("/getProducts", productValidation.query(), productController.getAllProducts);
 
 /**
  * @swagger
- * /api/public/product/{id}:
+ * /api/public/product/{code}:
  *   get:
  *     summary: Product 
  *     tags: [Product]
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: code
  *         required: true
  *         schema:
  *           type: string
@@ -301,6 +142,6 @@ router.get("/getProducts", productValidation.listProducts(), productController.g
  *             schema:
  *               $ref: '#/components/schemas/Product'
  */
-router.get("/:id", productController.productDetail);
+router.get("/:code", productController.productDetail);
 
 export default router;

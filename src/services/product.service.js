@@ -16,54 +16,90 @@ const productService = {
     price,
     colourVariant,
   }) => {
-    try {
-      const productCode = Math.random().toString(36).slice(2, 7);
+    const productCode = Math.random().toString(36).slice(2, 12);
 
-      const { colourName } = colourVariant;
+    const { colourName } = colourVariant;
 
-      var displayNameComponent = [productName, type, colourName];
-      const displayName = displayNameComponent.join(" - ");
+    var displayNameComponent = [productName, type, colourName];
+    const displayName = displayNameComponent.join(" - ");
 
-      const category = await categoryRepository.getById(categoryId);
+    const category = await categoryRepository.getById(categoryId);
 
-      const product = await productRepository.create({
-        productCode: productCode.toLocaleUpperCase(),
-        productName,
-        type,
-        displayName,
-        description,
-        thumbnail,
-        images,
-        categoryId: category._id,
-        price,
-        colourVariant,
-      });
+    const product = await productRepository.create({
+      productCode: productCode.toLocaleUpperCase(),
+      productName,
+      type,
+      displayName,
+      description,
+      thumbnail,
+      images,
+      categoryId: category._id,
+      price,
+      colourVariant,
+    });
 
-      return product;
-    } catch (error) {
-      throw new Error(error.message);
-    }
+    const productJson = product.toJSON();
+    delete productJson.__v;
+    delete productJson._id;
+    delete productJson.createdAt;
+    delete productJson.updatedAt;
+
+    return productJson;
   },
 
-  productDetail: async (productId) => {
-    return await productRepository.findById(productId);
+  productDetail: async (code) => {
+    const product = await productRepository.findByCode(code);
+    return await productService.handleformatProductResult(product);
+  },
+
+  handleformatProductResult: async (product) => {
+    const sizeMetrics = product.colourVariant.sizeMetrics.map((color) => {
+      return {
+        size: color.size,
+        quantity: color.quantity,
+      };
+    });
+
+    return {
+      productCode: product.productCode,
+      productName: product.productName,
+      type: product.type,
+      displayName: product.displayName,
+      description: product.description,
+      images: product.images,
+      category: product.category.name,
+      price: product.price,
+      salePrice: product.salePrice,
+      isHide: product.isHide,
+      colourVariant: {
+        colourName: product.colourVariant.colourName,
+        hex: product.colourVariant.hex,
+        sizeMetrics,
+      },
+    };
   },
 
   getAllProduct: async ({
     page,
     size,
     displayName,
-    min,
-    max,
-    isHide,
+    categoryId,
+    color,
+    minPrice,
+    maxPrice,
     priceSort,
   }) => {
     const skip = (page - 1) * size;
 
-    const query = {};
+    const query = {
+      isHide: false,
+    };
+
     if (displayName) query.displayName = { $regex: displayName, $options: "i" };
-    if (min || max) query.price = { $gte: min, $lte: max };
-    if (isHide !== undefined) query.isHide = isHide;
+    if (categoryId) query.category = categoryId;
+    if (color) query["colourVariant.hex"] = color;
+    if (minPrice) query.price = { $gte: minPrice };
+    if (maxPrice) query.price = { $lte: maxPrice };
 
     const sortOptions = {};
 
@@ -83,27 +119,108 @@ const productService = {
       sortOptions
     );
 
+    const result = await productService.formatProductResult(products);
+
     return {
-      products,
+      products: result,
       totalPage,
       totalDocuments,
     };
   },
 
-  deleteProduct: async ({ productId }) => {
-    return await productRepository.findAndChangeVisibility(productId);
+  getPoductDashboard: async ({
+    page,
+    size,
+    displayName,
+    categoryId,
+    color,
+    minPrice,
+    maxPrice,
+    priceSort,
+  }) => {
+
+    const skip = (page - 1) * size;
+
+    const query = {};
+
+    if (displayName) query.displayName = { $regex: displayName, $options: "i" };
+    if (categoryId) query.category = categoryId;
+    if (color) query["colourVariant.hex"] = color;
+    if (minPrice) query.price = { $gte: minPrice };
+    if (maxPrice) query.price = { $lte: maxPrice };
+
+    const sortOptions = {};
+
+    if (priceSort === sortOptions.ASC) {
+      sortOptions.price = 1;
+    } else if (priceSort === sortOptions.DESC) {
+      sortOptions.price = -1;
+    }
+
+    const totalDocuments = await productRepository.totalDocuments(query);
+    const totalPage = Math.ceil(totalDocuments / size);
+
+    const products = await productRepository.filterProducts(
+      query,
+      skip,
+      size,
+      sortOptions
+    );
+
+    const result = await Promise.all(
+      products.map(async (product) => {
+        const formattedProduct = await productService.handleformatProductResult(product);
+        return formattedProduct;
+      })
+    ); 
+
+    console.log('result', result);
+    return {
+      products: result,
+      totalPage,
+      totalDocuments,
+    };
   },
 
-  updateProduct: async (productId, updatedData) => {
+  formatProductResult: async (products) => {
+    const result = products.map((product) => {
+      const totalQuantity = product.colourVariant.sizeMetrics.reduce(
+        (acc, size) => acc + size.quantity,
+        0
+      );
+      return {
+        productCode: product.productCode,
+        productName: product.productName,
+        displayName: product.displayName,
+        type: product.category.name,
+        colorName: product.colourVariant.colourName,
+        salePrice: product.salePrice,
+        price: product.price,
+        images: product.images,
+        totalQuantity,
+      };
+    });
+
+    return result;
+  },
+
+  deleteProduct: async (code) => {
+    const product = await productRepository.findAndChangeVisibility(code);
+    return await productService.handleformatProductResult(product);
+  },
+
+  updateProduct: async (productCode, updatedData) => {
     const { productName, type, colourVariant } = updatedData;
 
     const { colourName } = colourVariant;
 
-    var displayNameComponent = [productName, type, colourName];
+    const displayNameComponent = [productName, type, colourName];
     const displayName = displayNameComponent.join(" - ");
     updatedData.displayName = displayName;
 
-    return await productRepository.findAndUpdate(productId, updatedData);
+    const product = await productRepository.findAndUpdate(productCode, updatedData);
+
+    return await productService.handleformatProductResult(product);
   },
 };
 

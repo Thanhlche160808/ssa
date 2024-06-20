@@ -39,13 +39,11 @@ const router = express.Router();
  *             description:
  *               type: string
  *               example: Giày chạy bộ tốt nhất năm 2024
- *             thumbnail:
- *               type: string
- *               example: https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
  *             images:
  *               type: array
  *               items:
  *                 type: string
+ *                 example: https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
  *             category:
  *               type: string
  *             isHide:
@@ -74,6 +72,9 @@ const router = express.Router();
  *             price:
  *               type: number
  *               example: 400000
+ *             salePrice:
+ *               type: number
+ *               example: 400000
  *       example:
  *         isSuccess: true
  *         statusCode: 200
@@ -83,8 +84,8 @@ const router = express.Router();
  *              type: Low top
  *              displayName: Bitis Hunter X - Low top - SKyblue
  *              description: Giày chạy bộ tốt nhất năm 2024
- *              thumbnail: https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
- *              images: []
+ *              images:
+ *                  - https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
  *              category: Bitis Hunter
  *              isHide: false
  *              colourVariant: 
@@ -96,6 +97,7 @@ const router = express.Router();
  *                  - size: 43
  *                    quantity: 200
  *              price: 400000
+ *              salePrice: 400000
  */
 /**
  * @swagger
@@ -122,25 +124,37 @@ const router = express.Router();
  *                 type: string
  *               description:
  *                 type: string
- *               thumbnail:
- *                 type: string
  *               images:
  *                 type: array
  *                 items:
  *                   type: string
- *               category:
+ *               categoryId:
  *                 type: string
  *               price:
  *                 type: string
  *               colourVariant:
- *                 type: string
+ *                 type: Object
+ *                 properties:
+ *                    colourName:
+ *                      type: String
+ *                    hex:
+ *                      type: String
+ *                    sizeMetrics:
+ *                      type: array
+ *                      items:
+ *                          type: Object
+ *                          properties:
+ *                              size:
+ *                                  type: number
+ *                              quantity:
+ *                                  type: number       
  *           example:
  *             productName: Bitis Hunter X
  *             type: Low top
  *             description: Giày chạy bộ tốt nhất năm 2024
- *             thumbnail: https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
- *             images: []
- *             category: Bitis Hunter
+ *             images:
+ *                  - https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
+ *             categoryId: 6661cab......
  *             isHide: false
  *             colourVariant: {
  *               colourName: Skyblue,
@@ -167,17 +181,18 @@ const router = express.Router();
  *               items:
  *                 $ref: '#/components/schemas/Product'
  */
-router.post("/createProduct", productValidation.create() ,productController.createProduct);
+router.post("/createProduct", productValidation.body(), productController.createProduct);
 
 /**
  * @swagger
- * /api/product/changeStatus:
+ * /api/product/changeStatus/{code}:
  *   put:
  *     summary: Delete Product 
  *     tags: [Product]
  *     parameters:
- *       - in: query
- *         name: productId
+ *       - in: path
+ *         name: code
+ *         required: true
  *         schema:
  *           type: string
  *         description: The id of the product to delete 
@@ -187,35 +202,20 @@ router.post("/createProduct", productValidation.create() ,productController.crea
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 productCode:
- *                   type: string
- *                   example: abcsd
- *                 productName:
- *                   type: string
- *                   example: Bitis Hunter X
- *                 type:
- *                   type: string
- *                   example: Low top
- *                 displayName:
- *                   type: string
- *                   example: Bitis Hunter X - Low top - SKyblue
- *                 isHide:
- *                   type: boolean
- *                   example: true
- */    
-router.put("/changeStatus", productController.changeStatus);
+ *                  $ref: '#/components/schemas/Product'
+ *                 
+ */
+router.put("/changeStatus/:code", productController.changeStatus);
 
 /**
  * @swagger
- * /api/product/{id}:
+ * /api/product/{code}:
  *   put:
  *     summary: Update Product 
  *     tags: [Product]
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: code
  *         required: true
  *         schema:
  *           type: string
@@ -233,8 +233,6 @@ router.put("/changeStatus", productController.changeStatus);
  *                 type: string
  *               description:
  *                 type: string
- *               thumbnail:
- *                 type: string
  *               images:
  *                 type: array
  *                 items:
@@ -249,8 +247,8 @@ router.put("/changeStatus", productController.changeStatus);
  *             productName: Bitis Hunter X
  *             type: Low top
  *             description: Giày chạy bộ tốt nhất năm 2024
- *             thumbnail: https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
- *             images: []
+ *             images:
+ *                  - https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
  *             isHide: false
  *             colourVariant: {
  *               colourName: Skyblue,
@@ -275,6 +273,119 @@ router.put("/changeStatus", productController.changeStatus);
  *             schema:
  *               $ref: '#/components/schemas/Product'
  */
-router.put("/:id", productValidation.updateProduct() ,productController.updateProduct);
+router.put("/:code", productValidation.body(), productController.updateProduct);
 
+/**
+ * @swagger
+ * /api/product/dashboard:
+ *   get:
+ *     summary: Get Product dashboard list
+ *     tags: [Product]
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: number
+ *           example: 1
+ *       - in: query
+ *         name: size
+ *         schema:
+ *           type: number
+ *           example: 10
+ *       - in: query
+ *         name: displayName
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: categoryId
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: color
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: minPrice
+ *         schema:
+ *           type: number
+ *       - in: query
+ *         name: maxPrice
+ *         schema:
+ *           type: number
+ *       - in: query
+ *         name: priceSort
+ *         schema:
+ *           type: string
+ *           enum: ['ASC', 'DESC']
+ *     responses:
+ *       200:
+ *         description: Product list
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 isSuccess:
+ *                   type: boolean
+ *                 statusCode:
+ *                   type: number
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: Object
+ *                     properties:
+ *                       productCode:
+ *                         type: string
+ *                         example: abcsd
+ *                       productName:
+ *                         type: string
+ *                         example: Bitis Hunter X
+ *                       displayName:
+ *                         type: string
+ *                         example: Bitis Hunter X - Low top - SKyblue
+ *                       type:
+ *                         type: string
+ *                         example: Low top
+ *                       colorName:
+ *                         type: string
+ *                         example: SKyblue
+ *                       images:
+ *                         type: array
+ *                         items:
+ *                           type: string
+ *                           example: https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
+ *                       price:
+ *                         type: number
+ *                         example: 400000
+ *                       salePrice:
+ *                         type: number
+ *                         example: 400000
+ *                       totalQuantity:
+ *                         type: number
+ *                         example: 300
+ *               example:
+ *                   isSuccess: true
+ *                   statusCode: 200
+ *                   data:
+ *                      - productCode: abcsd
+ *                        productName: Bitis Hunter X
+ *                        type: Low top
+ *                        displayName: Bitis Hunter X - Low top - SKyblue
+ *                        description: Giày chạy bộ tốt nhất năm 2024
+ *                        images:
+ *                            - https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
+ *                        category: Bitis Hunter
+ *                        isHide: false
+ *                        colourVariant: 
+ *                          colourName: Skyblue
+ *                          hex: 00CCFF
+ *                          sizeMetrics: 
+ *                            - size: 42
+ *                              quantity: 100
+ *                            - size: 43
+ *                              quantity: 200
+ *                        price: 400000
+ *                        salePrice: 400000
+ */
+router.get("/dashboard", productController.getProductsDashboard);
 export default router;
