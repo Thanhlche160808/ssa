@@ -46,13 +46,11 @@ export const categoryValidation = {
         validate([
             query("page")
                 .optional()
-                .notEmpty().withMessage(message.required("page"))
                 .isNumeric().withMessage(message.invalid("page"))
                 .custom(value => value > 0).withMessage(message.mustBeNumberAndGreaterThan("page", 0)),
 
             query("size")
                 .optional()
-                .notEmpty().withMessage(message.required("size"))
                 .isNumeric().withMessage(message.invalid("size"))
                 .custom(value => value > 0).withMessage(message.mustBeNumberAndGreaterThan("size", 0)),
         ]),

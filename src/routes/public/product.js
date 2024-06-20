@@ -152,8 +152,9 @@ const router = express.Router();
  *       - in: query
  *         name: priceSort
  *         schema:
- *           type: number
- *         description: The sort order of the products [-1, 1]
+ *           type: string
+ *           enum: ['ASC', 'DESC']
+ *         description: The sort order of the products [ASC, DESC]
  *       - in: query
  *         name: min
  *         schema:

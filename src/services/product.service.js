@@ -2,6 +2,9 @@
 import productRepository from "../repository/product.repository.js";
 import categoryRepository from "../repository/category.repository.js";
 
+// ** Constants
+import { sortOptions } from "../constants/query.constant.js";
+
 const productService = {
   createProduct: async ({
     productName,
@@ -63,11 +66,12 @@ const productService = {
     if (isHide !== undefined) query.isHide = isHide;
 
     const sortOptions = {};
-    const validPriceSortNumbers = [-1, 1];
-    if (!validPriceSortNumbers.includes(parseInt(priceSort))) {
-      priceSort = 0;
+
+    if (priceSort === sortOptions.ASC) {
+      sortOptions.price = 1;
+    } else if (priceSort === sortOptions.DESC) {
+      sortOptions.price = -1;
     }
-    if (priceSort) sortOptions.price = parseInt(priceSort);
 
     const totalDocuments = await productRepository.totalDocuments(query);
     const totalPage = Math.ceil(totalDocuments / size);

@@ -1,5 +1,8 @@
 import mongoose from 'mongoose';
 
+// ** Constant
+import { VOUCHER_STATUS } from '../constants/model.constant.js';
+
 const voucherSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -30,6 +33,16 @@ const voucherSchema = new mongoose.Schema({
 
     expiredDate: {
         type: Number,
+    },
+
+    isPublish: {
+        type: Boolean,
+        default: false,
+    },
+
+    status: {
+        type: String,
+        default: VOUCHER_STATUS.AVALIBALE,
     },
 }, { timestamps: true });
 
