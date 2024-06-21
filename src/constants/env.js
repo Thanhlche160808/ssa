@@ -16,11 +16,16 @@ export const HOST = process.env.SERVER_HOST;
 
 export const REDIS_URL = process.env.REDIS_URL;
 
-export const SWAGGER_SERVER= process.env.SWAGGER_SERVER;
-
 export const GOOGLE_CLIENT_ID= process.env.GOOGLE_CLIENT_ID;
 
 export const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 export const JWT_ACCESS_KEY = process.env.JWT_ACCESS_KEY;
 export const EXPIRES_ACCESS_TOKEN = process.env.EXPIRES_ACCESS_TOKEN;
 export const EXPIRES_REFRESH_TOKEN = process.env.EXPIRES_REFRESH_TOKEN;
+
+export const TMN_CODE = process.env.TMN_CODE;
+export const VNPAY_SECRET_KEY = process.env.VNPAY_SECRET_KEY;
+export const VNPAY_URL = process.env.VNPAY_URL;
+export const CURR_CODE = process.env.CURR_CODE;
+
+export const SERVER_URL = process.env.APP_ENV === 'production' ? process.env.SERVER_URL : `http://${HOST}:${PORT}`;

@@ -1,5 +1,5 @@
 import swaggerJSDoc from 'swagger-jsdoc';
-import { HOST, PORT, SWAGGER_SERVER } from '../constants/env.js';
+import { HOST, PORT, SERVER_URL } from '../constants/env.js';
 const options = {
     swaggerDefinition: {
         openapi: '3.0.0', // Phiên bản của Swagger/OpenAPI
@@ -10,7 +10,7 @@ const options = {
         },
         servers: [
             {
-                url: `${SWAGGER_SERVER}`,
+                url: `${SERVER_URL}`,
             },
         ],
         components: {

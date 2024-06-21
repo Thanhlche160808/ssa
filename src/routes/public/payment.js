@@ -124,4 +124,8 @@ const router = express.Router();
  */
 router.get('/getPayments', paymentController.getPayments);
 
+router.post('/create-payment-url', paymentController.createPaymentUrl);
+
+router.get('/vnpay-return', paymentController.vnpayReturn);
+
 export default router;
