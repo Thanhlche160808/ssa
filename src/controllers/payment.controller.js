@@ -87,7 +87,48 @@ const paymentController = {
                 }
             ));
         }
-    }
+    },
+
+    createPaymentUrl: async (req, res) => {
+        const ipAddr = req.headers['x-forwarded-for'] ||
+            req.connection.remoteAddress ||
+            req.socket.remoteAddress ||
+            req.connection.socket.remoteAddress;
+
+        const amount = req.body.amount;
+        const bankCode = req.body.bankCode;
+        const locale = req.body.language || 'vn';
+
+        try {
+            const vnpUrl = await paymentService.createVnPaytUrl(ipAddr, amount, bankCode, locale);
+            res.redirect(vnpUrl);
+        } catch (err) {
+            res.status(statusCode.BAD_REQUEST).json(response.error(
+                {
+                    message: err?.message,
+                    code: statusCode.BAD_REQUEST,
+                }
+            ));
+        }
+    },
+
+    vnpayReturn: async (req, res) => {
+        let vnp_Params = { ...req.query };
+        try {
+            const result = await paymentService.vnpayReturn(vnp_Params);
+            res.status(statusCode.OK).json({
+                data: result,
+                code: statusCode.OK,
+            })
+        } catch (err) {
+            res.status(statusCode.BAD_REQUEST).json(response.error(
+                {
+                    message: err?.message,
+                    code: statusCode.BAD_REQUEST,
+                }
+            ));
+        }
+    },
 };
 
 export default paymentController;
