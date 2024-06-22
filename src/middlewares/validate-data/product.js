@@ -27,7 +27,7 @@ export const productValidation = {
             body("images")
                 .isArray().withMessage(message.mustBeArray("images"))
                 .notEmpty().withMessage(message.required("images"))
-                .custom(value => value.every(url => url.match(/(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/g))).withMessage(message.invalid("images")),
+                .custom(value => value.every(url => url.match(/(http(s?):)([/|.|\w|\s|-]|[%])+(\.(jpg|gif|png))(?:\?.*)?$/i))).withMessage(message.invalid("images")),
 
             body("description")
                 .isLength({ min: 2, max: 1000 }).withMessage(message.stringLengthInRange({ min: 2, max: 1000 })),
