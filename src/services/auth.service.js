@@ -8,7 +8,7 @@ import jwtService from "../services/jwt.service.js";
 import accountRepository from "../repository/account.repository.js";
 
 // ** Constants
-import { JWT_SECRET_KEY, JWT_ACCESS_KEY, EXPIRES_REFRESH_TOKEN } from "../constants/index.js";
+import { JWT_SECRET_KEY, JWT_ACCESS_KEY } from "../constants/index.js";
 
 // ** Helper
 import googleHelper from '../helper/google.helper.js'

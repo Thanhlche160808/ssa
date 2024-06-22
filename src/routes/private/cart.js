@@ -5,7 +5,7 @@ import express from 'express';
 import cartController from '../../controllers/cart.controller.js';
 
 // **Middleware
-// import { cartValidation } from '../../middlewares/validate-data/cart.js';
+import { cartValidation } from '../../middlewares/validate-data/cart.js';
 
 const router = express.Router();
 
@@ -106,7 +106,7 @@ const router = express.Router();
  *             schema:
  *                  $ref: '#/components/schemas/Cart'
  */
-router.post('/add', cartController.addToCart);
+router.post('/add', cartValidation.add() , cartController.addToCart);
 
 /**
  * @swagger
@@ -154,7 +154,7 @@ router.get('/get', cartController.getCart);
  *             schema:
  *                  $ref: '#/components/schemas/Cart'
  */
-router.patch('/removeItem', cartController.removeItem);
+router.patch('/removeItem', cartValidation.remove() ,cartController.removeItem);
 
 /**
  * @swagger
@@ -193,6 +193,6 @@ router.patch('/removeItem', cartController.removeItem);
  *             schema:
  *                  $ref: '#/components/schemas/Cart'
  */
-router.put('/updateItem', cartController.updateItem);
+router.put('/updateItem', cartValidation.remove() ,cartController.updateItem);
 
 export default router;

@@ -1,11 +1,9 @@
 // ** Repository
 import cartRepository from "../repository/cart.repository.js";
 import productRepository from "../repository/product.repository.js";
-import productService from "../services/product.service.js";
-
 
 // ** Service
-import handleSizeMetrics from "../services/product.service.js";
+import productService from "../services/product.service.js";
 
 const cartService = {
     add: async ({ code, color, size, quantity }, account, cart) => {
