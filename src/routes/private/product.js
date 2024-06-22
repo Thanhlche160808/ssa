@@ -75,6 +75,9 @@ const router = express.Router();
  *             salePrice:
  *               type: number
  *               example: 400000
+ *             totalQuantity:
+ *               type: number
+ *               example: 300
  *       example:
  *         isSuccess: true
  *         statusCode: 200
@@ -98,6 +101,7 @@ const router = express.Router();
  *                    quantity: 200
  *              price: 400000
  *              salePrice: 400000
+ *              totalQuantity: 300
  */
 /**
  * @swagger
@@ -386,6 +390,7 @@ router.put("/:code", productValidation.body(), productController.updateProduct);
  *                              quantity: 200
  *                        price: 400000
  *                        salePrice: 400000
+ *                        totalQuantity: 300
  */
 router.get("/dashboard", productController.getProductsDashboard);
 export default router;
