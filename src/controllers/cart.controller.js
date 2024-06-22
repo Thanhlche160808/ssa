@@ -30,26 +30,51 @@ const cartController = {
     },
 
     getCart: async (req, res) => {
-        const { account } = req.signedCookies;
-        const { cart } = req.cookies;
-        if (!account) {
-            res.status(statusCode.BAD_REQUEST).json(response.error(
+        const { id } = req.user;
+        try {
+            const result = await cartService.getCartByAccount(id);
+            res.status(statusCode.OK).json(response.success(
                 {
-                    code: statusCode.BAD_REQUEST,
-                    message: "You need to login to get your cart",
+                    data: result,
+                    code: statusCode.OK,
                 }
             ));
-            return;
+        } catch (error) {
+            res.status(statusCode.BAD_REQUEST).json(response.error(
+                {
+                    message: error?.message,
+                    code: statusCode.BAD_REQUEST,
+                }
+            ))
         }
+    },
+
+    removeItem: async (req, res) => {
+        const { id } = req.user;
+        const { productCode, size } = req.body;
         try {
-            const result = await cartService.getCartByAccount(account);
-            if (!cart) {
-                res.cookie("cart", result);
-            } else {
-                cart.items = result.items;
-                cart.totalPrice = result.totalPrice;
-                res.cookie("cart", cart);
-            }
+            const result = await cartService.removeItem(productCode, size, id);
+            res.status(statusCode.OK).json(response.success(
+                {
+                    data: result,
+                    code: statusCode.OK,
+                }
+            ));
+        } catch (error) {
+            res.status(statusCode.BAD_REQUEST).json(response.error(
+                {
+                    message: error?.message,
+                    code: statusCode.BAD_REQUEST,
+                }
+            ))
+        }
+    },
+
+    updateItem: async (req, res) => {
+        const { id } = req.user;
+        const item = req.body;
+        try {
+            const result = await cartService.updateCart(item, id);
             res.status(statusCode.OK).json(response.success(
                 {
                     data: result,

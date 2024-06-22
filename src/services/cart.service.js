@@ -1,13 +1,14 @@
 // ** Repository
 import cartRepository from "../repository/cart.repository.js";
 import productRepository from "../repository/product.repository.js";
+import productService from "../services/product.service.js";
+
+
+// ** Service
+import handleSizeMetrics from "../services/product.service.js";
 
 const cartService = {
     add: async ({ code, color, size, quantity }, account, cart) => {
-        if (!account) {
-            const guestCart = cartService.addGuestCart({ code, color, size, quantity }, cart);
-            return guestCart;
-        }
 
         let totalPrice = 0;
         const product = await productRepository.findProductByCode(code);
@@ -38,87 +39,61 @@ const cartService = {
         };
     },
 
-    addToCart: async (accountId, { code, color, size, quantity }) => {
-        const product = await productRepository.findProductByCode(code);
-        if (!product) throw new Error("Product not exist");
+    addToCart: async (accountId, item) => {
+        const product = await productRepository.findProductByCode(item.productCode);
 
-        const cart = await cartRepository.findCartByAccount(accountId);
+        if (!product || product.isHide === true) throw new Error("Product not found");
+
+        let totalPrice = 0;
+
+        const sizeMetrics = await productService.handleSizeMetrics(product.colourVariant.sizeMetrics);
 
         const cartItem = {
-            productName: product.productName,
+            displayName: product.displayName,
             productCode: product.productCode,
-            color,
-            size,
-            quantity,
+            image: product.images[0],
             price: product.price,
-        };
+            size: item.size,
+            quantity: item.quantity,
+            isHide: product.isHide,
+            sizeMetrics,
+        }
 
-        const items = cart.items;
+        totalPrice = cartItem.price * cartItem.quantity;
 
-        
+        const cart = await cartRepository.addToCart([cartItem], totalPrice, accountId);
+
+        const cartItems = await cartService.formatCartItems(cart.items);
+
+        return {
+            items: cartItems,
+            totalPrice: cart.totalPrice,
+        }
     },
 
     formatCartItems: async (items) => {
         return items.map(item => {
+            const sizeMetrics = item.sizeMetrics.map(sizeMetric => {
+                return {
+                    size: sizeMetric.size,
+                    isAvailable: sizeMetric.isAvailable,
+                }
+            });
             return {
-                productName: item.productName,
+                displayName: item.productName,
                 productCode: item.productCode,
-                color: item.color,
+                image: item.image,
+                price: item.price,
                 size: item.size,
                 quantity: item.quantity,
-                price: item.price,
+                sizeMetrics,
+                isHide: item.isHide,
             }
         });
     },
 
-    addGuestCart: async ({ code, color, size, quantity }, cart) => {
-        const product = await productRepository.findProductByCode(code);
-
-        if (cart) {
-            const items = cart.items;
-            const existingItem = items.find(item => item.productCode === code && item.color === color && item.size === size);
-            if (existingItem) {
-                existingItem.quantity += quantity;
-                cart.totalPrice += product.price * quantity;
-            } else {
-                items.push({
-                    productName: product.productName,
-                    productCode: product.productCode,
-                    color: color,
-                    size: size,
-                    quantity: quantity,
-                    price: product.price,
-                });
-                cart.totalPrice += product.price * quantity;
-            }
-            return {
-                items,
-                totalPrice: cart.totalPrice,
-            }
-        }
-
-        let totalPrice = 0;
-        let cartItem = {};
-        if (product) {
-            cartItem = {
-                productName: product.productName,
-                productCode: product.productCode,
-                color: color,
-                size: size,
-                quantity: quantity,
-                price: product.price,
-            };
-            totalPrice += product.price * quantity;
-        }
-
-        return {
-            items: [cartItem],
-            totalPrice,
-        }
-    },
-
-    getCartByAccount: async (account) => {
-        const cart = await cartRepository.findCartByAccount(account);
+    getCartByAccount: async (accountId) => {
+        const cart = await cartRepository.findCartByAccount(accountId);
         const cartItems = await cartService.formatCartItems(cart.items);
         return {
             items: cartItems,
@@ -126,26 +101,14 @@ const cartService = {
         }
     },
 
-    removeItem: async (code, cart, account) => {
-        if (!account) {
-            const targetItem = cart.items.find(cartItem => cartItem.productCode === code);
-            if (!targetItem) throw new Error("No product in cart");
+    removeItem: async (productCode, size, accountId) => {
 
-            const items = cart.items.filter(cartItem => cartItem.productCode !== code);
-            const totalPrice = items.reduce((total, item) => total + (item.price * item.quantity), 0);
+        const userCart = await cartRepository.findCartByAccount(accountId);
 
-            return {
-                items,
-                totalPrice,
-            }
-        }
+        const indexItem = userCart.items.findIndex(cartItem => cartItem.productCode === productCode && cartItem.size === size);
+        if (!indexItem < 0) throw new Error("No product in cart");
 
-        const userCart = await cartRepository.findCartByAccount(account);
-
-        const item = userCart.items.find(cartItem => cartItem.productCode === code);
-        if (!item) throw new Error("No product in cart");
-
-        userCart.items = userCart.items.filter(cartItem => cartItem.productCode !== code);
+        userCart.items.splice(indexItem, 1);
         userCart.totalPrice = await cartService.calculateTotalPrice(userCart.items);
 
         await userCart.save();
@@ -156,15 +119,11 @@ const cartService = {
         }
     },
 
-    updateCart: async ({ code, oldSize, oldQuantity, newSize, newQuantity }, cart, account) => {
-        //Guest cart
-        if (!account) {
-            return await cartService.handleUpdateItems({ code, oldSize, oldQuantity, newSize, newQuantity }, cart.items);
-        }
+    updateCart: async ({ productCode, oldSize, oldQuantity, newSize, newQuantity }, accountId) => {
+        const userCart = await cartRepository.findCartByAccount(accountId);
+        if (!userCart) throw new Error("Cart not found");
 
-        const userCart = await cartRepository.findCartByAccount(account);
-
-        const cartItemsUpdate = await cartService.handleUpdateItems({ code, oldSize, oldQuantity, newSize, newQuantity }, userCart.items);
+        const cartItemsUpdate = await cartService.handleUpdateItems({ productCode, oldSize, oldQuantity, newSize, newQuantity }, userCart.items);
         userCart.items = cartItemsUpdate.items;
         userCart.totalPrice = cartItemsUpdate.totalPrice;
         userCart.save();
@@ -172,9 +131,9 @@ const cartService = {
         return cartItemsUpdate
     },
 
-    handleUpdateItems: async ({ code, oldSize, oldQuantity, newSize, newQuantity }, items) => {
+    handleUpdateItems: async ({ productCode, oldSize, oldQuantity, newSize, newQuantity }, items) => {
         const updateItems = [];
-        const index = items.findIndex(item => item.productCode === code && item.size === oldSize && item.quantity === oldQuantity);
+        const index = items.findIndex(item => item.productCode === productCode && item.size === oldSize && item.quantity === oldQuantity);
 
         if (index === -1) throw new Error("Item not found");
 

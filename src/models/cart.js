@@ -1,36 +1,49 @@
 import mongoose from "mongoose";
 
+const SizeMetrics = new mongoose.Schema({
+    size: {
+        type: Number,
+    },
+    isAvailable: {
+        type: Boolean,
+    },
+});
+
 const itemSchema = new mongoose.Schema({
-    productName: {
+    displayName: {
         type: String,
     },
     productCode: {
         type: String,
     },
-    color: {
+    image: {
         type: String,
     },
+    price: {
+        type: Number,
+    },
+    sizeMetrics: [SizeMetrics],
     size : {
         type: Number,
     },
     quantity: {
         type: Number,
     },
-    price: {
-        type: Number,
-    }
+    isHide: {
+        type: Boolean,
+    },
 },
 );
 
 const cartSchema = new mongoose.Schema({
     items: [itemSchema],
-    totalPrice: {
-        type: Number,
-    },
     account: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Account'
-    }
+    },
+    totalPrice: {
+        type: Number,
+    },
 },
     { timestamps: true }
 );

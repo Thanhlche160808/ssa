@@ -52,6 +52,14 @@ const productService = {
     return await productService.handleformatProductResult(product);
   },
 
+  getTotalQuantity: async (product) => {
+    const totalQuantity = product.colourVariant.sizeMetrics.reduce(
+      (acc, size) => acc + size.quantity,
+      0
+    );
+    return totalQuantity;
+  },
+
   handleformatProductResult: async (product) => {
     const sizeMetrics = product.colourVariant.sizeMetrics.map((color) => {
       return {
@@ -169,12 +177,15 @@ const productService = {
 
     const result = await Promise.all(
       products.map(async (product) => {
+        const totalQuantity = await productService.getTotalQuantity(product);
         const formattedProduct = await productService.handleformatProductResult(product);
-        return formattedProduct;
+        return {
+          ...formattedProduct,
+          totalQuantity,
+        };
       })
     ); 
 
-    console.log('result', result);
     return {
       products: result,
       totalPage,
@@ -238,6 +249,19 @@ const productService = {
 
     return colors;
   },
+
+  handleSizeMetrics: async (sizeMetrics) => {
+    const result = [];
+    for (const sizeMetric of sizeMetrics) {
+        result.push({
+            size: sizeMetric.size,
+            isAvailable: sizeMetric.quantity > 0 ? true : false,
+        });
+
+    }
+    return result;
+},
+
 };
 
 export default productService;

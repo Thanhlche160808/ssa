@@ -2,7 +2,7 @@
 import Cart from '../models/cart.js';
 
 const cartRepository = {
-    addToCart: async ({ items, totalPrice, accountId }) => {
+    addToCart: async ( items, totalPrice, accountId ) => {
         const userCart = await Cart.findOne({ account: accountId });
 
         if (!userCart) {
@@ -42,9 +42,9 @@ const cartRepository = {
         }
     },
 
-    findCartByAccount: async (account) => {
+    findCartByAccount: async (accountId) => {
         return await Cart.findOne({
-            account
+            account: accountId,
         }).select('-__v');
     },
 
@@ -60,7 +60,7 @@ const cartRepository = {
         ).select('-__v');
 
         return cart;
-    }
+    },
 };
 
 export default cartRepository;

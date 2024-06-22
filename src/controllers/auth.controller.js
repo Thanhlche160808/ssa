@@ -7,6 +7,8 @@ import { statusCode } from "../constants/index.js";
 // ** Utils
 import { response } from "../utils/baseResponse.js";
 
+const maxAge = 7 * 24 * 60 * 60 * 1000;
+
 const authController = {
     register: async (req, res) => {
         const data = req.body;
@@ -32,7 +34,14 @@ const authController = {
         const data = req.body;
         try {
             const loginInfo = await authService.login(data);
-            res.cookie("refreshToken", loginInfo.refreshToken, { signed: true, httpOnly: true, sameSite: 'none', secure: true });
+            res.cookie("refreshToken", loginInfo.refreshToken,
+                {
+                    signed: true,
+                    httpOnly: true,
+                    sameSite: 'none',
+                    secure: true,
+                    maxAge
+                });
             delete loginInfo.refreshToken;
             res.status(statusCode.OK).json(response.success(
                 {
@@ -65,7 +74,14 @@ const authController = {
         const { credential } = req.body;
         try {
             const result = await authService.loginWithGoogle(credential);
-            res.cookie("refreshToken", result.refreshToken, { signed: true, httpOnly: true, sameSite: 'none', secure: true });
+            res.cookie("refreshToken", result.refreshToken,
+                {
+                    signed: true,
+                    httpOnly: true,
+                    sameSite: 'none',
+                    secure: true,
+                    maxAge
+                });
             delete result.refreshToken;
             res.status(statusCode.OK).json(response.success(
                 {
