@@ -38,6 +38,26 @@ const cartService = {
         };
     },
 
+    addToCart: async (accountId, { code, color, size, quantity }) => {
+        const product = await productRepository.findProductByCode(code);
+        if (!product) throw new Error("Product not exist");
+
+        const cart = await cartRepository.findCartByAccount(accountId);
+
+        const cartItem = {
+            productName: product.productName,
+            productCode: product.productCode,
+            color,
+            size,
+            quantity,
+            price: product.price,
+        };
+
+        const items = cart.items;
+
+        
+    },
+
     formatCartItems: async (items) => {
         return items.map(item => {
             return {

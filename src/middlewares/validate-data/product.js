@@ -71,16 +71,16 @@ export const productValidation = {
                 .optional()
                 .isNumeric().withMessage(message.invalid("size"))
                 .custom(value => value > 0).withMessage(message.mustBeNumberAndGreaterThan("size", 0)),
-            
+
             query("color")
                 .optional()
                 .isHexColor().withMessage(message.isHexColor("color")),
-            
+
             query("minPrice")
                 .optional()
                 .isNumeric().withMessage(message.invalid("minPrice"))
                 .custom(value => value > 0).withMessage(message.mustBeNumberAndGreaterThan("minPrice", 0)),
-            
+
             query("maxPrice")
                 .optional()
                 .isNumeric().withMessage(message.invalid("maxPrice"))
