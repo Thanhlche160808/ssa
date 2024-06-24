@@ -9,6 +9,7 @@ const productRepository = {
     try {
       const productExist = await Product.findOne({
         productName: product.productName,
+        "colourVariant.hex": product.colourVariant.hex,
       });
 
       if (productExist) {
@@ -46,7 +47,7 @@ const productRepository = {
   },
 
   findByProductName: async (productName) => {
-    const product = await Product.findOne({ productName });
+    const product = await Product.find({ productName });
 
     if (!product) throw new Error("Product not found");
 
