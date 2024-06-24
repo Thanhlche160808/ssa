@@ -48,6 +48,7 @@ const voucherService = {
 
     updateVoucher: async (code, { title, description, discount, minOrderPrice, maxDiscountValue, expiredDate, isPublish }) => {
         const voucher = await voucherRepository.getByCode(code);
+        
         if (!voucher) throw new Error('Voucher not found');
 
         voucher.title = title;
@@ -59,7 +60,17 @@ const voucherService = {
         voucher.isPublish = isPublish;
 
         await voucher.save();
-        return voucher;
+        return {
+            title: voucher.title,
+            code: voucher.code,
+            description: voucher.description,
+            discount: voucher.discount,
+            minOrderPrice: voucher.minOrderPrice,
+            maxDiscountValue: voucher.maxDiscountValue,
+            isPublish: voucher.isPublish,
+            status: voucher.status,
+            expiredDate: voucher.expiredDate,
+        };
     }
 };
 

@@ -244,8 +244,11 @@ const productService = {
 
     const { colourName } = colourVariant;
 
-    const displayNameComponent = [productName, type, colourName];
-    const displayName = displayNameComponent.join(" - ");
+    updatedData.productName = await productService.formatName(productName);
+    updatedData.type = await productService.formatName(type);
+    colourVariant.colourName = await productService.formatName(colourName);
+
+    const displayName = `${updatedData.productName} - ${updatedData.type} - ${colourVariant.colourName}`;
     updatedData.displayName = displayName;
 
     const product = await productRepository.findAndUpdate(productCode, updatedData);

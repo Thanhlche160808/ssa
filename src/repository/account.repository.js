@@ -24,13 +24,15 @@ const accountRepository = {
 
             const usernameExist = await Account.findOne({ $or: query });
 
-            if (usernameExist.email === account.email) {
-                throw new Error('Email is exist');
+            // 1 mỗi 1 account chỉ có 1 username và 1 email
+            if (usernameExist) {
+                if (usernameExist.username === account.username) {
+                    throw new Error('This username is already taken');
+                } else {
+                    throw new Error('This email is already taken');
+                }
             }
 
-            if (usernameExist.user === account.username) {
-                throw new Error('Username is exist');
-            }
             const user = new User({
                 firstName: account.firstName,
                 lastName: account.lastName,

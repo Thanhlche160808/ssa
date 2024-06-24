@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const SizeMetrics = new mongoose.Schema({
+export const SizeMetrics = new mongoose.Schema({
     size: {
         type: Number,
     },
@@ -9,7 +9,7 @@ const SizeMetrics = new mongoose.Schema({
     },
 });
 
-const itemSchema = new mongoose.Schema({
+export const itemSchema = new mongoose.Schema({
     displayName: {
         type: String,
     },

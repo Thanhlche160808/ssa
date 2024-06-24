@@ -241,18 +241,33 @@ router.put("/changeStatus/:code", productController.changeStatus);
  *                 type: array
  *                 items:
  *                   type: string
- *               category:
+ *               categoryId:
  *                 type: string
  *               price:
  *                 type: string
  *               colourVariant:
- *                 type: string
+ *                 type: Object
+ *                 properties:
+ *                    colourName:
+ *                      type: String
+ *                    hex:
+ *                      type: String
+ *                    sizeMetrics:
+ *                      type: array
+ *                      items:
+ *                          type: Object
+ *                          properties:
+ *                              size:
+ *                                  type: number
+ *                              quantity:
+ *                                  type: number       
  *           example:
  *             productName: Bitis Hunter X
  *             type: Low top
  *             description: Giày chạy bộ tốt nhất năm 2024
  *             images:
  *                  - https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
+ *             categoryId: 6661cab......
  *             isHide: false
  *             colourVariant: {
  *               colourName: Skyblue,
