@@ -24,10 +24,13 @@ const accountRepository = {
 
             const usernameExist = await Account.findOne({ $or: query });
 
-            if (usernameExist) {
-                throw new Error('Username is exist');
+            if (usernameExist.email === account.email) {
+                throw new Error('Email is exist');
             }
 
+            if (usernameExist.user === account.username) {
+                throw new Error('Username is exist');
+            }
             const user = new User({
                 firstName: account.firstName,
                 lastName: account.lastName,

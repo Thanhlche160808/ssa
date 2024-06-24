@@ -72,10 +72,6 @@ export const productValidation = {
                 .isNumeric().withMessage(message.invalid("size"))
                 .custom(value => value > 0).withMessage(message.mustBeNumberAndGreaterThan("size", 0)),
 
-            query("color")
-                .optional()
-                .isHexColor().withMessage(message.isHexColor("color")),
-
             query("minPrice")
                 .optional()
                 .isNumeric().withMessage(message.invalid("minPrice"))

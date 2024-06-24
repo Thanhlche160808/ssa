@@ -49,7 +49,17 @@ const productService = {
 
   productDetail: async (code) => {
     const product = await productRepository.findByCode(code);
-    return await productService.handleformatProductResult(product);
+    const ortherColor = await productRepository.findByProductName(product.productName);
+    const result = await productService.handleformatProductResult(product);
+    return {
+      ...result,
+      ortherColor: ortherColor.map((product) => {
+        return {
+          productCode: product.productCode,
+          hex: product.colourVariant.hex,
+        };
+      }),
+    }
   },
 
   getTotalQuantity: async (product) => {
@@ -90,9 +100,10 @@ const productService = {
   getAllProduct: async ({
     page,
     size,
+    types,
     displayName,
-    categoryId,
-    color,
+    categoryIds,
+    colors,
     minPrice,
     maxPrice,
     priceSort,
@@ -104,8 +115,9 @@ const productService = {
     };
 
     if (displayName) query.displayName = { $regex: displayName, $options: "i" };
-    if (categoryId) query.category = categoryId;
-    if (color) query["colourVariant.hex"] = color;
+    if (types) query.type = { $in: types };
+    if (categoryIds) query.category = { $in: categoryIds };
+    if (colors) query["colourVariant.hex"] = { $in: colors };
     if (minPrice) query.price = { $gte: minPrice };
     if (maxPrice) query.price = { $lte: maxPrice };
 

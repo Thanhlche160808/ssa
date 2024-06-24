@@ -38,13 +38,32 @@ const router = express.Router();
  *         schema:
  *           type: string
  *       - in: query
- *         name: categoryId
+ *         name: types
  *         schema:
- *           type: string
+ *           type: array
+ *           items:
+ *             type: string
+ *           style: form
+ *           explode: true
+ *           example: ["types"]
  *       - in: query
- *         name: color
+ *         name: categoryIds
  *         schema:
- *           type: string
+ *           type: array
+ *           items:
+ *             type: string
+ *           style: form
+ *           explode: true
+ *           example: ["categoryIds"]
+ *       - in: query
+ *         name: colors
+ *         schema:
+ *           type: array
+ *           items:
+ *             type: string
+ *           style: form
+ *           explode: true
+ *           example: ["colors"]
  *       - in: query
  *         name: minPrice
  *         schema:
@@ -73,7 +92,7 @@ const router = express.Router();
  *                 data:
  *                   type: array
  *                   items:
- *                     type: Object
+ *                     type: object
  *                     properties:
  *                       productCode:
  *                         type: string
@@ -164,7 +183,7 @@ router.get("/product-colors", productController.getAllColors);
  * @swagger
  * /api/public/product/{code}:
  *   get:
- *     summary: Product 
+ *     summary: Get product details
  *     tags: [Product]
  *     parameters:
  *       - in: path
@@ -175,11 +194,111 @@ router.get("/product-colors", productController.getAllColors);
  *         description: The product ID
  *     responses:
  *       200:
- *         description: Update product successfully
+ *         description: Product details retrieved successfully
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Product'
+ *               type: object
+ *               properties:
+ *                 isSuccess:
+ *                   type: boolean
+ *                 statusCode:
+ *                   type: integer
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     productCode:
+ *                       type: string
+ *                       example: abcsd
+ *                     productName:
+ *                       type: string
+ *                       example: Bitis Hunter X
+ *                     type:
+ *                       type: string
+ *                       example: Low top
+ *                     displayName:
+ *                       type: string
+ *                       example: Bitis Hunter X - Low top - Skyblue
+ *                     description:
+ *                       type: string
+ *                       example: Giày chạy bộ tốt nhất năm 2024
+ *                     images:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *                         example: https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
+ *                     category:
+ *                       type: string
+ *                     isHide:
+ *                       type: boolean
+ *                       example: false
+ *                     colourVariant:
+ *                       type: object
+ *                       properties:
+ *                         colourName:
+ *                           type: string
+ *                           example: Skyblue
+ *                         hex:
+ *                           type: string
+ *                           example: #00CCFF
+ *                         sizeMetrics:
+ *                           type: array
+ *                           items:
+ *                             type: object
+ *                             properties:
+ *                               size:
+ *                                 type: number
+ *                                 example: 41
+ *                               quantity:
+ *                                 type: number
+ *                                 example: 400
+ *                     price:
+ *                       type: number
+ *                       example: 400000
+ *                     salePrice:
+ *                       type: number
+ *                       example: 400000
+ *                     totalQuantity:
+ *                       type: number
+ *                       example: 300
+ *                     ortherColor:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           productCode:
+ *                             type: string
+ *                             example: abcsd
+ *                           hex:
+ *                             type: string
+ *                             example: '#000000'
+ *             example:
+ *               isSuccess: true
+ *               statusCode: 200
+ *               data:
+ *                 productCode: abcsd
+ *                 productName: Bitis Hunter X
+ *                 type: Low top
+ *                 displayName: Bitis Hunter X - Low top - Skyblue
+ *                 description: Giày chạy bộ tốt nhất năm 2024
+ *                 images:
+ *                   - https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
+ *                 category: Bitis Hunter
+ *                 isHide: false
+ *                 colourVariant:
+ *                   colourName: Skyblue
+ *                   hex: #00CCFF
+ *                   sizeMetrics:
+ *                     - size: 42
+ *                       quantity: 100
+ *                     - size: 43
+ *                       quantity: 200
+ *                 price: 400000
+ *                 salePrice: 400000
+ *                 totalQuantity: 300
+ *                 ortherColor:
+ *                   - productCode: abcsd
+ *                     hex: '#000000'
  */
 router.get("/:code", productController.productDetail);
 
