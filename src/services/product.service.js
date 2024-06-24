@@ -20,15 +20,18 @@ const productService = {
 
     const { colourName } = colourVariant;
 
-    var displayNameComponent = [productName, type, colourName];
-    const displayName = displayNameComponent.join(" - ");
+    const productNameformated = await productService.formatName(productName);
+    const typeformated = await productService.formatName(type);
+    colourVariant.colourName = await productService.formatName(colourName);
+
+    const displayName = `${productNameformated} - ${typeformated} - ${colourVariant.colourName}`;
 
     const category = await categoryRepository.getById(categoryId);
 
     const product = await productRepository.create({
       productCode: productCode.toLocaleUpperCase(),
-      productName,
-      type,
+      productName: productNameformated,
+      type: typeformated,
       displayName,
       description,
       thumbnail,
@@ -45,6 +48,10 @@ const productService = {
     delete productJson.updatedAt;
 
     return productJson;
+  },
+
+  formatName: async (name) => {
+    return name.split(" ").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
   },
 
   productDetail: async (code) => {
