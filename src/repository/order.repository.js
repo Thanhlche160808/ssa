@@ -9,12 +9,20 @@ const orderRepository = {
         return await Order.create(order);
     },
 
-    async findAll(query) {
-        return await Order.find(query);
+    async findBy(query) {
+        return await Order.findOne(query);
     },
 
-    async findById(id) {
-        return await Order.findById(id);
+    async orderPagination(query, skip, size) {
+        return await Order.find(query)
+        .skip(skip)
+        .limit(size);
+    },
+
+    async findByCode(code) {
+        const order = await Order.findOne({ code });
+        if (!order) throw new Error('Order not found');
+        return order;
     },
 
     async update(id, order) {
@@ -23,6 +31,10 @@ const orderRepository = {
 
     async cancelOrder(id) {
         return await Order.findByIdAndUpdate(id, { status: ORDER_STATUS.CANCELLED }, { new: true });
+    }, 
+
+    async totalDocuments(query) {
+        return await Order.countDocuments(query);
     }
 };
 

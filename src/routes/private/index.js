@@ -8,6 +8,7 @@ import productRouter from "./product.js";
 import paymentRouter from "./payment.js"
 import voucherRouter from "./voucher.js";
 import cartRouter from './cart.js';
+import orderRuter from './order.js';
 
 const privateRouter = express.Router();
 
@@ -17,5 +18,6 @@ privateRouter.use("/product", productRouter);
 privateRouter.use("/payment", paymentRouter)
 privateRouter.use("/voucher", voucherRouter);
 privateRouter.use("/cart", cartRouter);
+privateRouter.use("/order", orderRuter);
 
 export { privateRouter };

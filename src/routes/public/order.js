@@ -198,4 +198,27 @@ const router = express.Router();
  */
 router.post('/create', orderValidation.create(), orderController.createOrder);
 
+
+/**
+ * @swagger
+ * /api/public/order/{code}:
+ *   get:
+ *     summary: Get order detail
+ *     tags: [Order]
+ *     parameters:
+ *          - in: path
+ *            name: code
+ *            schema:
+ *               type: string
+ *            required: true
+ *     responses:
+ *       200:
+ *         description: Create new order
+ *         content:
+ *           application/json:
+ *              schema:
+ *                 $ref: '#/components/schemas/Order'
+*/
+router.get('/:code', orderController.getOrderDetail);
+
 export default router;

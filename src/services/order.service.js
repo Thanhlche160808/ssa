@@ -6,6 +6,9 @@ import voucherRepository from '../repository/voucher.repository.js';
 // ** Helper
 import googleHelper from '../helper/google.helper.js';
 
+// ** Constants
+import { ORDER_STATUS } from '../constants/model.constant.js';
+
 const orderService = {
     createOrder: async ({
         accountId, // Optional
@@ -20,7 +23,9 @@ const orderService = {
         shippingFee,
         totalPrice
     }) => {
+        const code = Math.random().toString(36).slice(2, 12);
         const order = {
+            code: code.toLocaleUpperCase(),
             email,
             receiverName,
             receiverPhone,
@@ -47,7 +52,11 @@ const orderService = {
         };
 
         const result = await orderRepository.create(order);
-        await googleHelper.sendEmail(email, 'Order confirmation', `<p>Thank you for your order</p>`);
+
+        if (!accountId) {
+            await googleHelper.sendEmail(email, 'Order confirmation', `<p>Thank you for your order</p>`);
+        }
+
         return await orderService.formatOrderResult(result);
     },
 
@@ -82,6 +91,82 @@ const orderService = {
             totalPrice: order.totalPrice,
             status: order.status,
         };
+    },
+
+    getMyOrder: async (accountId, page, size, code, status) => {
+        const skip = (page - 1) * size;
+
+        const query = {
+            account: accountId,
+        }
+
+        if (code) query.code = code;
+        if (status) query.status = status;
+
+        const orders = await orderRepository.orderPagination(query, skip, size);
+
+        const totalDocuments = await orderRepository.totalDocuments(query);
+
+        const totalPage = Math.ceil(totalDocuments / size);
+
+        const result = await Promise.all(orders.map(async (order) => {
+            return await orderService.formatOrderResult(order);
+        }));
+
+        return {
+            orders: result,
+            totalPage,
+            totalDocuments
+        };
+    },
+
+    getOrderDetail: async (code) => {
+        const order = await orderRepository.findByCode(code);
+        return await orderService.formatOrderResult(order);
+    },
+
+    changeDeliveryAddress: async (accountId, {
+        code,
+        address,
+        city,
+        district,
+        ward
+    }) => {
+        console.log(code, accountId);
+        const order = await orderRepository.findBy({
+            code,
+            account: accountId
+        });
+
+        if (!order) throw new Error('This order not belong to you');
+
+        order.deliveryAddress = {
+            address,
+            city,
+            district,
+            ward
+        };
+
+        await order.save();
+
+        return await orderService.formatOrderResult(order);
+    },
+
+    cancelOrder: async (accountId, code) => {
+        const order = await orderRepository.findBy({
+            code,
+            account: accountId
+        });
+
+        if (!order) throw new Error('This order not belong to you');
+
+        if (order.status !== ORDER_STATUS.PENDING) throw new Error('This order cannot be cancelled');
+
+        order.status = ORDER_STATUS.CANCELLED;
+
+        await order.save();
+
+        return await orderService.formatOrderResult(order);
     }
 };
 

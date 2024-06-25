@@ -7,10 +7,12 @@ import { GOOGLE_CLIENT_ID } from '../constants/env.js'
 
 const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
+const shopEmail = "testzed920@gmail.com";
+
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: "testzed920@gmail.com",
+      user: shopEmail,
       pass: "kqit gdml mxqh jhat",
     },
   });
@@ -30,7 +32,7 @@ const googleHelper = {
 
     sendEmail: async (email, subject, html) => {
         await transporter.sendMail({
-            from: "testzed920@gmail.com",
+            from: shopEmail,
             to : email,
             subject: subject,
             html: html

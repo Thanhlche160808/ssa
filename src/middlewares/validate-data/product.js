@@ -82,6 +82,15 @@ export const productValidation = {
                 .isNumeric().withMessage(message.invalid("maxPrice"))
                 .custom(value => value > 0).withMessage(message.mustBeNumberAndGreaterThan("maxPrice", 0)),
 
+            query("minPrice")
+                .optional()
+                .custom((value, { req }) => {
+                    if (req.query.maxPrice && value > req.query.maxPrice) {
+                        throw new Error('minPriceMustBeLessThanMaxPrice');
+                    }
+                    return true;
+                }),
+
             query("priceSort")
                 .optional()
                 .isIn([sortOptions.ASC, sortOptions.DESC]).withMessage(message.mustBeOneOf({ field: "priceSort", values: [sortOptions.ASC, sortOptions.DESC] })),
