@@ -121,6 +121,34 @@ router.get('/list-active', categoryValidation.list() ,cateController.searchActiv
 
 /**
  * @swagger
+ * /api/public/category/get-for-filter:
+ *   get:
+ *     summary: Get actice category for product filter
+ *     tags: [Category]
+ *     responses:
+ *       200:
+ *         description: Get user's cart
+ *         content:
+ *           application/json:
+ *             schema:
+ *                 type: array
+ *                 items: 
+ *                     type: Object
+ *                     properties:
+ *                         _id:
+ *                           type: string 
+ *                         name:
+ *                           type: string 
+ *             example:
+ *                   - _id: 945h34r9h.....
+ *                     name: Old School
+ *                   - _id: 94fsdfd9h.....
+ *                     name: New School                 
+ */
+router.get('/get-for-filter', cateController.getAll);
+
+/**
+ * @swagger
  * /api/public/category/{id}:
  *   get:
  *     summary: Get Category by ID

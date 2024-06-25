@@ -3,7 +3,7 @@ import Category from "../models/category.js";
 
 const cateRepository = {
     getAll: async () => {
-        return await Category.find().select('-__v');
+        return await Category.find().select({ _id: 1, name: 1 });
     },
 
     getById: async (id) => {

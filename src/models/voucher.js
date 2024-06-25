@@ -42,7 +42,7 @@ const voucherSchema = new mongoose.Schema({
 
     status: {
         type: String,
-        default: VOUCHER_STATUS.AVALIBALE,
+        default: VOUCHER_STATUS.AVAILABLE,
     },
 }, { timestamps: true });
 
