@@ -175,12 +175,12 @@ const productService = {
     if (minPrice) query.price = { $gte: minPrice };
     if (maxPrice) query.price = { $lte: maxPrice };
 
-    const sortOptions = {};
+    const sort = {};
 
     if (priceSort === sortOptions.ASC) {
-      sortOptions.price = 1;
+      sort.price = 1;
     } else if (priceSort === sortOptions.DESC) {
-      sortOptions.price = -1;
+      sort.price = -1;
     }
 
     const totalDocuments = await productRepository.totalDocuments(query);
@@ -190,7 +190,7 @@ const productService = {
       query,
       skip,
       size,
-      sortOptions
+      sort
     );
 
     const result = await Promise.all(
