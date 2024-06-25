@@ -27,7 +27,6 @@ const productService = {
     const displayName = `${productNameformated} - ${typeformated} - ${colourVariant.colourName}`;
 
     const category = await categoryRepository.getById(categoryId);
-
     const product = await productRepository.create({
       productCode: productCode.toLocaleUpperCase(),
       productName: productNameformated,
@@ -128,12 +127,12 @@ const productService = {
     if (minPrice) query.price = { $gte: minPrice };
     if (maxPrice) query.price = { $lte: maxPrice };
 
-    const sortOptions = {};
+    const sort = {};
 
     if (priceSort === sortOptions.ASC) {
-      sortOptions.price = 1;
+      sort.price = 1;
     } else if (priceSort === sortOptions.DESC) {
-      sortOptions.price = -1;
+      sort.price = -1;
     }
 
     const totalDocuments = await productRepository.totalDocuments(query);
@@ -143,7 +142,7 @@ const productService = {
       query,
       skip,
       size,
-      sortOptions
+      sort
     );
 
     const result = await productService.formatProductResult(products);
@@ -203,7 +202,7 @@ const productService = {
           totalQuantity,
         };
       })
-    ); 
+    );
 
     return {
       products: result,
@@ -222,7 +221,8 @@ const productService = {
         productCode: product.productCode,
         productName: product.productName,
         displayName: product.displayName,
-        type: product.category.name,
+        type: product.type,
+        category: product.category.name,
         colorName: product.colourVariant.colourName,
         salePrice: product.salePrice,
         price: product.price,
@@ -244,8 +244,11 @@ const productService = {
 
     const { colourName } = colourVariant;
 
-    const displayNameComponent = [productName, type, colourName];
-    const displayName = displayNameComponent.join(" - ");
+    updatedData.productName = await productService.formatName(productName);
+    updatedData.type = await productService.formatName(type);
+    colourVariant.colourName = await productService.formatName(colourName);
+
+    const displayName = `${updatedData.productName} - ${updatedData.type} - ${colourVariant.colourName}`;
     updatedData.displayName = displayName;
 
     const product = await productRepository.findAndUpdate(productCode, updatedData);
@@ -272,14 +275,14 @@ const productService = {
   handleSizeMetrics: async (sizeMetrics) => {
     const result = [];
     for (const sizeMetric of sizeMetrics) {
-        result.push({
-            size: sizeMetric.size,
-            isAvailable: sizeMetric.quantity > 0 ? true : false,
-        });
+      result.push({
+        size: sizeMetric.size,
+        isAvailable: sizeMetric.quantity > 0 ? true : false,
+      });
 
     }
     return result;
-},
+  },
 
 };
 

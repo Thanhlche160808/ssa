@@ -27,7 +27,7 @@ const voucherRepository = {
     },
 
     getByCode: async (code) => {
-        const voucher = Voucher.findOne({ code }).select('-__v -_id');
+        const voucher = Voucher.findOne({ code })
         if (!voucher) throw new Error('Voucher not found');
         return voucher;
     },
