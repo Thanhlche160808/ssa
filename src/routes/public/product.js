@@ -56,6 +56,15 @@ const router = express.Router();
  *           explode: true
  *           example: ["categoryIds"]
  *       - in: query
+ *         name: categoryNames
+ *         schema:
+ *           type: array
+ *           items:
+ *             type: string
+ *           style: form
+ *           explode: true
+ *           example: ["categoryNames"]
+ *       - in: query
  *         name: colors
  *         schema:
  *           type: array
@@ -64,6 +73,15 @@ const router = express.Router();
  *           style: form
  *           explode: true
  *           example: ["colors"]
+ *       - in: query
+ *         name: colorNames
+ *         schema:
+ *           type: array
+ *           items:
+ *             type: string
+ *           style: form
+ *           explode: true
+ *           example: ["colorNames"]
  *       - in: query
  *         name: minPrice
  *         schema:

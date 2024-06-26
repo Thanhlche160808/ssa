@@ -109,7 +109,9 @@ const productService = {
     types,
     displayName,
     categoryIds,
+    categoryNames,
     colors,
+    colorNames,
     minPrice,
     maxPrice,
     priceSort,
@@ -121,11 +123,20 @@ const productService = {
     };
 
     if (displayName) query.displayName = { $regex: displayName, $options: "i" };
-    if (types) query.type = { $in: types };
-    if (categoryIds) query.category = { $in: categoryIds };
-    if (colors) query["colourVariant.hex"] = { $in: colors };
+
+    if (types) query.type = productService.handleGenereateQueryArray(types);
+
+    if (categoryIds) query.category = productService.handleGenereateQueryArray(categoryIds);
+
+    if (colors) query["colourVariant.hex"] = productService.handleGenereateQueryArray(colors);
+
     if (minPrice) query.price = { $gte: minPrice };
+
     if (maxPrice) query.price = { $lte: maxPrice };
+
+    if (categoryNames) query["category.name"] = productService.handleGenereateQueryArray(categoryNames);
+
+    if (colorNames) query["colourVariant.colourName"] = productService.handleGenereateQueryArray(colorNames);
 
     const sort = {};
 
@@ -152,6 +163,14 @@ const productService = {
       totalPage,
       totalDocuments,
     };
+  },
+
+  handleGenereateQueryArray: (array) => {
+    if (Array.isArray(array)) {
+      return { $in: array };
+    } else {
+      return { $regex: array, $options: "i" };
+    }
   },
 
   getPoductDashboard: async ({
@@ -217,6 +236,12 @@ const productService = {
         (acc, size) => acc + size.quantity,
         0
       );
+      const sizeMetrics = product.colourVariant.sizeMetrics.map((sizes) => {
+        return {
+          size: sizes.size,
+          quantity: sizes.quantity,
+        };
+      });
       return {
         productCode: product.productCode,
         productName: product.productName,
@@ -227,6 +252,7 @@ const productService = {
         salePrice: product.salePrice,
         price: product.price,
         images: product.images,
+        sizeMetrics,
         totalQuantity,
       };
     });
