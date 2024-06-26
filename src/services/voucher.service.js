@@ -71,7 +71,29 @@ const voucherService = {
             status: voucher.status,
             expiredDate: voucher.expiredDate,
         };
+    },
+    
+    changePublishStatus: async (code) => {
+        const voucherUpdated = await voucherRepository.changePublishStatus(code);
+        return voucherService.handleVoucherOutput(voucherUpdated);
+    },
+
+    handleVoucherOutput: async (voucher) => {
+        return {
+            title: voucher.title,
+            code: voucher.code,
+            description: voucher.description,
+            discount: voucher.discount,
+            minOrderPrice: voucher.minOrderPrice,
+            maxDiscountValue: voucher.maxDiscountValue,
+            isPublish: voucher.isPublish,
+            status: voucher.status,
+            expiredDate: voucher.expiredDate,
+            createdAt: voucher.createdAt,
+            updatedAt: voucher.updatedAt,
+        };
     }
+
 };
 
 export default voucherService;

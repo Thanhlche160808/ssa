@@ -88,6 +88,26 @@ const voucherController = {
             ));
         }
     },
+
+    changePublishStatus: async (req, res) => {
+        const code = req.params.code
+        try {
+            const voucher = await voucherService.changePublishStatus(code);
+            res.status(statusCode.OK).json(response.success(
+                {
+                    data: voucher,
+                    code: statusCode.OK
+                }
+            ))
+        } catch (error) {
+            res.status(statusCode.BAD_REQUEST).json(response.error(
+                {
+                    message: error?.message,
+                    code: statusCode.BAD_REQUEST
+                }
+            ))
+        }
+    },
 };
 
 export default voucherController;
