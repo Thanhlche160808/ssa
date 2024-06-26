@@ -126,7 +126,7 @@ const productService = {
 
     if (types) query.type = productService.handleGenereateQueryArray(types);
 
-    if (categoryIds) query.category = productService.handleGenereateQueryArray(categoryIds);
+    if (categoryIds) query.category = { $in: categoryIds };
 
     if (colors) query["colourVariant.hex"] = productService.handleGenereateQueryArray(colors);
 
