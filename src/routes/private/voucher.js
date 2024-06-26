@@ -290,4 +290,23 @@ router.get("/:code", voucherController.getByCode);
 */
 router.put("/updateVoucher/:code", voucherValidation.body(), voucherController.updateVoucher);
 
+/**
+* @swagger
+* /api/voucher/changePublishStatus/{code}:
+*   put:
+*     summary: Change voucher publish status
+*     tags: [Voucher]
+*     parameters:
+*       - in: path
+*         name: code
+*         required: true
+*     responses:
+*       200:
+*         content:
+*           application/json:
+*             schema:
+*               $ref: '#/components/schemas/Voucher'
+*/
+router.put('/changePublishStatus/:code', voucherController.changePublishStatus)
+
 export default router;
