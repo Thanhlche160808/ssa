@@ -74,10 +74,14 @@ const voucherService = {
     },
     
     changePublishStatus: async (code) => {
-        const voucher = await voucherRepository.changePublishStatus(code);
-        
+        const voucherUpdated = await voucherRepository.changePublishStatus(code);
+        return voucherService.handleVoucherOutput(voucherUpdated);
+    },
+
+    handleVoucherOutput: async (voucher) => {
         return {
             title: voucher.title,
+            code: voucher.code,
             description: voucher.description,
             discount: voucher.discount,
             minOrderPrice: voucher.minOrderPrice,
@@ -88,7 +92,8 @@ const voucherService = {
             createdAt: voucher.createdAt,
             updatedAt: voucher.updatedAt,
         };
-    },
+    }
+
 };
 
 export default voucherService;
