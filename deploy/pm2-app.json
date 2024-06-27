@@ -16,7 +16,14 @@
                 "JWT_ACCESS_KEY": "superlongsecretkeyTHANHan123@HaHaHihi!$832002NnIkzNum@oah",
                 "JWT_SECRET_KEY": "superlongsecretkeyTHANHan123@HaHaHihi!$832002NnIkzNum@oah",
                 "GOOGLE_CLIENT_ID": "281707253428-bgbb7t4p3831drgcvv30mbtpa71e5b84.apps.googleusercontent.com",
-                "REDIS_URL": "redis://default:NYreg8nLmKli6uBdJ4wVnK4LAQ7vHLSP@redis-12591.c16.us-east-1-2.ec2.redns.redis-cloud.com:12591"
+                "REDIS_URL": "redis://default:NYreg8nLmKli6uBdJ4wVnK4LAQ7vHLSP@redis-12591.c16.us-east-1-2.ec2.redns.redis-cloud.com:12591",
+                "FIRE_BASE_API_KEY": "AIzaSyBLoGuWq1kqBGQfdagixaTYgzLNHkda4q8",
+                "FIRE_BASE_AUTH_DOMAIN": "social-media-33aea.firebaseapp.com",
+                "FIRE_BASE_PROJECT_ID": "social-media-33aea",
+                "FIRE_BASE_STORAGE_BUCKET": "social-media-33aea.appspot.com",
+                "FIRE_BASE_MESSAGING_SENDER_ID": "1079068328199",
+                "FIRE_BASE_APP_ID": "1:1079068328199:web:3b071e58276a7f64e705a2",
+                "FIRE_BASE_MEASUREMENT_ID": "G-TPYGFLDWBN"
             }
         }
     ]

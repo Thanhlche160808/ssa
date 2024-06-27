@@ -1,6 +1,9 @@
 // ** Express
 import express from "express";
 
+// ** Configs
+import { upload } from "../../configs/multer";
+
 // ** Controllers
 import productController from "../../controllers/product.controller.js";
 
@@ -185,7 +188,7 @@ const router = express.Router();
  *               items:
  *                 $ref: '#/components/schemas/Product'
  */
-router.post("/createProduct", productValidation.body(), productController.createProduct);
+router.post("/createProduct", upload.array('files'), productController.createProduct);
 
 /**
  * @swagger

@@ -5,26 +5,31 @@ import categoryRepository from "../repository/category.repository.js";
 // ** Constants
 import { sortOptions } from "../constants/query.constant.js";
 
+// ** Helper
+import firebaseHelper from "../helper/firebase.helper.js";
+
 const productService = {
   createProduct: async ({
     productName,
     type,
     description,
     thumbnail,
-    images,
     categoryId,
     price,
     colourVariant,
-  }) => {
+  }, file = []) => {
+
     const productCode = Math.random().toString(36).slice(2, 12);
 
-    const { colourName } = colourVariant;
+    const colourVariantParsed = JSON.parse(colourVariant);
 
     const productNameformated = await productService.formatName(productName);
     const typeformated = await productService.formatName(type);
-    colourVariant.colourName = await productService.formatName(colourName);
+    colourVariantParsed.colourName = await productService.formatName(colourVariantParsed.colourName);
 
-    const displayName = `${productNameformated} - ${typeformated} - ${colourVariant.colourName}`;
+    const displayName = `${productNameformated} - ${typeformated} - ${colourVariantParsed.colourName}`;
+
+    const urls = await firebaseHelper.uploadToStorage({displayName, productCode}, file);
 
     const category = await categoryRepository.getById(categoryId);
     const product = await productRepository.create({
@@ -34,10 +39,10 @@ const productService = {
       displayName,
       description,
       thumbnail,
-      images,
+      images: urls,
       categoryId: category._id,
       price,
-      colourVariant,
+      colourVariant: colourVariantParsed,
     });
 
     const productJson = product.toJSON();

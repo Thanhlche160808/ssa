@@ -132,7 +132,6 @@ const orderService = {
         district,
         ward
     }) => {
-        console.log(code, accountId);
         const order = await orderRepository.findBy({
             code,
             account: accountId

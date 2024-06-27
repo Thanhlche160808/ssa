@@ -10,7 +10,6 @@ import { response } from "../utils/baseResponse.js";
 const paymentController = {
     getPayments: async (req, res) => {
         const { isActive, type } = req.query;
-        console.log('isActive: ', !!isActive);
         try {
             const result = await paymentService.getAll(type, !!isActive);
             res.status(statusCode.OK).json(response.success(
