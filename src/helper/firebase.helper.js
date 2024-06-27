@@ -1,5 +1,5 @@
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { storage } from "../configs/firebase";
+import { storage } from "../configs/firebase.js";
 
 const firebaseHelper = {
     /**

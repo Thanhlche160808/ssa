@@ -2,7 +2,7 @@
 import express from "express";
 
 // ** Configs
-import { upload } from "../../configs/multer";
+import { upload } from "../../configs/multer.js";
 
 // ** Controllers
 import productController from "../../controllers/product.controller.js";
