@@ -2,15 +2,6 @@ import { config } from "dotenv";
 config();
 export const CLIENT_URL = process.env.CLIENT_URL;
 
-export const FIRE_BASE_API_KEY = process.env.FIRE_BASE_API_KEY;
-export const FIRE_BASE_AUTH_DOMAIN = process.env.FIRE_BASE_AUTH_DOMAIN;
-export const FIRE_BASE_PROJECT_ID = process.env.FIRE_BASE_PROJECT_ID;
-export const FIRE_BASE_STORAGE_BUCKET = process.env.FIRE_BASE_STORAGE_BUCKET;
-export const FIRE_BASE_MESSAGING_SENDER_ID =
-  process.env.FIRE_BASE_MESSAGING_SENDER_ID;
-export const FIRE_BASE_APP_ID = process.env.FIRE_BASE_APP_ID;
-export const FIRE_BASE_MEASUREMENT_ID = process.env.FIRE_BASE_MEASUREMENT_ID;
-
 export const PORT = process.env.SERVER_PORT;
 export const HOST = process.env.SERVER_HOST;
 
@@ -29,3 +20,11 @@ export const VNPAY_URL = process.env.VNPAY_URL;
 export const CURR_CODE = process.env.CURR_CODE;
 
 export const SERVER_URL = process.env.APP_ENV === 'production' ? process.env.SERVER_URL : `http://${HOST}:${PORT}`;
+
+export const FIRE_BASE_API_KEY = process.env.FIRE_BASE_API_KEY;
+export const FIRE_BASE_AUTH_DOMAIN = process.env.FIRE_BASE_AUTH_DOMAIN;
+export const FIRE_BASE_PROJECT_ID = process.env.FIRE_BASE_PROJECT_ID;
+export const FIRE_BASE_STORAGE_BUCKET = process.env.FIRE_BASE_STORAGE_BUCKET;
+export const FIRE_BASE_MESSAGING_SENDER_ID = process.env.FIRE_BASE_MESSAGING_SENDER_ID;
+export const FIRE_BASE_APP_ID = process.env.FIRE_BASE_APP_ID;
+export const FIRE_BASE_MEASUREMENT_ID = process.env.FIRE_BASE_MEASUREMENT_ID;

@@ -5,51 +5,43 @@ import categoryRepository from "../repository/category.repository.js";
 // ** Constants
 import { sortOptions } from "../constants/query.constant.js";
 
+// ** Helper
+import firebaseHelper from "../helper/firebase.helper.js";
+
 const productService = {
-  createProduct: async ({
-    productName,
-    type,
-    description,
-    thumbnail,
-    images,
-    categoryId,
-    price,
-    colourVariant,
-  }) => {
-    const productCode = Math.random().toString(36).slice(2, 12);
+  createProduct: async ({ productName, type, description, categoryId, price, colourVariant }, images = []) => {
+    const productCode = Math.random().toString(36).slice(2, 12).toUpperCase();
+    const colourVariantParsed = JSON.parse(colourVariant);
 
-    const { colourName } = colourVariant;
+    const productNameFormatted = productService.formatName(productName);
+    const typeFormatted = productService.formatName(type);
+    colourVariantParsed.colourName = productService.formatName(colourVariantParsed.colourName);
 
-    const productNameformated = await productService.formatName(productName);
-    const typeformated = await productService.formatName(type);
-    colourVariant.colourName = await productService.formatName(colourName);
-
-    const displayName = `${productNameformated} - ${typeformated} - ${colourVariant.colourName}`;
+    const displayName = `${productNameFormatted} - ${typeFormatted} - ${colourVariantParsed.colourName}`;
 
     const category = await categoryRepository.getById(categoryId);
+
     const product = await productRepository.create({
-      productCode: productCode.toLocaleUpperCase(),
-      productName: productNameformated,
-      type: typeformated,
+      productCode,
+      productName: productNameFormatted,
+      type: typeFormatted,
       displayName,
       description,
-      thumbnail,
-      images,
       categoryId: category._id,
       price,
-      colourVariant,
+      colourVariant: colourVariantParsed,
     });
 
-    const productJson = product.toJSON();
-    delete productJson.__v;
-    delete productJson._id;
-    delete productJson.createdAt;
-    delete productJson.updatedAt;
+    if (product) {
+      const urls = await firebaseHelper.uploadToStorage({ displayName, productCode }, images);
+      product.images = urls;
+      await product.save();
+    }
 
-    return productJson;
+    return productService.handleformatProductResult(product);
   },
 
-  formatName: async (name) => {
+  formatName: (name) => {
     return name.split(" ").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
   },
 
@@ -76,7 +68,7 @@ const productService = {
     return totalQuantity;
   },
 
-  handleformatProductResult: async (product) => {
+  handleformatProductResult: (product) => {
     const sizeMetrics = product.colourVariant.sizeMetrics.map((color) => {
       return {
         size: color.size,
@@ -215,7 +207,7 @@ const productService = {
     const result = await Promise.all(
       products.map(async (product) => {
         const totalQuantity = await productService.getTotalQuantity(product);
-        const formattedProduct = await productService.handleformatProductResult(product);
+        const formattedProduct = productService.handleformatProductResult(product);
         return {
           ...formattedProduct,
           totalQuantity,
@@ -262,7 +254,7 @@ const productService = {
 
   deleteProduct: async (code) => {
     const product = await productRepository.findAndChangeVisibility(code);
-    return await productService.handleformatProductResult(product);
+    return productService.handleformatProductResult(product);
   },
 
   updateProduct: async (productCode, updatedData) => {
@@ -279,7 +271,7 @@ const productService = {
 
     const product = await productRepository.findAndUpdate(productCode, updatedData);
 
-    return await productService.handleformatProductResult(product);
+    return productService.handleformatProductResult(product);
   },
 
   getAllColors: async () => {

@@ -1,6 +1,9 @@
 // ** Express
 import express from "express";
 
+// ** Configs
+import { upload } from "../../configs/multer";
+
 // ** Controllers
 import productController from "../../controllers/product.controller.js";
 
@@ -118,74 +121,62 @@ const router = express.Router();
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
  *               productName: 
  *                 type: string
+ *                 example: Bitis Hunter X
  *               type:
  *                 type: string
+ *                 example: Low top
  *               description:
  *                 type: string
+ *                 example: Giày chạy bộ tốt nhất năm 2024
  *               images:
  *                 type: array
  *                 items:
  *                   type: string
+ *                   format: binary
  *               categoryId:
  *                 type: string
+ *                 example: 6661cab......
  *               price:
- *                 type: string
+ *                 type: number
+ *                 example: 400000
  *               colourVariant:
- *                 type: Object
+ *                 type: object
  *                 properties:
- *                    colourName:
- *                      type: String
- *                    hex:
- *                      type: String
- *                    sizeMetrics:
- *                      type: array
- *                      items:
- *                          type: Object
- *                          properties:
- *                              size:
- *                                  type: number
- *                              quantity:
- *                                  type: number       
- *           example:
- *             productName: Bitis Hunter X
- *             type: Low top
- *             description: Giày chạy bộ tốt nhất năm 2024
+ *                   colourName:
+ *                     type: string
+ *                     example: Skyblue
+ *                   hex:
+ *                     type: string
+ *                     example: '#00CCFF'
+ *                   sizeMetrics:
+ *                     type: array
+ *                     items:
+ *                       type: object
+ *                       properties:
+ *                         size:
+ *                           type: number
+ *                           example: 41
+ *                         quantity:
+ *                           type: number
+ *                           example: 500000
+ *           encoding:
  *             images:
- *                  - https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
- *             categoryId: 6661cab......
- *             isHide: false
- *             colourVariant: {
- *               colourName: Skyblue,
- *               hex: "#00CCFF",
- *               sizeMetrics: [
- *                 {
- *                   size: 42,
- *                   quantity: 100
- *                 },
- *                 {
- *                   size: 43,
- *                   quantity: 200
- *                  }
- *                ]
- *             }
- *             price: 400000
+ *               contentType: image/jpeg, image/png, image/jpg
  *     responses:
  *       200:
  *         description: Create new product
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
  *                 $ref: '#/components/schemas/Product'
  */
-router.post("/createProduct", productValidation.body(), productController.createProduct);
+router.post("/createProduct", upload.array('images'), productValidation.body() ,productController.createProduct);
 
 /**
  * @swagger
@@ -292,7 +283,7 @@ router.put("/changeStatus/:code", productController.changeStatus);
  *             schema:
  *               $ref: '#/components/schemas/Product'
  */
-router.put("/:code", productValidation.body(), productController.updateProduct);
+router.put("/:code", upload.array('images'), productController.updateProduct);
 
 /**
  * @swagger
