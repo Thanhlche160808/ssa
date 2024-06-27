@@ -146,22 +146,21 @@ router.get("/profile", userController.getProfile);
  *               address:
  *                 type: string
  *               city:
- *                 type: number
+ *                 type: string
  *               district:
- *                 type: number
+ *                 type: string
  *               ward:
- *                 type: number
+ *                 type: string
  *               isDefault:
  *                 type: boolean
  *             example:
  *               address: "123 Main St"
- *               city: 123123
- *               district: 1231231
- *               ward: 124123
+ *               city: 'Ha Noi'
+ *               district: 'Thuong Tin'
+ *               ward: 'Ha Hoi'
  *               isDefault: true
  *     responses:
  *       200:
- *         description: User profile
  *         content:
  *           application/json:
  *             schema:
@@ -169,4 +168,85 @@ router.get("/profile", userController.getProfile);
  */
 
 router.post('/delivery-address', userController.createDeliveryAddress);
+
+/**
+ * @swagger
+ * /api/user/my-addresses:
+ *   get:
+ *     summary: My delivery addresses 
+ *     tags: [User]
+ *     responses:
+ *       200:
+ *         content:
+ *           application/json:
+ *             schema:
+ *                  $ref: '#/components/schemas/DeliveryAddress'
+ */
+router.get('/my-addresses', userController.getMyAddresses);
+
+/**
+ * @swagger
+ * /api/user/delivery-address/{addressId}:
+ *   put:
+ *     summary: Update delivery address
+ *     tags: [User]
+ *     parameters:
+ *        - in: path
+ *          name: addressId
+ *          required: true
+ *          schema:
+ *             type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               address:
+ *                 type: string
+ *               city:
+ *                 type: string
+ *               district:
+ *                 type: string
+ *               ward:
+ *                 type: string
+ *               isDefault:
+ *                 type: boolean
+ *             example:
+ *               address: "123 Main St"
+ *               city: 'Ha Noi'
+ *               district: 'Thuong Tin'
+ *               ward: 'Ha Hoi'
+ *               isDefault: true
+ *     responses:
+ *       200:
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/DeliveryAddress'
+ */
+router.put('/delivery-address/:addressId', userController.updateDeliveryAddress);
+
+/**
+ * @swagger
+ * /api/user/delivery-address/{addressId}:
+ *   delete:
+ *     summary: Delete delivery address
+ *     tags: [User]
+ *     parameters:
+ *        - in: path
+ *          name: addressId
+ *          required: true
+ *          schema:
+ *             type: string
+ *     responses:
+ *       200:
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/DeliveryAddress'
+ */
+router.delete('/delivery-address/:addressId', userController.deleteDeliveryAddress);
+
 export default router;

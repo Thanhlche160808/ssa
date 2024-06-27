@@ -6,15 +6,15 @@ export const deliveryAddressSchema = new mongoose.Schema({
     },
 
     city: {
-        type: Number
+        type: String
     },
 
     district: {
-        type: Number
+        type: String
     },
 
     ward: {
-        type: Number
+        type: String
     },
 
     isDefault: {

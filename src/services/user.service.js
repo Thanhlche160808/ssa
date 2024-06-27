@@ -61,7 +61,66 @@ const userService = {
                 isDefault: item.isDefault,
             }
         });
-    }
+    },
+
+    updateDeliveryAddress: async (accountId, addressId, address) => {
+        const account = await accountRepository.findById(accountId);
+        const user = account.user;
+    
+        const deliveryAddress = user.deliveryAddress.id(addressId);
+
+        if (!deliveryAddress) {
+            throw new Error('Address not found');
+        }
+    
+        if (address.isDefault) {
+            user.deliveryAddress.forEach(item => {
+                item.isDefault = false;
+            });
+        }
+    
+        deliveryAddress.address = address.address;
+        deliveryAddress.city = address.city;
+        deliveryAddress.district = address.district;
+        deliveryAddress.ward = address.ward;
+        deliveryAddress.isDefault = address.isDefault;
+    
+        await user.save();
+    
+        const result = userService.handleDeliveryAddressResult(user.deliveryAddress);
+        return result;
+    },
+
+    getUserDeliveryAddress: async (accountId) => {
+        const account = await accountRepository.findById(accountId);
+        const user = account.user;
+    
+        const result = userService.handleDeliveryAddressResult(user.deliveryAddress);
+        return result;
+    },
+
+    deleteDeliveryAddress: async (accountId, addressId) => {
+        const account = await accountRepository.findById(accountId);
+        const user = account.user;
+
+        const deliveryAddress = user.deliveryAddress.id(addressId);
+
+        if (!deliveryAddress) {
+            throw new Error('Address not found');
+        }
+
+        if (deliveryAddress.isDefault) {
+            throw new Error('Cannot delete default address');
+        }
+
+        user.deliveryAddress.pull({ _id: addressId });
+
+        await user.save();
+
+        const result = userService.handleDeliveryAddressResult(user.deliveryAddress);
+
+        return result;
+    },
 };
 
 export default userService;
