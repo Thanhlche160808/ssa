@@ -9,7 +9,7 @@ import {
   FIRE_BASE_MESSAGING_SENDER_ID,
   FIRE_BASE_PROJECT_ID,
   FIRE_BASE_STORAGE_BUCKET,
-} from "../constants/env";
+} from "../constants/env.js";
 
 const firebaseConfig = {
   apiKey: FIRE_BASE_API_KEY,
