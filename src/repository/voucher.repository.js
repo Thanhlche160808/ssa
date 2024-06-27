@@ -4,7 +4,7 @@ import Voucher from '../models/voucher.js';
 // ** Constants
 
 const voucherRepository = {
-    create: async ({ title, code, description, discount, minOrderPrice, maxDiscountValue, expiredDateDate, isPublish }) => {
+    create: async ({ title, code, description, discount, minOrderPrice, maxDiscountValue, expiredDate, isPublish }) => {
         const newVoucher = new Voucher({
             title,
             code,
@@ -12,7 +12,7 @@ const voucherRepository = {
             discount,
             minOrderPrice,
             maxDiscountValue,
-            expiredDateDate,
+            expiredDate,
             isPublish,
         });
 

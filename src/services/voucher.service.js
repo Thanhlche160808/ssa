@@ -2,7 +2,7 @@
 import voucherRepository from "../repository/voucher.repository.js";
 
 const voucherService = {
-    create: async ({ title, description, discount, minOrderPrice, maxDiscountValue, expiredDateDate, isPublish }) => {
+    create: async ({ title, description, discount, minOrderPrice, maxDiscountValue, expiredDate, isPublish }) => {
         const code = Math.random().toString(36).slice(2, 12);
         const voucher = await voucherRepository.create(
             {
@@ -12,14 +12,12 @@ const voucherService = {
                 discount,
                 minOrderPrice,
                 maxDiscountValue,
-                expiredDateDate,
+                expiredDate,
                 isPublish,
             });
-        const voucherJson = voucher.toJSON();
-        delete voucherJson.__v;
-        delete voucherJson._id;
 
-        return voucherJson;
+        const result = await voucherService.handleVoucherOutput(voucher);
+        return result;
     },
 
     getVoucher: async ({ title, page, size, status, code }) => {
@@ -89,8 +87,6 @@ const voucherService = {
             isPublish: voucher.isPublish,
             status: voucher.status,
             expiredDate: voucher.expiredDate,
-            createdAt: voucher.createdAt,
-            updatedAt: voucher.updatedAt,
         };
     }
 
