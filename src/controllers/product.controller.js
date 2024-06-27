@@ -10,9 +10,9 @@ import { response } from "../utils/baseResponse.js";
 const productController = {
     createProduct: async (req, res) => {
         const data = req.body;
-        const files = req.files;
+        const images = req.files;
         try {
-            const result = await productService.createProduct(data, files);
+            const result = await productService.createProduct(data, images);
             res.status(statusCode.CREATED).json(response.success(
                 {
                     data: result,
