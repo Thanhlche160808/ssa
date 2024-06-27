@@ -30,6 +30,27 @@ const userController = {
             ))
         }
     },
+
+    createDeliveryAddress: async (req, res) => {
+        const { user } = req;
+        const address = req.body;
+        try {
+            const result = await userService.createDeliveryAddress(user.id, address);
+            res.status(statusCode.CREATED).json(response.success(
+                {
+                    data: result,
+                    code: statusCode.CREATED,
+                }
+            ));
+        } catch (error) {
+            res.status(statusCode.BAD_REQUEST).json(response.error(
+                {
+                    message: error?.message,
+                    code: statusCode.BAD_REQUEST,
+                }
+            ));
+        }
+    },
 };
 
 export default userController;

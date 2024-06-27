@@ -13,6 +13,47 @@ const router = express.Router();
  * @swagger
  * components:
  *   schemas:
+ *     DeliveryAddress:
+ *       type: object
+ *       required:
+ *       properties:
+ *         isSuccess:
+ *           type: boolean
+ *         statusCode:
+ *           type: number
+ *         data:
+ *           type:: array
+ *           items:
+ *              type: object
+ *              properties:
+ *                 id:
+ *                   type: string
+ *                 address:
+ *                   type: string
+ *                 city:
+ *                   type: number
+ *                 district:
+ *                   type: number
+ *                 ward:
+ *                   type: number
+ *                 isDefault:
+ *                   type: boolean
+ *       example:
+ *         isSuccess: true
+ *         statusCode: 200
+ *         data: 
+ *            - id: "60d0fe4f5311236168a109ca"
+ *              address: "123 Main St"
+ *              city: 5132
+ *              district: 12549
+ *              ward: 65421
+ *              isDefault: true
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
  *     User:
  *       type: object
  *       required:
@@ -88,4 +129,44 @@ const router = express.Router();
  */
 router.get("/profile", userController.getProfile);
 
+
+/**
+ * @swagger
+ * /api/user/delivery-address:
+ *   post:
+ *     summary: Add delivery address
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               address:
+ *                 type: string
+ *               city:
+ *                 type: number
+ *               district:
+ *                 type: number
+ *               ward:
+ *                 type: number
+ *               isDefault:
+ *                 type: boolean
+ *             example:
+ *               address: "123 Main St"
+ *               city: 123123
+ *               district: 1231231
+ *               ward: 124123
+ *               isDefault: true
+ *     responses:
+ *       200:
+ *         description: User profile
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/DeliveryAddress'
+ */
+
+router.post('/delivery-address', userController.createDeliveryAddress);
 export default router;

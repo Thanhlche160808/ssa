@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 
 // ** Model
 import { itemSchema } from './cart.js';
-import { deliveryAddressSchema } from './user.js';
 
 // ** Constant
 import { ORDER_STATUS } from '../constants/model.constant.js';
@@ -31,7 +30,12 @@ const orderSchema = new mongoose.Schema({
     },
 
     deliveryAddress: {
-        type: deliveryAddressSchema,
+        type: {
+            address: String,
+            city: String,
+            district: String,
+            ward: String,
+        },
         required: true,
     },
 
