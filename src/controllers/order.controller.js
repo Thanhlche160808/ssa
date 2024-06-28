@@ -109,7 +109,66 @@ const orderController = {
                 }
             ))
         }
-    }
+    }, 
+
+    getAllProvinces: async (req, res) => {
+        try {
+            const data = await orderService.getAllVnProvinces();
+            res.status(statusCode.OK).json(response.success(
+                {
+                    data: data,
+                    code: statusCode.OK,
+                }
+            ));
+        } catch (error) {
+            res.status(statusCode.BAD_REQUEST).json(response.error(
+                {
+                    message: error?.message,
+                    code: statusCode.BAD_REQUEST,
+                }
+            ))
+        }
+    },
+
+    getDistrictOfProvince: async (req, res) => {
+        try {
+            const { provinceId } = req.query
+            const data = await orderService.getDistrictOfProvince(provinceId);
+            res.status(statusCode.OK).json(response.success(
+                {
+                    data: data,
+                    code: statusCode.OK,
+                }
+            ));
+        } catch (error) {
+            res.status(statusCode.BAD_REQUEST).json(response.error(
+                {
+                    message: error?.message,
+                    code: statusCode.BAD_REQUEST,
+                }
+            ))
+        }
+    },
+
+    getWardOfDistrict: async (req, res) => {
+        try {
+            const {district_id} = req.query
+            const data = await orderService.getWardOfDistrict(district_id);
+            res.status(statusCode.OK).json(response.success(
+                {
+                    data: data,
+                    code: statusCode.OK,
+                }
+            ));
+        } catch (error) {
+            res.status(statusCode.BAD_REQUEST).json(response.error(
+                {
+                    message: error?.message,
+                    code: statusCode.BAD_REQUEST,
+                }
+            ))
+        }
+    },
 };
 
 export default orderController;

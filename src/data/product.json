@@ -1,0 +1,26 @@
+[
+    {
+      "productCode": "24aig",
+      "productName": "Bitis Hunter A",
+      "type": "High top",
+      "displayName": "Bitis Hunter A - High top - Green",
+      "description": "Giày chạy bộ tốt nhất năm 2024",
+      "images": [],
+      "isHide": true,
+      "colourVariant": {
+        "colourName": "Green",
+        "hex": "#00CCFF",
+        "sizeMetrics": [
+          {
+            "size": 42,
+            "quantity": 100
+          },
+          {
+            "size": 43,
+            "quantity": 200
+          }
+        ]
+      },
+      "price": 400000
+    }
+]

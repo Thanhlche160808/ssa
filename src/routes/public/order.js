@@ -11,6 +11,89 @@ const router = express.Router();
 
 /**
  * @swagger
+ * /api/public/order/provinces:
+ *   get:
+ *     summary: Get order detail
+ *     tags: [Order]
+ *     responses:
+ *       200:
+ *         description: Get all provinces
+ *         content:
+ *           application/json:
+ *             schema:
+ *                 type: array
+ *                 items: 
+ *                     type: Object
+ *                     properties:
+ *                         ProvinceID:
+ *                           type: number 
+ *                         ProvinceName:
+ *                           type: string 
+*/
+router.get('/provinces', orderController.getAllProvinces);
+
+/**
+ * @swagger
+ * /api/public/order/districts:
+ *   get:
+ *     summary: Get order detail
+ *     tags: [Order]
+ *     parameters:
+ *       - in: query
+ *         name: provinceId
+ *         required: true
+ *         schema:
+ *           type: number
+ *           example: 269
+ *     responses:
+ *       200:
+ *         description: Get all provinces
+ *         content:
+ *           application/json:
+ *             schema:
+ *                 type: array
+ *                 items: 
+ *                     type: Object
+ *                     properties:
+ *                         ProvinceID:
+ *                           type: number 
+ *                         ProvinceName:
+ *                           type: string 
+*/
+router.get('/districts', orderController.getDistrictOfProvince);
+
+/**
+ * @swagger
+ * /api/public/order/wards:
+ *   get:
+ *     summary: Get order detail
+ *     tags: [Order]
+ *     parameters:
+ *       - in: query
+ *         name: district_id
+ *         required: true
+ *         schema:
+ *           type: number
+ *           example: 2264
+ *     responses:
+ *       200:
+ *         description: Get all wards
+ *         content:
+ *           application/json:
+ *             schema:
+ *                 type: array
+ *                 items: 
+ *                     type: Object
+ *                     properties:
+ *                         DistricID:
+ *                           type: number 
+ *                         WardName:
+ *                           type: string 
+*/
+router.get('/wards', orderController.getWardOfDistrict);
+
+/**
+ * @swagger
  * components:
  *   schemas:
  *     Order:
