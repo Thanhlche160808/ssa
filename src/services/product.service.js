@@ -48,7 +48,7 @@ const productService = {
   productDetail: async (code) => {
     const product = await productRepository.findByCode(code);
     const ortherColor = await productRepository.findByProductName(product.productName);
-    const result = await productService.handleformatProductResult(product);
+    const result = productService.handleformatProductResult(product);
     return {
       ...result,
       ortherColor: ortherColor.map((product) => {
@@ -83,7 +83,10 @@ const productService = {
       displayName: product.displayName,
       description: product.description,
       images: product.images,
-      category: product.category.name,
+      category: {
+        id: product.category._id,
+        name: product.category.name,
+      },
       price: product.price,
       salePrice: product.salePrice,
       isHide: product.isHide,
