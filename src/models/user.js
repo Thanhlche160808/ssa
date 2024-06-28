@@ -1,20 +1,41 @@
 import mongoose from "mongoose";
 
 export const deliveryAddressSchema = new mongoose.Schema({
+    fullName: {
+        type: String
+    },
+
+    phone: {
+        type: String
+    },
+
+    email: {
+        type: String
+    },
+
     address: {
         type: String
     },
 
-    city: {
-        type: String
+    province: {
+        type: {
+            provinceId: Number,
+            provinceName: String
+        }
     },
 
     district: {
-        type: String
+        type: {
+            districtId: Number,
+            districtName: String
+        }
     },
 
     ward: {
-        type: String
+        type: {
+            wardId: String,
+            wardName: String
+        }
     },
 
     isDefault: {

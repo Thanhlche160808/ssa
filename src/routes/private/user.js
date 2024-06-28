@@ -28,14 +28,35 @@ const router = express.Router();
  *              properties:
  *                 id:
  *                   type: string
+ *                 fullName:
+ *                   type: string
+ *                 phone:
+ *                   type: string
+ *                 email:
+ *                   type: string
  *                 address:
  *                   type: string
- *                 city:
- *                   type: number
+ *                 province:
+ *                   type: object
+ *                   properties:
+ *                      provinceId:
+ *                          type: number
+ *                      provinceName:
+ *                          type: string
  *                 district:
- *                   type: number
+ *                   type: object
+ *                   properties:
+ *                      districtId:
+ *                         type: number
+ *                      districtName:
+ *                         type: string
  *                 ward:
- *                   type: number
+ *                   type: object
+ *                   properties:
+ *                        wardId:
+ *                           type: string
+ *                        wardName:
+ *                           type: string
  *                 isDefault:
  *                   type: boolean
  *       example:
@@ -43,10 +64,19 @@ const router = express.Router();
  *         statusCode: 200
  *         data: 
  *            - id: "60d0fe4f5311236168a109ca"
+ *              fullName: "Thomas Lee"
+ *              phone: "0364716473"
+ *              email: "abcd@gmail.com"
  *              address: "123 Main St"
- *              city: 5132
- *              district: 12549
- *              ward: 65421
+ *              province:
+ *                  provinceId: 201
+ *                  provinceName: "Ha Noi" 
+ *              district: 
+ *                  districtId: 3303
+ *                  districtName: "Thuong Tin"
+ *              ward:
+ *                  wardId: 1B2705
+ *                  wardName: "Ha Hoi"
  *              isDefault: true
  */
 
@@ -143,21 +173,51 @@ router.get("/profile", userController.getProfile);
  *           schema:
  *             type: object
  *             properties:
+ *               fullName:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               email:
+ *                 type: string
  *               address:
  *                 type: string
- *               city:
- *                 type: string
+ *               province:
+ *                 type: object
+ *                 properties:
+ *                    provinceId:
+ *                       type: number
+ *                    provinceName:
+ *                       type: string
  *               district:
- *                 type: string
+ *                 type: object
+ *                 properties:
+ *                    districtId:
+ *                       type: number
+ *                    districtName:
+ *                       type: string
  *               ward:
- *                 type: string
+ *                 type: object
+ *                 properties:
+ *                    wardId:
+ *                       type: string
+ *                    wardName:
+ *                       type: string
  *               isDefault:
  *                 type: boolean
  *             example:
+ *               fullName: "Thomas Lee"
+ *               phone: "0364716473"
+ *               email: "abcd@gmail.com"
  *               address: "123 Main St"
- *               city: 'Ha Noi'
- *               district: 'Thuong Tin'
- *               ward: 'Ha Hoi'
+ *               province:
+ *                    provinceId: 201
+ *                    provinceName: "Ha Noi"
+ *               district:
+ *                    districtId: 3303
+ *                    districtName: "Thuong Tin"
+ *               ward:
+ *                    wardId: 1B2705
+ *                    wardName: "Ha Hoi"
  *               isDefault: true
  *     responses:
  *       200:
@@ -203,21 +263,51 @@ router.get('/my-addresses', userController.getMyAddresses);
  *           schema:
  *             type: object
  *             properties:
+ *               fullName:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               email:
+ *                 type: string
  *               address:
  *                 type: string
- *               city:
- *                 type: string
+ *               province:
+ *                 type: object
+ *                 properties:
+ *                    provinceId:
+ *                       type: number
+ *                    provinceName:
+ *                       type: string
  *               district:
- *                 type: string
+ *                 type: object
+ *                 properties:
+ *                    districtId:
+ *                       type: number
+ *                    districtName:
+ *                       type: string
  *               ward:
- *                 type: string
+ *                 type: object
+ *                 properties:
+ *                    wardId:
+ *                       type: string
+ *                    wardName:
+ *                       type: string
  *               isDefault:
  *                 type: boolean
  *             example:
+ *               fullName: "Thomas Lee"
+ *               phone: "0364716473"
+ *               email: "abcd@gmail.com"
  *               address: "123 Main St"
- *               city: 'Ha Noi'
- *               district: 'Thuong Tin'
- *               ward: 'Ha Hoi'
+ *               province:
+ *                    provinceId: 201
+ *                    provinceName: "Ha Noi"
+ *               district:
+ *                    districtId: 3303
+ *                    districtName: "Thuong Tin"
+ *               ward:
+ *                    wardId: 1B2705
+ *                    wardName: "Ha Hoi"
  *               isDefault: true
  *     responses:
  *       200:

@@ -21,14 +21,15 @@ const userService = {
     },
 
     createDeliveryAddress: async (id, address) => {
+        console.log('address', address);
         const account = await accountRepository.findById(id);
         const user = account.user;
-    
+
         const isExist = user.deliveryAddress.find(item => 
             item.address === address.address || 
-            item.city === address.city || 
-            item.district === address.district || 
-            item.ward === address.ward
+            item.province.provinceId === address.province.provinceId || 
+            item.district.districtId === address.district.districtId || 
+            item.ward.wardId === address.ward.wardId
         );
     
         if (isExist) {
@@ -54,10 +55,22 @@ const userService = {
         return deliveryAddress.map(item => {
             return {
                 id: item._id,
+                fullName: item.fullName,
+                phone: item.phone,
+                email: item.email,
                 address: item.address,
-                city: item.city,
-                district: item.district,
-                ward: item.ward,
+                province: {
+                    provinceId: item.province.provinceId,
+                    provinceName: item.province.provinceName,
+                },
+                district: {
+                    districtId: item.district.districtId,
+                    districtName: item.district.districtName,
+                },
+                ward: {
+                    wardId: item.ward.wardId,
+                    wardName: item.ward.wardName,
+                },
                 isDefault: item.isDefault,
             }
         });
