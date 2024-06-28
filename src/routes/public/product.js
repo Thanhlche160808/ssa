@@ -301,7 +301,9 @@ router.get("/product-colors", productController.getAllColors);
  *                 description: Giày chạy bộ tốt nhất năm 2024
  *                 images:
  *                   - https://product.hstatic.net/1000230642/product/hsm004401den1_58f0020cd4314e309c76dcdd2621ee82.jpg
- *                 category: Bitis Hunter
+ *                 category:
+ *                      id: '667a4086af531....'
+ *                      name: Vintas
  *                 isHide: false
  *                 colourVariant:
  *                   colourName: Skyblue
