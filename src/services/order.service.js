@@ -5,6 +5,7 @@ import voucherRepository from '../repository/voucher.repository.js';
 
 // ** Helper
 import googleHelper from '../helper/google.helper.js';
+import provincesHelper from '../helper/ghn.helper.js'
 
 // ** Constants
 import { ORDER_STATUS } from '../constants/model.constant.js';
@@ -166,7 +167,22 @@ const orderService = {
         await order.save();
 
         return await orderService.formatOrderResult(order);
-    }
+    },
+
+    getAllVnProvinces : async () => {
+        const provinces = await provincesHelper.getPublicProvinces();
+        return provinces;
+    },
+
+    getDistrictOfProvince : async (provinceId) => {
+        const districts = await provincesHelper.getDistricOfProvince(provinceId);
+        return districts;
+    },
+
+    getWardOfDistrict : async (districtId) => {
+        const wards = await provincesHelper.getWardOfDistrict(districtId);
+        return wards;
+    },
 };
 
 export default orderService;
