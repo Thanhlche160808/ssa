@@ -126,9 +126,13 @@ const productService = {
 
     if (colors) query["colourVariant.hex"] = productService.handleGenereateQueryArray(colors);
 
-    if (minPrice) query.price = { $gte: minPrice };
-
-    if (maxPrice) query.price = { $lte: maxPrice };
+    if (minPrice && maxPrice) {
+      query.price = { $gte: minPrice, $lte: maxPrice };
+    } else if (minPrice) {
+      query.price = { $gte: minPrice };
+    } else if (maxPrice) {
+      query.price = { $lte: maxPrice };
+    }
 
     if (categoryNames) query["category.name"] = productService.handleGenereateQueryArray(categoryNames);
 
