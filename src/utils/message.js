@@ -12,7 +12,7 @@ export const message = {
       field
     )} must be greater or equal than ${min} and less or equal than ${max} characters`,
   mustBeOneOf: ({ field, values }) =>
-    `${_.capitalize(field)} must be one of [${values}]`,
+    `${_.capitalize(field)} must be one of [${values}] and not duplicated`,
   mustBeNumberAndGreaterThanOrEqual: ({ field, value = 1 }) =>
     `${_.capitalize(field)} must be number and greater than or equal ${value}`,
   mustBeNumberAndGreaterThan: ({ field, value = 1 }) =>

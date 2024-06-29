@@ -21,7 +21,6 @@ const userService = {
     },
 
     createDeliveryAddress: async (id, address) => {
-        console.log('address', address);
         const account = await accountRepository.findById(id);
         const user = account.user;
 

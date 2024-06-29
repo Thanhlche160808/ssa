@@ -69,10 +69,12 @@ const productService = {
   },
 
   handleformatProductResult: (product) => {
-    const sizeMetrics = product.colourVariant.sizeMetrics.map((color) => {
+    const sizeMetrics = product.colourVariant.sizeMetrics.sort((a, b) => {
+      return a.size - b.size;
+    }).map((size) => {
       return {
-        size: color.size,
-        quantity: color.quantity,
+        size: size.size,
+        quantity: size.quantity,
       };
     });
 

@@ -183,6 +183,11 @@ const orderService = {
         const wards = await provincesHelper.getWardOfDistrict(districtId);
         return wards;
     },
+
+    getShippingFee: async (address) => {
+        const fee = await provincesHelper.getShippingFee(address);
+        return fee;
+    }
 };
 
 export default orderService;

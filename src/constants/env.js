@@ -28,3 +28,5 @@ export const FIRE_BASE_STORAGE_BUCKET = process.env.FIRE_BASE_STORAGE_BUCKET;
 export const FIRE_BASE_MESSAGING_SENDER_ID = process.env.FIRE_BASE_MESSAGING_SENDER_ID;
 export const FIRE_BASE_APP_ID = process.env.FIRE_BASE_APP_ID;
 export const FIRE_BASE_MEASUREMENT_ID = process.env.FIRE_BASE_MEASUREMENT_ID;
+
+export const GHN_TOKEN = process.env.GHN_TOKEN;

@@ -169,6 +169,26 @@ const orderController = {
             ))
         }
     },
+
+    getShippingFee: async (req, res) => {
+        try {
+            const address = req.body;
+            const data = await orderService.getShippingFee(address);
+            res.status(statusCode.OK).json(response.success(
+                {
+                    data: data,
+                    code: statusCode.OK,
+                }
+            ));
+        } catch (error) {
+            res.status(statusCode.BAD_REQUEST).json(response.error(
+                {
+                    message: error?.message,
+                    code: statusCode.BAD_REQUEST,
+                }
+            ))
+        }
+    },
 };
 
 export default orderController;
