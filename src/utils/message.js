@@ -15,10 +15,11 @@ export const message = {
     `${_.capitalize(field)} must be one of [${values}] and not duplicated`,
   mustBeNumberAndGreaterThanOrEqual: ({ field, value = 1 }) =>
     `${_.capitalize(field)} must be number and greater than or equal ${value}`,
-  mustBeNumberAndGreaterThan: ({ field, value = 1 }) =>
+  mustBeNumberAndGreaterThan: (field, value = 1) =>
     `${_.capitalize(field)} must be number and greater than ${value}`,
   exist: (field) => `${_.capitalize(field)} is already exists`,
   specialCharacter: (field) => `${_.capitalize(field)} must not contain special characters`,
   isHexColor: (field) => `${_.capitalize(field)} must be a valid hex color`,
   mustBeArray: (field) => `${_.capitalize(field)} must be an array`,
+  mustBeLessThan: (field1, field2) => `${_.capitalize(field1)} must be less than ${_.capitalize(field2)}`,
 };

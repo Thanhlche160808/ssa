@@ -62,7 +62,7 @@ export const productValidation = {
                     if (!allSizesInRange) {
                         throw new Error(message.mustBeOneOf({ field: 'size', values: [36, 37, 38, 39, 40, 41, 42, 43] }));
                     }
-                    
+
                     if (!/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(hex)) {
                         throw new Error(message.isHexColor('hex'));
                     }
@@ -72,7 +72,7 @@ export const productValidation = {
                     }
 
                     if (!allQuantitiesValid) {
-                        throw new Error(message.mustBeNumberAndGreaterThan({field: 'quantity', value: 0 }));
+                        throw new Error(message.mustBeNumberAndGreaterThan('quantity', 0));
                     }
 
                     return true;
@@ -104,9 +104,21 @@ export const productValidation = {
             query("minPrice")
                 .optional()
                 .custom((value, { req }) => {
-                    if (req.query.maxPrice && value > req.query.maxPrice) {
-                        throw new Error('minPriceMustBeLessThanMaxPrice');
+                    const minPrice = parseFloat(value);
+                    const maxPrice = parseFloat(req.query.maxPrice);
+
+                    if (isNaN(minPrice)) {
+                        throw new Error(message.invalid("minPrice"));
                     }
+
+                    if (req.query.maxPrice !== undefined && isNaN(maxPrice)) {
+                        throw new Error(message.invalid("maxPrice"));
+                    }
+
+                    if (req.query.maxPrice !== undefined && minPrice > maxPrice) {
+                        throw new Error(message.mustBeLessThan("minPrice",  "maxPrice"));
+                    }
+
                     return true;
                 }),
 
@@ -114,4 +126,5 @@ export const productValidation = {
                 .optional()
                 .isIn([sortOptions.ASC, sortOptions.DESC]).withMessage(message.mustBeOneOf({ field: "priceSort", values: [sortOptions.ASC, sortOptions.DESC] })),
         ]),
+
 };
