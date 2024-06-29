@@ -36,23 +36,63 @@ export const productValidation = {
                 .isNumeric().withMessage(message.invalid("price"))
                 .custom(value => value > 0).withMessage(message.mustBeNumberAndGreaterThan("price", 0)),
 
-            body("colourVariant.colourName")
-                .notEmpty().withMessage(message.required("colourName"))
-                .isLength({ min: 2, max: 20 }).withMessage(message.stringLengthInRange({ min: 2, max: 20 })),
 
-            body("colourVariant.hex")
-                .isHexColor().withMessage(message.invalid("hex"))
-                .notEmpty().withMessage(message.required("hex")),
+            // body("colourVariant")
+            //     .notEmpty().withMessage(message.required("colourVariant"))
+            //     .custom((value, { req }) => {
+            //         const colourVariant = JSON.parse(value);
+            //         const sizeMetrics = colourVariant.sizeMetrics;
+            //         const size = sizeMetrics.map(item => item.size);
+            //         return size.indexOf(value) === size.lastIndexOf(value) && value >= 36 && value <= 43;
+            //     }).withMessage(message.mustBeOneOf({ field: "size", values: [36, 37, 38, 39, 40, 41, 42, 43] })),
 
-            body("colourVariant.sizeMetrics.*.size")
-                .notEmpty().withMessage(message.required("size"))
-                .isNumeric().withMessage(message.invalid("size"))
-                .custom(value => value >= 36 && value <= 43).withMessage(message.mustBeOneOf({ field: "size", values: [36, 37, 38, 39, 40, 41, 42, 43] })),
 
-            body("colourVariant.sizeMetrics.*.quantity")
-                .notEmpty().withMessage(message.required("quantity"))
-                .isNumeric().withMessage(message.invalid("quantity"))
-                .custom(value => value > 0).withMessage(message.mustBeNumberAndGreaterThan("quantity", 0)),
+            // colourVariant là 1 object đang được truyền vào dưới bằng form-data. T muốn validate các trường bên trong nó như sau
+            // - size là 1 số nguyên từ 36 đến 43 và không được trùng lặp
+            // - quantity là 1 số nguyên lớn hơn 0
+            // - hex là 1 mã màu hex hợp lệ
+            // bắt đầu làm đi
+            body("colourVariant")
+                .notEmpty().withMessage(message.required("colourVariant"))
+                .custom((value) => {
+                    let colourVariant;
+                    try {
+                        colourVariant = JSON.parse(value);
+                    } catch (e) {
+                        throw new Error('Invalid JSON');
+                    }
+
+                    const { sizeMetrics, hex } = colourVariant;
+
+                    if (!Array.isArray(sizeMetrics) || sizeMetrics.length === 0) {
+                        throw new Error(message.required('sizeMetrics'));
+                    }
+
+                    const sizes = sizeMetrics.map(item => item.size);
+                    const uniqueSizes = new Set(sizes);
+
+                    const allSizesInRange = sizes.every(size => size >= 36 && size <= 43);
+                    const allSizesUnique = sizes.length === uniqueSizes.size;
+                    const allQuantitiesValid = sizeMetrics.every(item => item.quantity > 0);
+
+                    if (!allSizesInRange) {
+                        throw new Error(message.mustBeOneOf({ field: 'size', values: [36, 37, 38, 39, 40, 41, 42, 43] }));
+                    }
+                    
+                    if (!/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(hex)) {
+                        throw new Error(message.isHexColor('hex'));
+                    }
+
+                    if (!allSizesUnique) {
+                        throw new Error('Sizes must be unique');
+                    }
+
+                    if (!allQuantitiesValid) {
+                        throw new Error(message.mustBeNumberAndGreaterThan({field: 'quantity', value: 0 }));
+                    }
+
+                    return true;
+                }),
         ]),
 
     query: () =>

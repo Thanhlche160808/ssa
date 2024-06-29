@@ -304,4 +304,55 @@ router.post('/create', orderValidation.create(), orderController.createOrder);
 */
 router.get('/:code', orderController.getOrderDetail);
 
+/**
+ * @swagger
+ * /api/public/order/shipping-fee:
+ *   post:
+ *     summary: Shipping fee
+ *     tags: [Order]
+ *     requestBody:
+ *         required: true
+ *         content:
+ *            application/json:
+ *              schema:
+ *                 type: object
+ *                 properties:
+ *                     fromDistrictId:
+ *                         type: number
+ *                         example: 1442
+ *                     fromWardCode:
+ *                         type: string
+ *                         example: 20210
+ *                     toDistrictId:
+ *                         type: number
+ *                         example: 1820
+ *                     toWardCode:
+ *                         type: string
+ *                         example: 20210
+ *                     amount:
+ *                         type: number
+ *                         example: 500000
+ *     responses:
+ *       200:
+ *         description: Create new order
+ *         content:
+ *           application/json:
+ *              schema:
+ *                 type: object
+ *                 properties:
+ *                    isSuccess:
+ *                        type: boolean
+ *                        example: true
+ *                    statusCode:
+ *                        type: number
+ *                        example: 200
+ *                    data:
+ *                        type: object
+ *                        properties:
+ *                             fee:
+ *                               type: number
+ *                               example: 10000
+ */
+router.post('/shipping-fee', orderController.getShippingFee)
+
 export default router;

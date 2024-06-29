@@ -1,11 +1,17 @@
+// ** Libs
 import axios from 'axios';
 
+// ** Constants
+import { GHN_TOKEN } from '../constants';
+
+const GHN_ENDPOINT = 'https://dev-online-gateway.ghn.vn/shiip/public-api';
+
 const provincesHelper = {
-    getPublicProvinces : async () =>  {
+    getPublicProvinces: async () => {
         try {
-            const response = await axios.get('https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/province', {
+            const response = await axios.get(`${GHN_ENDPOINT}/master-data/province`, {
                 headers: {
-                  token: 'aa464af2-349c-11ef-8e53-0a00184fe694'
+                    Token: GHN_TOKEN
                 }
             });
             return response.data.data;
@@ -15,14 +21,14 @@ const provincesHelper = {
         }
     },
 
-    getDistricOfProvince : async (provinceId) =>  {
+    getDistricOfProvince: async (provinceId) => {
         try {
             const response = await axios.get(
-                "https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/district",
+                `${GHN_ENDPOINT}/master-data/district`,
                 {
                     params: { province_id: provinceId },
                     headers: {
-                        token: 'aa464af2-349c-11ef-8e53-0a00184fe694',
+                        Token: GHN_TOKEN,
                         'Content-Type': 'application/json'
                     }
                 }
@@ -34,14 +40,14 @@ const provincesHelper = {
         }
     },
 
-    getWardOfDistrict : async (districtId) =>  {
+    getWardOfDistrict: async (districtId) => {
         try {
             const response = await axios.get(
-                "https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/ward",
+                `${GHN_ENDPOINT}/master-data/ward`,
                 {
                     params: { district_id: districtId },
                     headers: {
-                        token: 'aa464af2-349c-11ef-8e53-0a00184fe694',
+                        Token: GHN_TOKEN,
                         'Content-Type': 'application/json'
                     }
                 }
@@ -52,6 +58,34 @@ const provincesHelper = {
             return [];
         }
     },
+
+    getShippingFee: async ({
+        fromDistrictId,
+        fromWardCode,
+        toDistrictId,
+        toWardCode,
+        amount,
+    }) => {
+        try {
+            console.log(`${GHN_ENDPOINT}/v2/shipping-order/fee?service_type_id=2&insurance_value=${amount}&from_district_id=${fromDistrictId}&from_ward_code=${fromWardCode}&to_district_id=${toDistrictId}&to_ward_code=${toWardCode}&weight=500`);
+            const response = await axios.get(
+                `${GHN_ENDPOINT}/v2/shipping-order/fee?service_type_id=2&insurance_value=${amount}&from_district_id=${fromDistrictId}&from_ward_code=${fromWardCode}&to_district_id=${toDistrictId}&to_ward_code=${toWardCode}&weight=500`,
+                {
+                    headers: {
+                        Token: GHN_TOKEN,
+                        shop_id: 192587,
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+
+            const fee = response.data.data.service_fee;
+            return { fee };
+        } catch (error) {
+            console.error("Error fetching shipping fee:", error);
+            return 0;
+        }
+    }
 }
 
 export default provincesHelper
