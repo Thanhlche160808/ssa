@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 // ** Constants
-import { GHN_TOKEN } from '../constants';
+import { GHN_TOKEN } from '../constants/index.js';
 
 const GHN_ENDPOINT = 'https://dev-online-gateway.ghn.vn/shiip/public-api';
 
