@@ -10,6 +10,7 @@ import firebaseHelper from "../helper/firebase.helper.js";
 
 const productService = {
   createProduct: async ({ productName, type, description, categoryId, price, colourVariant }, images = []) => {
+    const category = await categoryRepository.getById(categoryId);
     const productCode = Math.random().toString(36).slice(2, 12).toUpperCase();
     const colourVariantParsed = JSON.parse(colourVariant);
 
@@ -17,9 +18,7 @@ const productService = {
     const typeFormatted = productService.formatName(type);
     colourVariantParsed.colourName = productService.formatName(colourVariantParsed.colourName);
 
-    const displayName = `${productNameFormatted} - ${typeFormatted} - ${colourVariantParsed.colourName}`;
-
-    const category = await categoryRepository.getById(categoryId);
+    const displayName = `${productService.formatName(category.name)} ${productNameFormatted} - ${typeFormatted}`;
 
     const product = await productRepository.create({
       productCode,
@@ -262,19 +261,26 @@ const productService = {
     return productService.handleformatProductResult(product);
   },
 
-  updateProduct: async (productCode, updatedData) => {
-    const { productName, type, colourVariant } = updatedData;
+  updateProduct: async (productCode, { productName, type, description, categoryId, price, colourVariant }) => {
+    const category = await categoryRepository.getById(categoryId);
+    const colourVariantParsed = JSON.parse(colourVariant);
 
-    const { colourName } = colourVariant;
+    const productNameFormatted = productService.formatName(productName);
+    const typeFormatted = productService.formatName(type);
+    colourVariantParsed.colourName = productService.formatName(colourVariantParsed.colourName);
 
-    updatedData.productName = await productService.formatName(productName);
-    updatedData.type = await productService.formatName(type);
-    colourVariant.colourName = await productService.formatName(colourName);
+    const displayName = `${productService.formatName(category.name)} ${productNameFormatted} - ${typeFormatted}`;
 
-    const displayName = `${updatedData.productName} - ${updatedData.type} - ${colourVariant.colourName}`;
-    updatedData.displayName = displayName;
-
-    const product = await productRepository.findAndUpdate(productCode, updatedData);
+    const product = await productRepository.findAndUpdate(productCode, {
+      productCode,
+      productName: productNameFormatted,
+      type: typeFormatted,
+      displayName,
+      description,
+      categoryId: category._id,
+      price,
+      colourVariant: colourVariantParsed,
+    });
 
     return productService.handleformatProductResult(product);
   },

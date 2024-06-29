@@ -176,7 +176,7 @@ const router = express.Router();
  *             schema:
  *                 $ref: '#/components/schemas/Product'
  */
-router.post("/createProduct", upload.array('images'), productValidation.body() ,productController.createProduct);
+router.post("/createProduct", upload.array('images'), productValidation.body(), productController.createProduct);
 
 /**
  * @swagger
@@ -265,7 +265,7 @@ router.put("/changeStatus/:code", productController.changeStatus);
  *             schema:
  *               $ref: '#/components/schemas/Product'
  */
-router.put("/:code", upload.array('images'), productController.updateProduct);
+router.put("/:code", upload.array('images'), productValidation.body(), productController.updateProduct);
 
 /**
  * @swagger
