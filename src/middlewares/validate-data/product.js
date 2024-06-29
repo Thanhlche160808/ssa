@@ -36,22 +36,6 @@ export const productValidation = {
                 .isNumeric().withMessage(message.invalid("price"))
                 .custom(value => value > 0).withMessage(message.mustBeNumberAndGreaterThan("price", 0)),
 
-
-            // body("colourVariant")
-            //     .notEmpty().withMessage(message.required("colourVariant"))
-            //     .custom((value, { req }) => {
-            //         const colourVariant = JSON.parse(value);
-            //         const sizeMetrics = colourVariant.sizeMetrics;
-            //         const size = sizeMetrics.map(item => item.size);
-            //         return size.indexOf(value) === size.lastIndexOf(value) && value >= 36 && value <= 43;
-            //     }).withMessage(message.mustBeOneOf({ field: "size", values: [36, 37, 38, 39, 40, 41, 42, 43] })),
-
-
-            // colourVariant là 1 object đang được truyền vào dưới bằng form-data. T muốn validate các trường bên trong nó như sau
-            // - size là 1 số nguyên từ 36 đến 43 và không được trùng lặp
-            // - quantity là 1 số nguyên lớn hơn 0
-            // - hex là 1 mã màu hex hợp lệ
-            // bắt đầu làm đi
             body("colourVariant")
                 .notEmpty().withMessage(message.required("colourVariant"))
                 .custom((value) => {
