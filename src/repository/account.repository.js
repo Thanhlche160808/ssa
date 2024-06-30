@@ -108,12 +108,22 @@ const accountRepository = {
     },
 
     findById: async (id) => {
-        const account = await Account.findById(id).select('-__v -password').populate('user', selectUser);
+        const account = await Account.findById(id).select('-__v').populate('user', selectUser);
 
         if (!account) throw new Error('This account is currently unavailable');
 
         return account;
     },
+
+    findByEmail: async (email) => {
+        const account = await Account.findOne({ email });
+        return account;
+    },
+
+    findByPasswordResetToken: async (token) => {
+        const account = await Account.findOne({ passwordResetToken: token , passwordResetExpires: { $gt: Date.now() }});
+        return account;
+    }
 };
 
 export default accountRepository;

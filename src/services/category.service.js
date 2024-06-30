@@ -3,6 +3,7 @@ import Category from "../models/category.js";
 
 // ** Repository
 import cateRepository from "../repository/category.repository.js";
+import productRepository from "../repository/product.repository.js";
 
 const cateService = {
   getAll: async () => {
@@ -40,7 +41,9 @@ const cateService = {
   },
 
   changeStatus: async (id) => {
-    return cateRepository.changeStatus(id);
+    const category = cateRepository.changeStatus(id);
+    await productRepository.changeStatusByCategory(id, category.isHide);
+    return category;
   },
 
   //get all existing categories in DB (for admin only)

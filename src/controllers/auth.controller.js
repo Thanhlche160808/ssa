@@ -150,6 +150,67 @@ const authController = {
             ))
         }
     },
+
+    forgotPassword: (req, res) => {
+        const { email } = req.body;
+        try {
+            authService.forgotPassword(email);
+            res.status(statusCode.OK).json(response.success(
+                {
+                    data: "OK",
+                    code: statusCode.OK,
+                }
+            ));
+        } catch (err) {
+            res.status(statusCode.BAD_REQUEST).json(response.error(
+                {
+                    message: err?.message,
+                    code: statusCode.BAD_REQUEST,
+                }
+            ))
+        }
+    },
+
+    resetPassword: async (req, res) => {
+        const { token, password } = req.body;
+        try {
+            await authService.resetPassword(token, password);
+            res.status(statusCode.OK).json(response.success(
+                {
+                    data: "OK",
+                    code: statusCode.OK,
+                }
+            ));
+        } catch (error) {
+            res.status(statusCode.BAD_REQUEST).json(response.error(
+                {
+                    message: error?.message,
+                    code: statusCode.BAD_REQUEST,
+                }
+            ))
+        }
+    },
+
+    changePassword: async (req, res) => {
+        const { oldPassword, newPassword } = req.body;
+        const { id } = req.user;
+        try {
+            await authService.changePassword(id, oldPassword, newPassword);
+            res.status(statusCode.OK).json(response.success(
+                {
+                    data: "OK",
+                    code: statusCode.OK,
+                }
+            ));
+        } catch (error) {
+            res.status(statusCode.BAD_REQUEST).json(response.error(
+                {
+                    message: error?.message,
+                    code: statusCode.BAD_REQUEST,
+                }
+            ))
+        }
+    }
 };
 
 export default authController;

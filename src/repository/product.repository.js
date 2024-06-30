@@ -101,6 +101,17 @@ const productRepository = {
       .populate("category", categorySelect)
       .select("-__v -_id -createdAt -updatedAt");
   },
+
+  changeStatusByCategory: async (categoryId, status) => {
+    await Product.findAndUpdate(
+      {
+        category: categoryId,
+      },
+      {
+        isHide: status,
+      }
+    );
+  }
 };
 
 export default productRepository;
