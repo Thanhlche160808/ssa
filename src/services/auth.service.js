@@ -1,6 +1,8 @@
 // ** Lib
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
+
 // ** Services
 import jwtService from "../services/jwt.service.js";
 
@@ -8,7 +10,7 @@ import jwtService from "../services/jwt.service.js";
 import accountRepository from "../repository/account.repository.js";
 
 // ** Constants
-import { JWT_SECRET_KEY, JWT_ACCESS_KEY } from "../constants/index.js";
+import { JWT_SECRET_KEY, JWT_ACCESS_KEY, CLIENT_URL } from "../constants/index.js";
 
 // ** Helper
 import googleHelper from '../helper/google.helper.js'
@@ -134,6 +136,45 @@ const authService = {
             NX: true
         });
     },
+
+    forgotPassword: async (email) => {
+        const account = await accountRepository.findByEmail(email);
+        if (!account) throw new Error("Account not found");
+
+        const resetPasswordToken = crypto.randomBytes(32).toString('hex');
+
+        account.passwordResetToken = resetPasswordToken;
+        account.passwordResetExpires = Date.now() + 600000;
+
+        account.save();
+
+        const html = `Xin vui lòng click vào link dưới đây để thay đổi mật khẩu của bạn.Link này sẽ hết hạn sau 10 phút kể từ bây giờ. <a href=${CLIENT_URL}${resetPasswordToken}>Click here</a>`
+        await googleHelper.sendEmail(email, "Forgot password", html);
+    },
+
+    resetPassword: async (token, password) => {
+        const account = await accountRepository.findByPasswordResetToken(token);
+
+        if (!account) throw new Error("Token is invalid or has expired");
+
+        const salt = bcrypt.genSaltSync();
+        account.password = bcrypt.hashSync(password, salt);
+
+        account.passwordResetToken = null;
+        account.passwordResetExpires = null;
+        await account.save();
+    },
+
+    changePassword: async (id, oldPassword, newPassword) => {
+        const account = await accountRepository.findById(id);
+        if (!bcrypt.compareSync(oldPassword, account.password))
+            throw new Error("Incorrect password");
+
+        const salt = bcrypt.genSaltSync();
+        account.password = bcrypt.hashSync(newPassword, salt);
+
+        await account.save();
+    }
 };
 
 export default authService;

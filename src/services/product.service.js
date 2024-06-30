@@ -261,8 +261,12 @@ const productService = {
   },
 
   deleteProduct: async (code) => {
-    const product = await productRepository.findAndChangeVisibility(code);
-    return productService.handleformatProductResult(product);
+    const product = await productRepository.findByCode(code);
+    if (product.isHide !== product.category.isHide) {
+      throw new Error("Cannot hide product because category is hidden");
+    }
+    const result = await productRepository.findAndChangeVisibility(code);
+    return productService.handleformatProductResult(result);
   },
 
   updateProduct: async (productCode, { productName, type, description, categoryId, price, colourVariant }) => {

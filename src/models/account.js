@@ -22,13 +22,16 @@ const accountSChema = new mongoose.Schema({
         type: String,
         default: "User"
     },
+    passwordResetToken: {
+        type: String
+    },
+    passwordResetExpires: {
+        type: Number
+    },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    favourite: [{
-        type: String,
-    }],
 }, { timestamps: true }
 );
 

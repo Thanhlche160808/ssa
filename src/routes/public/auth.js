@@ -331,4 +331,121 @@ router.get("/refresh-access-token", authController.refreshAccessToken);
  */
 router.post("/logout", authController.logout);
 
+/**
+ * @swagger
+ * /api/public/auth/forgot-password:
+ *  post:
+ *     summary: Forgot password
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email: 
+ *                 type: string
+ *           example:
+ *             email: testzed9220@gmail.com
+ *     responses:
+ *       200:
+ *         description: User logout
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                  isSuccess:
+ *                      type: boolean
+ *                      example: true
+ *                  statusCode:
+ *                      type: number
+ *                      example: 200
+ *                  data:
+ *                      type: sting
+ *                      example: OK
+ */
+router.post("/forgot-password", authController.forgotPassword);
+
+/**
+ * @swagger
+ * /api/public/auth/reset-password:
+ *  post:
+ *     summary: Reset password
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               token: 
+ *                 type: string
+ *               password: 
+ *                 type: string
+ *           example:
+ *             token: e6d30c541e9aec2a9f78589........
+ *             password: thanh2002
+ *     responses:
+ *       200:
+ *         description: User logout
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                  isSuccess:
+ *                      type: boolean
+ *                      example: true
+ *                  statusCode:
+ *                      type: number
+ *                      example: 200
+ *                  data:
+ *                      type: sting
+ *                      example: OK
+ */
+router.post("/reset-password", authController.resetPassword)
+
+/**
+ * @swagger
+ * /api/public/auth/change-password:
+ *  post:
+ *     summary: Channge password
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               oldPassword: 
+ *                 type: string
+ *               newPassword: 
+ *                 type: string
+ *           example:
+ *             oldPassword: thanh0702
+ *             password: thanh2002
+ *     responses:
+ *       200:
+ *         description: User logout
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                  isSuccess:
+ *                      type: boolean
+ *                      example: true
+ *                  statusCode:
+ *                      type: number
+ *                      example: 200
+ *                  data:
+ *                      type: sting
+ *                      example: OK
+ */
+router.post('/change-password', authController.changePassword);
+
 export default router;

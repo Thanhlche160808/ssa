@@ -3,6 +3,7 @@ import express from "express";
 
 // ** Controllers
 import userController from "../../controllers/user.controller.js";
+import authController from "../../controllers/auth.controller.js";
 
 // ** Middlewares
 // import { authValidation } from "../../middlewares/validate-data/auth";
@@ -338,5 +339,45 @@ router.put('/delivery-address/:addressId', userController.updateDeliveryAddress)
  *               $ref: '#/components/schemas/DeliveryAddress'
  */
 router.delete('/delivery-address/:addressId', userController.deleteDeliveryAddress);
+
+/**
+ * @swagger
+ * /api/user/change-password:
+ *  post:
+ *     summary: Channge password
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               oldPassword: 
+ *                 type: string
+ *               newPassword: 
+ *                 type: string
+ *           example:
+ *             oldPassword: thanh0702
+ *             newPassword: thanh2002
+ *     responses:
+ *       200:
+ *         description: User logout
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                  isSuccess:
+ *                      type: boolean
+ *                      example: true
+ *                  statusCode:
+ *                      type: number
+ *                      example: 200
+ *                  data:
+ *                      type: sting
+ *                      example: OK
+ */
+router.post('/change-password', authController.changePassword);
 
 export default router;
