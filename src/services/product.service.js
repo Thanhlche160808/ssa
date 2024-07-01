@@ -134,8 +134,6 @@ const productService = {
       query.price = { $lte: maxPrice };
     }
 
-    if (categoryNames) query["category.name"] = productService.handleGenereateQueryArray(categoryNames);
-
     if (colorNames) query["colourVariant.colourName"] = productService.handleGenereateQueryArray(colorNames);
 
     const sort = {};
@@ -149,12 +147,19 @@ const productService = {
     const totalDocuments = await productRepository.totalDocuments(query);
     const totalPage = Math.ceil(totalDocuments / size);
 
-    const products = await productRepository.filterProducts(
+    let products = await productRepository.filterProducts(
       query,
       skip,
       size,
       sort
     );
+
+    if (categoryNames) {
+      const regex = new RegExp([categoryNames].join('|'), 'i');
+      products = products.filter(product => 
+        product.category && regex.test(product.category.name)
+      );
+    }
 
     const result = await productService.formatProductResult(products);
 

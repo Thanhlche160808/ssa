@@ -46,6 +46,10 @@ const productSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    initialHideStatus: {
+      type: Boolean,
+      default: false,
+    },
     colourVariant: {
       type: ColourVariant,
     },
