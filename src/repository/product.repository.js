@@ -103,7 +103,7 @@ const productRepository = {
   },
 
   changeStatusByCategory: async (categoryId, status) => {
-    await Product.findAndUpdate(
+    await Product.updateMany(
       {
         category: categoryId,
       },
