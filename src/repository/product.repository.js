@@ -59,7 +59,7 @@ const productRepository = {
 
     return await Product.findOneAndUpdate(
       { productCode: code },
-      { isHide: !product.isHide },
+      { isHide: !product.isHide, initialHideStatus: product.isHide },
       { new: true }
     )
       .populate("category", categorySelect)
@@ -97,20 +97,28 @@ const productRepository = {
   },
 
   getAllProducts: async () => {
-    return await Product.find()
+    return await Product.find({ isHide: false })
       .populate("category", categorySelect)
       .select("-__v -_id -createdAt -updatedAt");
   },
 
   changeStatusByCategory: async (categoryId, status) => {
-    await Product.updateMany(
-      {
-        category: categoryId,
-      },
-      {
-        isHide: status,
-      }
-    );
+    if (status) { //true ẩn
+      await Product.updateMany(
+        { category: categoryId, isHide: true },
+        { initialHideStatus: true }
+      );
+
+      await Product.updateMany(
+        { category: categoryId, isHide: false },
+        { isHide: true, initialHideStatus: false }
+      );
+    } else { //false hiện
+      await Product.updateMany(
+        { category: categoryId, initialHideStatus: false },
+        { isHide: false, initialHideStatus: true }
+      );
+    }
   }
 };
 

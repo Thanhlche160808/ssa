@@ -42,9 +42,6 @@ const cateService = {
 
   changeStatus: async (id) => {
     const category = await cateRepository.changeStatus(id);
-    // if (!cateRepository.isHide) {
-    //   await productRepository.changeStatusByCategory(id, category.isHide);
-    // }
     await productRepository.changeStatusByCategory(id, category.isHide);
     return category;
   },
