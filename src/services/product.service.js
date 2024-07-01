@@ -262,7 +262,7 @@ const productService = {
 
   deleteProduct: async (code) => {
     const product = await productRepository.findByCode(code);
-    if (product.isHide !== product.category.isHide) {
+    if (product.category.isHide) {
       throw new Error("Cannot hide product because category is hidden");
     }
     const result = await productRepository.findAndChangeVisibility(code);
