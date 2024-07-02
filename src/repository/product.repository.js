@@ -30,7 +30,7 @@ const productRepository = {
         colourVariant: product.colourVariant,
       });
 
-      return await newProduct.save();
+      return (await newProduct.save()).populate("category", categorySelect);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -39,7 +39,7 @@ const productRepository = {
   findByCode: async (code) => {
     const product = await Product.findOne({ productCode: code })
       .populate("category", categorySelect)
-      .select("-__v -_id -createdAt -updatedAt");
+      .select("-__v -createdAt -updatedAt");
 
     if (!product) throw new Error("Product not found");
 

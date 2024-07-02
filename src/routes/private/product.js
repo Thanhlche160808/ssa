@@ -214,7 +214,7 @@ router.put("/changeStatus/:code", productController.changeStatus);
  *         required: true
  *         schema:
  *           type: string
- *         description: The product ID
+ *         description: The product code
  *     requestBody:
  *       required: true
  *       content:
@@ -231,6 +231,16 @@ router.put("/changeStatus/:code", productController.changeStatus);
  *               description:
  *                 type: string
  *                 example: Giày chạy bộ tốt nhất năm 2024
+ *               removeImageIds:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   example: 6661cab......
+ *               images:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: binary
  *               categoryId:
  *                 type: string
  *                 example: 6661cab......
@@ -265,7 +275,7 @@ router.put("/changeStatus/:code", productController.changeStatus);
  *             schema:
  *               $ref: '#/components/schemas/Product'
  */
-router.put("/:code", upload.array('images'), productValidation.body(), productController.updateProduct);
+router.put("/:code", upload.array('images'), productController.updateProduct);
 
 /**
  * @swagger

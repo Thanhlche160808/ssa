@@ -49,7 +49,7 @@ const cartService = {
         const cartItem = {
             displayName: product.displayName,
             productCode: product.productCode,
-            image: product.images[0],
+            image: product.images[0].url,
             price: product.price,
             size: item.size,
             quantity: item.quantity,

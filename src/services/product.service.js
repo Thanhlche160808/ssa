@@ -31,8 +31,8 @@ const productService = {
       colourVariant: colourVariantParsed,
     });
 
-    if (product) {
-      const urls = await firebaseHelper.uploadToStorage({ displayName, productCode }, images);
+    if (product && images.length > 0) {
+      const urls = await firebaseHelper.uploadToStorage(productCode, images);
       product.images = urls;
       await product.save();
     }
@@ -77,13 +77,18 @@ const productService = {
       };
     });
 
+    const images = product.images.map((image) => ({
+      id: image.id,
+      url: image.url,
+    }));
+
     return {
       productCode: product.productCode,
       productName: product.productName,
       type: product.type,
       displayName: product.displayName,
       description: product.description,
-      images: product.images,
+      images,
       category: {
         id: product.category._id,
         name: product.category.name,
@@ -156,7 +161,7 @@ const productService = {
 
     if (categoryNames) {
       const regex = new RegExp([categoryNames].join('|'), 'i');
-      products = products.filter(product => 
+      products = products.filter(product =>
         product.category && regex.test(product.category.name)
       );
     }
@@ -274,28 +279,47 @@ const productService = {
     return productService.handleformatProductResult(result);
   },
 
-  updateProduct: async (productCode, { productName, type, description, categoryId, price, colourVariant }) => {
-    const category = await categoryRepository.getById(categoryId);
+  updateProduct: async (productCode, { productName, type, description, categoryId, price, colourVariant, removeImageIds = [] }, images = []) => {
+    const product = await productRepository.findByCode(productCode);
+
+    const query = {};
+    let categoryName = product.category.name;
+    if (categoryId !== product.category._id.toString()) {
+      const category = await categoryRepository.getById(categoryId);
+      query.category = category._id;
+      categoryName = productService.formatName(category.name);
+    }
+
     const colourVariantParsed = JSON.parse(colourVariant);
 
     const productNameFormatted = productService.formatName(productName);
     const typeFormatted = productService.formatName(type);
     colourVariantParsed.colourName = productService.formatName(colourVariantParsed.colourName);
 
-    const displayName = `${productService.formatName(category.name)} ${productNameFormatted} - ${typeFormatted}`;
+    const displayName = `${categoryName} ${productNameFormatted} - ${typeFormatted}`;
 
-    const product = await productRepository.findAndUpdate(productCode, {
-      productCode,
-      productName: productNameFormatted,
-      type: typeFormatted,
-      displayName,
-      description,
-      categoryId: category._id,
-      price,
-      colourVariant: colourVariantParsed,
-    });
+    query.productName = productNameFormatted;
+    query.type = typeFormatted;
+    query.displayName = displayName;
+    if (description) query.description = description;
+    query.price = price;
+    query.colourVariant = colourVariantParsed;
 
-    return productService.handleformatProductResult(product);
+    if (removeImageIds.length > 0) {
+      await firebaseHelper.deleteFile(productCode, removeImageIds);
+      product.images = product.images.filter((image) => !removeImageIds.includes(image.id));
+      query.images = product.images;
+    }
+
+    if (images.length > 0) {
+      const urls = await firebaseHelper.uploadToStorage(productCode, images);
+      product.images = product.images.concat(urls);
+      query.images = product.images;
+    }
+
+    const result = await productRepository.findAndUpdate(productCode, query);
+
+    return productService.handleformatProductResult(result);
   },
 
   getAllColors: async () => {
