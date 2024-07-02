@@ -10,6 +10,7 @@ const productRepository = {
       const productExist = await Product.findOne({
         productName: product.productName,
         "colourVariant.hex": product.colourVariant.hex,
+        type: product.type,
       });
 
       if (productExist) {
