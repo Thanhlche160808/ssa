@@ -22,15 +22,13 @@ const accountService = {
         isBlocked,
     }) => {
         const skip = (page - 1) * size;
-        const query = {};
-    
+        let query = {};
         if (nameKey) query = {
             $or: [
-                { username: { $regex: username, $options: "i" } }, 
-                { email: { $regex: username, $options: "i" } }, 
-                { fullname: { $regex: username, $options: "i" } }, 
-            ],
-          };
+                { username: { $regex: nameKey, $options: 'i' } },
+                { email: { $regex: nameKey, $options: 'i' } },
+            ]
+        };
         if (role) query.role = role;
         if (isBlocked) query.isBlocked = isBlocked;
     

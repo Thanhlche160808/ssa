@@ -125,7 +125,7 @@ const accountRepository = {
     },
 
     filterAccounts: async (query, skip, size) => {
-        return await Product.find(query)
+        return await Account.find(query)
             .populate("user", selectUser)
             .select("-__v")
             .skip(skip)
