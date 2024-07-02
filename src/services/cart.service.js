@@ -70,6 +70,7 @@ const cartService = {
     },
 
     formatCartItems: async (items) => {
+        if (!items) return [];
         return items.map(item => {
             const sizeMetrics = item.sizeMetrics.map(sizeMetric => {
                 return {
@@ -78,7 +79,7 @@ const cartService = {
                 }
             });
             return {
-                displayName: item.productName,
+                displayName: item.displayName,
                 productCode: item.productCode,
                 image: item.image,
                 price: item.price,
@@ -92,6 +93,12 @@ const cartService = {
 
     getCartByAccount: async (accountId) => {
         const cart = await cartRepository.findCartByAccount(accountId);
+        if (!cart) {
+            return {
+                items: [],
+                totalPrice: 0,
+            }
+        }
         const cartItems = await cartService.formatCartItems(cart.items);
         return {
             items: cartItems,
