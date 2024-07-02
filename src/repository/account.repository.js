@@ -104,7 +104,6 @@ const accountRepository = {
         } else {
             return accountRepository.create({ email, firstName, lastName, avatar });
         }
-
     },
 
     findById: async (id) => {
@@ -123,7 +122,83 @@ const accountRepository = {
     findByPasswordResetToken: async (token) => {
         const account = await Account.findOne({ passwordResetToken: token , passwordResetExpires: { $gt: Date.now() }});
         return account;
-    }
+    },
+
+    filterAccounts: async (query, skip, size) => {
+        return await Product.find(query)
+            .populate("user", selectUser)
+            .select("-__v")
+            .skip(skip)
+            .limit(size);
+    },
+
+    assign: async (account) => {
+        try {
+            const query = [];
+            if (account.username) {
+                query.push({ username: account.username });
+            }
+            if (account.email) {
+                query.push({ email: account.email });
+            }
+
+            const usernameExist = await Account.findOne({ $or: query });
+
+            // mỗi 1 account chỉ có 1 username và 1 email
+            if (usernameExist) {
+                if (usernameExist.username === account.username) {
+                    throw new Error('This username is already taken');
+                } else {
+                    throw new Error('This email is already taken');
+                }
+            }
+
+            const user = new User({
+                firstName: account.firstName,
+                lastName: account.lastName,
+                phone: account.phone,
+            });
+
+            const newAccount = new Account({
+                username: account.username,
+                password: account.password,
+                email: account.email,
+                role: account.formatRole,
+                user,
+            });
+
+            if (account.password) {
+                const salt = bcrypt.genSaltSync();
+                newAccount.password = bcrypt.hashSync(newAccount.password, salt);
+            }
+
+            await newAccount.save();
+
+            await user.save();
+
+            return newAccount.populate('user', selectUser);
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    },
+
+    totalDocuments: async (query) => {
+        return await Account.countDocuments(query);
+    },
+
+    editRole: async (accountId, newRole) => {
+        const account = await accountRepository.findById(accountId);
+        account.role = newRole;
+        await account.save();
+        return account;
+    },
+
+    blockById: async (accountId) => {
+        const account = await accountRepository.findById(accountId);
+        account.isBlocked = !account.isBlocked;
+        await account.save();
+        return account
+    },
 };
 
 export default accountRepository;
