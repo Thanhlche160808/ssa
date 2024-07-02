@@ -193,6 +193,6 @@ router.patch('/removeItem', cartValidation.remove() ,cartController.removeItem);
  *             schema:
  *                  $ref: '#/components/schemas/Cart'
  */
-router.put('/updateItem', cartValidation.remove() ,cartController.updateItem);
+router.put('/updateItem', cartValidation.update() ,cartController.updateItem);
 
 export default router;
