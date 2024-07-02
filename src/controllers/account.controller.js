@@ -49,8 +49,8 @@ const accountController = {
     },
 
     editRole: async (req, res) => {
-        const data = req.body
-        const id = req.params.id
+        const data = req.body;
+        const id = req.params.id;
         try {
             const result = await accountService.editAccountRole(id, data);
             res.status(statusCode.OK).json(response.success(

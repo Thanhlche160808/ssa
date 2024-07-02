@@ -107,11 +107,14 @@ const accountRepository = {
     },
 
     findById: async (id) => {
-        const account = await Account.findById(id).select('-__v').populate('user', selectUser);
+        try {
+            const account = await Account.findById(id).select('-__v').populate('user', selectUser);
+            if (!account) throw new Error('This account is currently unavailable');
 
-        if (!account) throw new Error('This account is currently unavailable');
-
-        return account;
+            return account;
+        } catch (err) {
+            throw new Error('This account is currently unavailable');
+        }
     },
 
     findByEmail: async (email) => {
