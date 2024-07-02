@@ -92,9 +92,12 @@ const productController = {
     updateProduct: async (req, res) => {
         const data = req.body;
         const { code } = req.params;
-
+        const images = req.files;
+        if (data.removeImageIds) {
+            data.removeImageIds = data.removeImageIds.split(',');
+        }
         try {
-            const result = await productService.updateProduct(code, data);
+            const result = await productService.updateProduct(code, data, images);
             res.status(statusCode.OK).json(response.success(
                 {
                     data: result,

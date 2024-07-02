@@ -19,6 +19,15 @@ export const ColourVariant = new mongoose.Schema({
   sizeMetrics: [SizeMetrics],
 });
 
+const imageSchema = new mongoose.Schema({
+  id: {
+    type: String,
+  },
+  url: {
+    type: String,
+  },
+}, { _id: false });
+
 const productSchema = new mongoose.Schema(
   {
     productCode: {
@@ -36,7 +45,7 @@ const productSchema = new mongoose.Schema(
     description: {
       type: String,
     },
-    images: [String],
+    images: [imageSchema],
     category: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
