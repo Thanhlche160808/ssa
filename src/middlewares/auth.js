@@ -3,11 +3,15 @@ import jwt from "jsonwebtoken";
 
 // ** Constants
 import { authConstant, statusCode } from "../constants/index.js"
+import { JWT_ACCESS_KEY } from "../constants/index.js";
 
 // ** Utils
 import { response } from "../utils/baseResponse.js";
 
-export const verifyAccessToken = (req, res, next) => {
+// ** Configs
+import { client } from '../configs/redisConfig.js';
+
+export const verifyAccessToken = async (req, res, next) => {
     try {
         let token = req.header("Authorization");
 
@@ -19,13 +23,22 @@ export const verifyAccessToken = (req, res, next) => {
                     message: authConstant.UNAUTHORIZED,
                 }));
 
-                if (token.startsWith("Bearer "))
+        if (token.startsWith("Bearer "))
             token = token.slice(7, token.length).trim();
 
-        const payload = jwt.verify(token, process.env.JWT_ACCESS_KEY);
+        const payload = jwt.verify(token, JWT_ACCESS_KEY);
+
+        const result = await client.get(`${payload.id}_${payload.exp}`);
+        if (result === token) {
+            return res.status(statusCode.UNAUTHORIZED).json(
+                response.error({
+                    code: statusCode.UNAUTHORIZED,
+                    message: 'Token is expired',
+                })
+            );
+        }
 
         req.user = payload;
-        req.token = token;
         next();
     } catch (err) {
         res.status(statusCode.UNAUTHORIZED).json(

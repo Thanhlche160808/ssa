@@ -12,6 +12,9 @@ const userController = {
         const { user } = req;
         try {
             const userInfo = await userService.getProfile(user.id);
+            if (userInfo.isBlocked) {
+                throw new Error('This account is currently blocked');
+            }
             res.status(statusCode.OK).json(response.success(
                 {
                     data: userInfo,
@@ -27,6 +30,92 @@ const userController = {
             ))
         }
     },
+
+    createDeliveryAddress: async (req, res) => {
+        const { user } = req;
+        const address = req.body;
+        try {
+            const result = await userService.createDeliveryAddress(user.id, address);
+            res.status(statusCode.CREATED).json(response.success(
+                {
+                    data: result,
+                    code: statusCode.CREATED,
+                }
+            ));
+        } catch (error) {
+            res.status(statusCode.BAD_REQUEST).json(response.error(
+                {
+                    message: error?.message,
+                    code: statusCode.BAD_REQUEST,
+                }
+            ));
+        }
+    },
+
+
+    updateDeliveryAddress: async (req, res) => {
+        const { user } = req;
+        const { addressId } = req.params;
+        const address = req.body;
+
+        try {
+            const result = await userService.updateDeliveryAddress(user.id, addressId, address);
+            res.status(statusCode.OK).json(response.success(
+                {
+                    data: result,
+                    code: statusCode.OK,
+                }
+            ));
+        } catch (error) {
+            res.status(statusCode.BAD_REQUEST).json(response.error(
+                {
+                    message: error?.message,
+                    code: statusCode.BAD_REQUEST,
+                }
+            ));
+        }
+    },
+
+    getMyAddresses: async (req, res) => {
+        const { user } = req;
+        try {
+            const result = await userService.getUserDeliveryAddress(user.id);
+            res.status(statusCode.OK).json(response.success(
+                {
+                    data: result,
+                    code: statusCode.OK,
+                }
+            ));
+        } catch (error) {
+            res.status(statusCode.BAD_REQUEST).json(response.error(
+                {
+                    message: error?.message,
+                    code: statusCode.BAD_REQUEST,
+                }
+            ));
+        }
+    },
+
+    deleteDeliveryAddress: async (req, res) => {
+        const { user } = req;
+        const { addressId } = req.params;
+        try {
+            const result = await userService.deleteDeliveryAddress(user.id, addressId);
+            res.status(statusCode.OK).json(response.success(
+                {
+                    data: result,
+                    code: statusCode.OK,
+                }
+            ));
+        } catch (error) {
+            res.status(statusCode.BAD_REQUEST).json(response.error(
+                {
+                    message: error?.message,
+                    code: statusCode.BAD_REQUEST,
+                }
+            ));
+        }
+    }
 };
 
 export default userController;

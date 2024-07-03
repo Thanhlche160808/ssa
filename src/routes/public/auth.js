@@ -5,7 +5,7 @@ import express from "express";
 import authController from "../../controllers/auth.controller.js";
 
 // ** Middlewares
-// import { authValidation } from "../../middlewares/validate-data/auth";
+import { authValidation } from "../../middlewares/validate-data/auth.js";
 
 const router = express.Router();
 
@@ -116,15 +116,18 @@ const router = express.Router();
  *                              user:
  *                                  type: Object
  *                                  properties:
- *                                      _id:
- *                                          type: string
- *                                          example: 665fbbde32d25335b95b1089
  *                                      firstName:
  *                                          type: string
- *                                          example: Thomas
  *                                      lastName:
  *                                          type: string
- *                                          example: Lee
+ *                                      avatar:
+ *                                          type: string
+ *                                      phone:
+ *                                          type: string
+ *                                      deliveryAddress:
+ *                                          type: array
+ *                                      address:
+ *                                          type: string
  *                              favourite:
  *                                  type: Array
  *                                  example: []                     
@@ -138,13 +141,16 @@ const router = express.Router();
  *                  isBlocked: false
  *                  role: User
  *                  user:
- *                     _id: 665fbbde32d25335b95b1089
  *                     firstName: Thomas
  *                     lastName: Lee
+ *                     avatar: ""
+ *                     phone: "123456789"
+ *                     deliveryAddress: []
+ *                     address: ""
  *                  favourite: []
  * 
  */
-router.post("/register", authController.register);
+router.post("/register", authValidation.register() ,authController.register);
 
 /**
  * @swagger
@@ -201,11 +207,8 @@ router.post("/register", authController.register);
  *                          accessToken:
  *                              type: string
  *                              example: eyJhbGciO....
- *                          refreshToken:
- *                              type: string
- *                              example: eyJhbGciO....
  */
-router.post("/login", authController.login);
+router.post("/login", authValidation.login() ,authController.login);
 
 /**
  * @swagger
@@ -259,10 +262,190 @@ router.post("/login", authController.login);
  *                          accessToken:
  *                              type: string
  *                              example: eyJhbGciO....
- *                          refreshToken:
+ */
+router.post("/google/login", authController.loginWithGoogle);
+
+/**
+ * @swagger
+ * /api/public/auth/refresh-access-token:
+ *  get:
+ *     summary: refresh token
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: Refresh Token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                  isSuccess:
+ *                      type: boolean
+ *                      example: true
+ *                  statusCode:
+ *                      type: number
+ *                      example: 200
+ *                  data:
+ *                      type: object
+ *                      properties:
+ *                          accessToken: 
  *                              type: string
  *                              example: eyJhbGciO....
  */
-router.post("/google/login", authController.loginWithGoogle);
+router.get("/refresh-access-token", authController.refreshAccessToken);
+
+/**
+ * @swagger
+ * /api/public/auth/logout:
+ *  post:
+ *     summary: Logout
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               accessToken: 
+ *                 type: string
+ *           example:
+ *             accessToken: aibhjkcnlkmaikbjslkn.....
+ *     responses:
+ *       200:
+ *         description: User logout
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                  isSuccess:
+ *                      type: boolean
+ *                      example: true
+ *                  statusCode:
+ *                      type: number
+ *                      example: 200
+ *                  data:
+ *                      type: sting
+ *                      example: OK
+ */
+router.post("/logout", authController.logout);
+
+/**
+ * @swagger
+ * /api/public/auth/forgot-password:
+ *  post:
+ *     summary: Forgot password
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email: 
+ *                 type: string
+ *           example:
+ *             email: testzed9220@gmail.com
+ *     responses:
+ *       200:
+ *         description: User logout
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                  isSuccess:
+ *                      type: boolean
+ *                      example: true
+ *                  statusCode:
+ *                      type: number
+ *                      example: 200
+ *                  data:
+ *                      type: sting
+ *                      example: OK
+ */
+router.post("/forgot-password", authController.forgotPassword);
+
+/**
+ * @swagger
+ * /api/public/auth/reset-password:
+ *  post:
+ *     summary: Reset password
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               token: 
+ *                 type: string
+ *               password: 
+ *                 type: string
+ *           example:
+ *             token: e6d30c541e9aec2a9f78589........
+ *             password: thanh2002
+ *     responses:
+ *       200:
+ *         description: User logout
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                  isSuccess:
+ *                      type: boolean
+ *                      example: true
+ *                  statusCode:
+ *                      type: number
+ *                      example: 200
+ *                  data:
+ *                      type: sting
+ *                      example: OK
+ */
+router.post("/reset-password", authController.resetPassword)
+
+/**
+ * @swagger
+ * /api/public/auth/change-password:
+ *  post:
+ *     summary: Channge password
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               oldPassword: 
+ *                 type: string
+ *               newPassword: 
+ *                 type: string
+ *           example:
+ *             oldPassword: thanh0702
+ *             password: thanh2002
+ *     responses:
+ *       200:
+ *         description: User logout
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                  isSuccess:
+ *                      type: boolean
+ *                      example: true
+ *                  statusCode:
+ *                      type: number
+ *                      example: 200
+ *                  data:
+ *                      type: sting
+ *                      example: OK
+ */
+router.post('/change-password', authController.changePassword);
 
 export default router;

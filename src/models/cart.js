@@ -1,69 +1,53 @@
 import mongoose from "mongoose";
 
-const options = { discriminatorKey: 'kind' };
-
-const productSchema = new mongoose.Schema(
-    {
-        productName: {
-            type: String
-        },
-        productCode: {
-            type: String
-        },
-        color: {
-            type: String
-        },
-        size: {
-            type: Number,
-        },
-        price: {
-            type: Number
-        },
-        quantity: {
-            type: Number
-        },
-    }
-);
-
-const collectionSchema = new mongoose.Schema(
-    {
-        collectionName: {
-            type: String
-        },
-        collectionCode: {
-            type: String
-        },
-        price: {
-            type: Number
-        },
-        quantity: {
-            type: Number
-        },
-    }
-);
+export const SizeMetrics = new mongoose.Schema({
+    size: {
+        type: Number,
+    },
+    isAvailable: {
+        type: Boolean,
+    },
+});
 
 export const itemSchema = new mongoose.Schema({
-    kind: {
+    displayName: {
         type: String,
-        required: true,
-        enum: ['Product', 'Collection']
-    }
-}, options);
+    },
+    productCode: {
+        type: String,
+    },
+    image: {
+        type: String,
+    },
+    price: {
+        type: Number,
+    },
+    sizeMetrics: [SizeMetrics],
+    size : {
+        type: Number,
+    },
+    quantity: {
+        type: Number,
+    },
+    isHide: {
+        type: Boolean,
+    },
+},
+);
 
 const cartSchema = new mongoose.Schema({
     items: [itemSchema],
+    account: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Account'
+    },
     totalPrice: {
         type: Number,
     },
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    }
-});
+},
+    { timestamps: true }
+);
 
 let Cart = mongoose.model('Cart', cartSchema);
-let Item = mongoose.model('Item', itemSchema);
-Item.discriminator('ProductCart', productSchema);
-Item.discriminator('CollectionCart', collectionSchema);
 
-export default { Cart };
+export default Cart;

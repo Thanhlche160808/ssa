@@ -4,16 +4,27 @@
             "name": "shoes-api",
             "script": "src/index.js",
             "env": {
+                "APP_ENV": "production",
                 "SERVER_PORT": 5000,
                 "SERVER_HOST": "0.0.0.0",
-                "SWAGGER_SERVER": "http://54.206.151.132",
+                "CLIENT_URL": "https://shoe4sure-web.vercel.app",
+                "SERVER_URL": "https://ssa.io.vn",
+                "SWAGGER_SERVER": "https://ssa.io.vn",
                 "DATABASE_URI": "mongodb+srv://thanhlche160808:thanh2002@demo.cvgbalk.mongodb.net/shoes-store",
-                "EXPIRES_ACCESS_TOKEN": "1h",
-                "EXPIRES_REFRESH_TOKEN": "12h",
+                "EXPIRES_ACCESS_TOKEN": "60m",
+                "EXPIRES_REFRESH_TOKEN": "7d",
                 "JWT_ACCESS_KEY": "superlongsecretkeyTHANHan123@HaHaHihi!$832002NnIkzNum@oah",
                 "JWT_SECRET_KEY": "superlongsecretkeyTHANHan123@HaHaHihi!$832002NnIkzNum@oah",
-                "GOOGLE_CLIENT_ID": "",
-                "GOOGLE_CLIENT_SECRET": ""
+                "GOOGLE_CLIENT_ID": "281707253428-bgbb7t4p3831drgcvv30mbtpa71e5b84.apps.googleusercontent.com",
+                "REDIS_URL": "redis://default:NYreg8nLmKli6uBdJ4wVnK4LAQ7vHLSP@redis-12591.c16.us-east-1-2.ec2.redns.redis-cloud.com:12591",
+                "FIRE_BASE_API_KEY": "AIzaSyBLoGuWq1kqBGQfdagixaTYgzLNHkda4q8",
+                "FIRE_BASE_AUTH_DOMAIN": "social-media-33aea.firebaseapp.com",
+                "FIRE_BASE_PROJECT_ID": "social-media-33aea",
+                "FIRE_BASE_STORAGE_BUCKET": "social-media-33aea.appspot.com",
+                "FIRE_BASE_MESSAGING_SENDER_ID": "1079068328199",
+                "FIRE_BASE_APP_ID": "1:1079068328199:web:3b071e58276a7f64e705a2",
+                "FIRE_BASE_MEASUREMENT_ID": "G-TPYGFLDWBN",
+                "GHN_TOKEN": "1eb12267-299b-11ef-8e53-0a00184fe694"
             }
         }
     ]

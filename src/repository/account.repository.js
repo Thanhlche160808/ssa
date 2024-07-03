@@ -14,18 +14,23 @@ const accountRepository = {
         try {
             // session = await mongoose.startSession();
             // session.startTransaction();
-            const query = {};
+            const query = [];
             if (account.username) {
-                query.username = account.username;
+                query.push({ username: account.username });
             }
             if (account.email) {
-                query.email = account.email;
+                query.push({ email: account.email });
             }
 
-            const usernameExist = await Account.findOne({ $or: [query] });
+            const usernameExist = await Account.findOne({ $or: query });
 
+            // 1 mỗi 1 account chỉ có 1 username và 1 email
             if (usernameExist) {
-                throw new Error('Username is exist');
+                if (usernameExist.username === account.username) {
+                    throw new Error('This username is already taken');
+                } else {
+                    throw new Error('This email is already taken');
+                }
             }
 
             const user = new User({
@@ -35,8 +40,8 @@ const accountRepository = {
             });
 
             const newAccount = new Account({
-                userName: account.username,
-                // password: account.password,
+                username: account.username,
+                password: account.password,
                 email: account.email,
                 user,
             });
@@ -75,7 +80,7 @@ const accountRepository = {
     },
 
     findByUsername: async (username) => {
-        const account = await Account.findOne({ username });
+        const account = await Account.findOne({ $or: [{ username }, { email: username }] });
 
         if (!account) throw new Error("Incorrect username");
 
@@ -97,10 +102,98 @@ const accountRepository = {
             );
             return account;
         } else {
-            return accountRepository.create({ email, firstName, lastName, picture });
+            return accountRepository.create({ email, firstName, lastName, avatar });
         }
+    },
 
-    }
+    findById: async (id) => {
+        try {
+            const account = await Account.findById(id).select('-__v').populate('user', selectUser);
+            if (!account) throw new Error('This account is currently unavailable');
+
+            return account;
+        } catch (err) {
+            throw new Error('This account is currently unavailable');
+        }
+    },
+
+    findByEmail: async (email) => {
+        const account = await Account.findOne({ email });
+        return account;
+    },
+
+    findByPasswordResetToken: async (token) => {
+        const account = await Account.findOne({ passwordResetToken: token , passwordResetExpires: { $gt: Date.now() }});
+        return account;
+    },
+
+    filterAccounts: async (query, skip, size) => {
+        return await Account.find(query)
+            .populate("user", selectUser)
+            .select("-__v")
+            .skip(skip)
+            .limit(size);
+    },
+
+    assign: async (account) => {
+        try {
+            const query = [];
+            if (account.username) {
+                query.push({ username: account.username });
+            }
+            if (account.email) {
+                query.push({ email: account.email });
+            }
+
+            const usernameExist = await Account.findOne({ $or: query });
+
+            // mỗi 1 account chỉ có 1 username và 1 email
+            if (usernameExist) {
+                if (usernameExist.username === account.username) {
+                    throw new Error('This username is already taken');
+                } else {
+                    throw new Error('This email is already taken');
+                }
+            }
+
+            const newAccount = new Account({
+                username: account.username,
+                password: account.password,
+                email: account.email,
+                role: account.formatRole,
+                user: null
+            });
+
+            if (account.password) {
+                const salt = bcrypt.genSaltSync();
+                newAccount.password = bcrypt.hashSync(newAccount.password, salt);
+            }
+
+            await newAccount.save();
+
+            return newAccount.populate('user', selectUser);
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    },
+
+    totalDocuments: async (query) => {
+        return await Account.countDocuments(query);
+    },
+
+    editRole: async (accountId, newRole) => {
+        const account = await accountRepository.findById(accountId);
+        account.role = newRole;
+        await account.save();
+        return account;
+    },
+
+    blockById: async (accountId) => {
+        const account = await accountRepository.findById(accountId);
+        account.isBlocked = !account.isBlocked;
+        await account.save();
+        return account
+    },
 };
 
 export default accountRepository;

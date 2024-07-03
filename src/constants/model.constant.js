@@ -1,0 +1,16 @@
+export const PAYMENT_TYPE = {
+    COD: "COD",
+    MOMO: "MOMO",
+}
+
+export const VOUCHER_STATUS = {
+    AVAILABLE: "AVAILABLE",
+    EXPIRED: "EXPIRED",
+}
+
+export const ORDER_STATUS = {
+    PENDING: "PENDING",
+    DELIVERING: "DELIVERING",
+    DELIVERED: "DELIVERED",
+    CANCELLED: "CANCELLED",
+}

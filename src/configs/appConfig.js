@@ -3,11 +3,11 @@ import session from "express-session";
 import cors from "cors";
 import morgan from "morgan";
 import bodyParser from "body-parser";
-import dotenv from "dotenv";
 import path from "path";
+import cookieParser from "cookie-parser";
+import { CLIENT_URL } from "../constants/env.js";
 
 const configApp = (app) => {
-  dotenv.config();
 
   app.use(express.static(path.join("./src", "assets")));
   app.use(express.json());
@@ -17,14 +17,11 @@ const configApp = (app) => {
       secret: "SECRET",
       resave: true,
       saveUninitialized: true,
-      cookie: {
-        maxAge: 15 * 60 * 1000,
-      },
     })
   );
   app.use(
     cors({
-      origin: "*",
+      origin: [CLIENT_URL, "http://localhost:3000"],
       methods: "GET,POST,PUT,DELETE,PATCH",
       credentials: true,
     })
@@ -40,6 +37,7 @@ const configApp = (app) => {
       parameterLimit: 1000000,
     })
   );
+  app.use(cookieParser('G56_CAPSTONE'));
 };
 
 export default configApp;
