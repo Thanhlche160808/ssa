@@ -2,6 +2,7 @@
 import express from "express";
 
 // ** Routes
+import accountRouter from "./account.js";
 import userRouter from "./user.js";
 import cateRouter from "./cate.js";
 import productRouter from "./product.js";
@@ -12,6 +13,7 @@ import orderRuter from './order.js';
 
 const privateRouter = express.Router();
 
+privateRouter.use("/account", accountRouter);
 privateRouter.use("/user", userRouter);
 privateRouter.use("/category", cateRouter);
 privateRouter.use("/product", productRouter);

@@ -13,6 +13,7 @@ const userService = {
         delete userInfo._id;
         delete userInfo.__v;
         delete accountInfo.refreshToken;
+        delete accountInfo.password;
 
         return {
             ...accountInfo,
