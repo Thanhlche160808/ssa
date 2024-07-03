@@ -156,18 +156,12 @@ const accountRepository = {
                 }
             }
 
-            const user = new User({
-                firstName: '',
-                lastName: '',
-                phone: '',
-            });
-
             const newAccount = new Account({
                 username: account.username,
                 password: account.password,
                 email: account.email,
                 role: account.formatRole,
-                user,
+                user: null
             });
 
             if (account.password) {
@@ -176,8 +170,6 @@ const accountRepository = {
             }
 
             await newAccount.save();
-
-            await user.save();
 
             return newAccount.populate('user', selectUser);
         } catch (error) {

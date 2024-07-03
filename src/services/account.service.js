@@ -7,11 +7,7 @@ const accountService = {
         const formatRole = productService.formatName(role);
         const account = await accountRepository.assign({ username, password, email, formatRole });
 
-        const accountJson = account.toJSON();
-        delete accountJson.password;
-        delete accountJson.__v;
-
-        return accountJson;
+        return accountService.formatAccountResponse(account);
     },
 
     getAccountDashboard: async ({
@@ -40,7 +36,7 @@ const accountService = {
           skip,
           size
         );
-        accounts.map((account) => account.password = undefined);
+        accounts.map((account) => accountService.formatAccountResponse(account));
 
         return {
             accounts,
@@ -51,15 +47,24 @@ const accountService = {
 
     editAccountRole: async ( accountId, { role }) => {
         const account = await accountRepository.findById(accountId);
-        if (account.role === role) return account;
+        if (account.role === role) return accountService.formatAccountResponse(account);
+        
         const editAccount = await accountRepository.editRole(accountId, role);
-        return editAccount;
+        return accountService.formatAccountResponse(editAccount);
     },
 
     blockAccount: async (accountId) => {
         const account = await accountRepository.blockById(accountId);
-        return account;
+        return accountService.formatAccountResponse(account);
     },
+
+    formatAccountResponse: async (account) => {
+        const accountJson = account.toJSON();
+        delete accountJson.password;
+        delete accountJson.__v;
+
+        return accountJson;
+    }
 };
 
 export default accountService;
