@@ -36,20 +36,11 @@ const router = express.Router();
  *                 type: string
  *               role:
  *                 type: string
- *               phone:
- *                 type: string
- *               firstName:
- *                 type: string
- *               lastName:
- *                 type: string
  *           example:
  *             username: admintest1
  *             password: "@dminTest1"
  *             email: adminTest1@gmail.com
  *             role: "Admin"
- *             phone: "0345678921"
- *             firstName: "At"
- *             lastName: "Min"
  *     responses:
  *       200:
  *         description: User profile
@@ -105,10 +96,10 @@ const router = express.Router();
  *                  isBlocked: false
  *                  role: User
  *                  user:
- *                     firstName: Thomas
- *                     lastName: Lee
+ *                     firstName: ""
+ *                     lastName: ""
  *                     avatar: ""
- *                     phone: "123456789"
+ *                     phone: ""
  *                     deliveryAddress: []
  *                     address: ""
  * 

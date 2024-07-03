@@ -3,9 +3,9 @@ import accountRepository from "../repository/account.repository.js";
 import productService from "./product.service.js";
 
 const accountService = {
-    assignAccount: async ({ username, password, email, role, phone, firstName, lastName }) => {
+    assignAccount: async ({ username, password, email, role }) => {
         const formatRole = productService.formatName(role);
-        const account = await accountRepository.assign({ username, password, email, formatRole, phone, firstName, lastName });
+        const account = await accountRepository.assign({ username, password, email, formatRole });
 
         const accountJson = account.toJSON();
         delete accountJson.password;
@@ -49,9 +49,11 @@ const accountService = {
         };
     },
 
-    editAccountRole: async ( accountId, {role}) => {
-        const account = await accountRepository.editRole(accountId, role);
-        return account;
+    editAccountRole: async ( accountId, { role }) => {
+        const account = await accountRepository.findById(accountId);
+        if (account.role === role) return account;
+        const editAccount = await accountRepository.editRole(accountId, role);
+        return editAccount;
     },
 
     blockAccount: async (accountId) => {

@@ -157,9 +157,9 @@ const accountRepository = {
             }
 
             const user = new User({
-                firstName: account.firstName,
-                lastName: account.lastName,
-                phone: account.phone,
+                firstName: '',
+                lastName: '',
+                phone: '',
             });
 
             const newAccount = new Account({
