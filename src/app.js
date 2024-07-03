@@ -23,6 +23,13 @@ configApp(app);
 
 const server = http.createServer(app);
 
+app.use("/api/health-check", (req, res) => {
+    res.status(statusCode.OK).json({
+        code: statusCode.OK,
+        message: "Health check is OK",
+    });
+});
+
 //Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
